@@ -21,14 +21,8 @@ create table usuario(
     </head>
     <body>
         <form action="index.jsp" method="post">
-            Nome: <input type="text" name="txtNome" onblur="validaCampo()"/> <br/>
-            CPF: <input type="text" name="txtCPF" onblur="validaCampo()"/> <br/>
-            Data de nascimento: <input type="text" name="txtDataNasc" onblur="validaCampo()"/> <br/>
-            Cidade: <input type="text" name="txtCidade" onblur="validaCampo()"/><br/><br/>
-            <input type="submit" name="b1" value="Cadastrar"/>&nbsp;&nbsp;
-            <input type="submit" name="b1" value="Alterar"/>&nbsp;&nbsp;
-            <input type="submit" name="b1" value="Remover"/>&nbsp;&nbsp;
-            <input type="submit" name="b1" value="Consultar"/>
+             
         </form>
+        <a href="usuario.jsp">Usuário</a>
     </body>
 </html>
