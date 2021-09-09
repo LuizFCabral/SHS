@@ -1,0 +1,33 @@
+create table usuario(
+	codigo serial primary key,
+	cpf varchar(14),
+	nome varchar (40),
+	data_nascimento date,
+	cidade varchar(30)
+);
+create table agenda(
+	codigo serial primary key,
+	data_agendamento date,
+	CONSTRAINT codigo_usuario FOREIGN KEY (codigo) REFERENCES usuario (codigo),
+	data_vacinacao date,
+	dose_numero int
+);
+create table vacina(
+	codigo serial primary key,
+	descricao varchar(20),
+	qtde_dose int
+);
+create table movimento_vacina(
+	codigo serial primary key,
+	CONSTRAINT codigo_vacina FOREIGN KEY (codigo) REFERENCES vacina (codigo),
+	data_movimento date,
+	tipo_movimento varchar(1),
+	qtde int,
+	lote int
+);
+create table usuario_apl(
+	codigo serial primary key,
+	cpf varchar(14),
+	nome varchar(40),
+	tipo_pessoa varchar(1)
+);
