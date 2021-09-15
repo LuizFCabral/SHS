@@ -23,12 +23,55 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>CRUD Usuário</title>
-        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript">
             var index;
+            
+            function resetarCampos(){
+                $('#idCod').attr('required', false);
+                $('#idNome').attr('required', false);
+                $('#idCPF').attr('required', false);
+                $('#idDataNasc').attr('required', false);
+                $('#idCidade').attr('required', false);
+            }
+            
             function definir(i)
             {
                 index = i;
+                switch(index){
+                    case 0:
+                        resetarCampos();
+                        
+                        $('#idNome').attr('required', true);
+                        $('#idCPF').attr('required', true);
+                        $('#idDataNasc').attr('required', true);
+                        $('#idCidade').attr('required', true);
+                        break;
+                        
+                    case 1:
+                        resetarCampos();
+                        
+                        $('#idCod').attr('required', true);
+                        $('#idNome').attr('required', true);
+                        $('#idCPF').attr('required', true);
+                        $('#idDataNasc').attr('required', true);
+                        $('#idCidade').attr('required', true);
+                        break;
+                        
+                    case 2:
+                        resetarCampos();
+                        
+                        $('#idCod').attr('required', true);
+                        break;
+                        
+                    case 3:
+                        resetarCampos();
+                        break;
+                        
+                    default:
+                        
+                        break;
+                }
             }
             function verificar()
             {
@@ -59,10 +102,10 @@
                     %>
                     <form action="usuario.jsp" method="post" onsubmit="return verificar()">
                             Código: <input type="text" name="txtCod" id="idCod"/> <br/>
-                            Nome: <input type="text" name="txtNome" required/> <br/>
-                            CPF: <input type="text" name="txtCPF" required/> <br/>
-                            Data de nascimento: <input type="text" name="txtDataNasc" required/> <br/>
-                            Cidade: <input type="text" name="txtCidade" required/><br/><br/>
+                            Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
+                            CPF: <input type="text" name="txtCPF" id="idCPF"/> <br/>
+                            Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc"/> <br/>
+                            Cidade: <input type="text" name="txtCidade" id="idCidade"/><br/><br/>
                             <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
