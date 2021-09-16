@@ -144,37 +144,47 @@
                 {
                     b = request.getParameter("b1");
                     int cod;
+                    String c;
+                    Boolean achou;
+                    DAOJPA daoJ = new DAOJPA();
                     switch(b)
                     {
                         case "Cadastrar":
-                            obj = new Usuario();
-                            obj.setNome(request.getParameter("txtNome"));
-                            String c = request.getParameter("txtCPF");
-                            DAOJPA daoJ = new DAOJPA();
-                            Boolean achou = daoJ.checarCPF(bb, c);
+                            c = request.getParameter("txtCPF");
+                            achou = daoJ.checarCPF(bb, c);
                             if(achou)
                                 throw new Exception("O CPF informado já está em uso!");
+                            obj = new Usuario();
+                            obj.setNome(request.getParameter("txtNome"));
                             obj.setCpf(c);
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
                             obj.setCidade(request.getParameter("txtCidade"));
                             dao.create(obj);
-                            %> <h1>Usuário de nome <%=obj.getNome()%> cadastrado com sucesso. Código: <%=obj.getCodigo()%></h1><%
+                            %> <h1>Usuário de nome <%=obj.getNome()%> cadastrado com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário<%
                             break;
                         case "Alterar":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
+                            obj = dao.findUsuario(cod);
+                            c = request.getParameter("txtCPF");
+                            if(!obj.getCpf().equals(c))
+                            {
+                                achou = daoJ.checarCPF(bb, c);
+                                if(achou)
+                                    throw new Exception("O CPF informado já está em uso!");
+                            }
                             obj = new Usuario();
-                            obj.setCodigo(cod);
                             obj.setNome(request.getParameter("txtNome"));
-                            obj.setCpf(request.getParameter("txtCPF"));
+                            obj.setCpf(c);
+                            obj.setCodigo(cod);
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
                             obj.setCidade(request.getParameter("txtCidade"));
                             dao.edit(obj);
-                            %><h1>Usuário de código <%=obj.getCodigo()%> alterado com sucesso!</h1><%
+                            %><h1>Usuário de código <%=obj.getCodigo()%> alterado com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário<%
                             break;
                         case "Remover":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
                             dao.destroy(cod);
-                            %><h1>Usuário de código <%=cod%> removido com sucesso!</h1><%
+                            %><h1>Usuário de código <%=cod%> removido com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário<%
                             break;
                         case "Consultar":
                             List<Usuario> lista = dao.findUsuarioEntities();
@@ -218,7 +228,8 @@
                                         </tbody>
                                     </table>
                                 </form>
-                                    Selecione o campo código de um usuário para carregar seus dados no formulário.
+                                    Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
+                                    Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
                                 <%
 
                             }

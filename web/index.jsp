@@ -16,7 +16,7 @@
         <form action="index.jsp" method="post">
              
         </form>
-        <a href="usuario.jsp">Usuário</a>
+        <a href="usuario.jsp">Usuário</a><br/>
         <a href="usuario_apl.jsp">Gestor/Enfermeiro</a>
     </body>
 </html>
