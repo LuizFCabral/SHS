@@ -11,6 +11,7 @@
     );
 --%>
 
+<%@page import="controller.DAOJPA"%>
 <%@page import="java.util.List"%>
 <%@page import="java.sql.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -148,7 +149,12 @@
                         case "Cadastrar":
                             obj = new Usuario();
                             obj.setNome(request.getParameter("txtNome"));
-                            obj.setCpf(request.getParameter("txtCPF"));
+                            String c = request.getParameter("txtCPF");
+                            DAOJPA daoJ = new DAOJPA();
+                            Boolean achou = daoJ.checarCPF(bb, c);
+                            if(achou)
+                                throw new Exception("O CPF informado já está em uso!");
+                            obj.setCpf(c);
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
                             obj.setCidade(request.getParameter("txtCidade"));
                             dao.create(obj);
