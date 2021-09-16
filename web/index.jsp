@@ -17,5 +17,6 @@
              
         </form>
         <a href="usuario.jsp">Usuário</a>
+        <a href="usuario_apl.jsp">Gestor/Enfermeiro</a>
     </body>
 </html>

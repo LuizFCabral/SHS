@@ -75,10 +75,10 @@
             }
             function verificar()
             {
-                if(index == 1 || index == 2)
+                if(index === 1 || index === 2)
                 {
                     cod = Document.getElementById("idCod").value.toString();
-                    if(cod.length == 0 || cod.includes('.') || cod.includes('-') || isNaN(cod))
+                    if(cod.length === 0 || cod.includes('.') || cod.includes('-') || isNaN(cod))
                     {
                         alert("Para alterar ou remover um usuário, informe o seu código. O código é um número inteiro positivo.");
                         return false;
@@ -229,6 +229,5 @@
                 %><h1>Erro: <%=ex.getMessage()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário<%
             }
             %>
-            
     </body>
 </html>
