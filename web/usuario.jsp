@@ -25,6 +25,7 @@
         <script type="text/javascript">
             var index;
             
+            //Seta todos os campos para não necessários (só serve de suporte)
             function resetarCampos(){
                 $('#idCod').attr('required', false);
                 $('#idNome').attr('required', false);
@@ -33,9 +34,11 @@
                 $('#idCidade').attr('required', false);
             }
             
+            //Quando um botão de operação do CRUD é clicado, define quais os campos necessários
             function definir(i)
             {
                 index = i;
+                
                 switch(index){
                     case 0:
                         resetarCampos();
@@ -67,15 +70,16 @@
                         break;
                         
                     default:
-                        
                         break;
                 }
             }
+            
+            //roda no envio de um form para testar se o código é válido
             function verificar()
             {
                 if(index === 1 || index === 2)
                 {
-                    cod = Document.getElementById("idCod").value.toString();
+                    cod = document.getElementById("idCod").value.toString();
                     if(cod.length === 0 || cod.includes('.') || cod.includes('-') || isNaN(cod))
                     {
                         alert("Para alterar ou remover um usuário, informe o seu código. O código é um número inteiro positivo.");
@@ -101,47 +105,54 @@
                 dao = new UsuarioJpaController(Banco.conexao);
                 SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
                 
+                //não há operações crud a fazer
                 if(request.getParameter("b1") == null)
                 {
+                    //não se tem que carregar dados da tabela da consulta
                     if(request.getParameter("bCarregar") == null)
                     {
-%>
-                            <form action="usuario.jsp" method="post" onsubmit="return verificar()">
-                                Código: <input type="text" name="txtCod" id="idCod"/> <br/>
-                                Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
-                                CPF: <input type="text" name="txtCPF" id="idCPF"/> <br/>
-                                Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc"/> <br/>
-                                Cidade: <input type="text" name="txtCidade" id="idCidade"/><br/><br/>
-                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
-                            </form>
+                        //primeira vez a rodar
+                        //FORM CRUD USUARIO A PREENCHER
+%>                      
+                        <form action="usuario.jsp" method="post" onsubmit="return verificar()">
+                            Código: <input type="text" name="txtCod" id="idCod"/> <br/>
+                            Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
+                            CPF: <input type="text" name="txtCPF" id="idCPF"/> <br/>
+                            Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc"/> <br/>
+                            Cidade: <input type="text" name="txtCidade" id="idCidade"/><br/><br/>
+                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                        </form>
 <%
                     }
+                    //carregar dados da tabela da consulta
                     else
                     {
                         obj = dao.findUsuario(Integer.parseInt(request.getParameter("bCarregar")));
+                        //FORM CARREGADO DE DADOS DE USUARIO DA TABELA
 %>
-                            <form action="usuario.jsp" method="post" onsubmit="return verificar()">
-                                Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
-                                Nome: <input type="text" name="txtNome" id="idNome" value="<%=obj.getNome()%>"/>  <br/>
-                                CPF: <input type="text" name="txtCPF" id="idCPF" value="<%=obj.getCpf()%>"/> <br/>
-                                Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc" value="<%=dF.format(obj.getDataNascimento())%>"/> <br/>
-                                Cidade: <input type="text" name="txtCidade" id="idCidade" value="<%=obj.getCidade()%>"/><br/><br/>
-                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
-                            </form>
+                        <form action="usuario.jsp" method="post" onsubmit="return verificar()">
+                            Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
+                            Nome: <input type="text" name="txtNome" id="idNome" value="<%=obj.getNome()%>"/>  <br/>
+                            CPF: <input type="text" name="txtCPF" id="idCPF" value="<%=obj.getCpf()%>"/> <br/>
+                            Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc" value="<%=dF.format(obj.getDataNascimento())%>"/> <br/>
+                            Cidade: <input type="text" name="txtCidade" id="idCidade" value="<%=obj.getCidade()%>"/><br/><br/>
+                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                        </form>
 <%
                     }
                 }
+                //OPERAÇÃO DE CRUD A SER FEITA
                 else
                 {
                     b = request.getParameter("b1");
                     int cod;
-                    String c;
+                    String c; //cpf
                     Boolean achou;
                     DAOJPA daoJ = new DAOJPA();
 
@@ -166,10 +177,13 @@
                         case "Alterar":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
                             obj = dao.findUsuario(cod);
+                            if(obj == null)
+                                throw new Exception("Esse usuário não existe.");
                             c = request.getParameter("txtCPF");
-                            //checando se cpf para o qual se altera já existe
+                            //checando se o cpf que estou alterando é igual ao anterior
                             if(!obj.getCpf().equals(c))
                             {
+                                //checando se cpf para o qual se altera já existe para outra pessoa
                                 achou = daoJ.checarCPF(bb, c);
                                 if(achou)
                                     throw new Exception("O CPF informado já está em uso!");
@@ -237,8 +251,8 @@
                                         </tbody>
                                     </table>
                                 </form>
-                                    Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
-                                    Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
+                                Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
+                                Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%
                             }
                             break;

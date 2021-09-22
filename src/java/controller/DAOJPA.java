@@ -1,28 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
+import javax.persistence.NoResultException;
 import model.*;
 
-/**
- *
- * @author Pedro
- */
 public class DAOJPA {
     public boolean checarCPF (Banco bb, String c) throws Exception
     {
         try
         {
+            //se n existir um usuario com esse cpf, dispara-se uma exceção NoResultException
             Usuario obj = (Usuario)bb.sessao.createNamedQuery("Usuario.findByCpf").setParameter("cpf", c).getSingleResult();
             return true;
         }
+        catch(NoResultException ex) 
+        {
+            return false;
+        }
         catch(Exception ex)
         {
-            if(ex.getMessage().contains("getSingleResult() did not retrieve any entities"))
-                return false;
             throw new Exception("Erro no checarCPF: " + ex.getMessage());
         }
     }

@@ -10,13 +10,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Login</title>
     </head>
     <body>
         <form action="index.jsp" method="post">
              
         </form>
         <a href="usuario.jsp">Usuário</a><br/>
-        <a href="usuario_apl.jsp">Gestor/Enfermeiro</a>
+        <a href="usuarioApl.jsp">Gestor/Enfermeiro</a>
     </body>
 </html>

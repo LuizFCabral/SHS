@@ -1,7 +1,4 @@
-<%-- 
-    Document   : usuarioApl
-    Created on : 21/09/2021, 21:29:51
-    Author     : catar
+<%--
 create table usuario_apl(
 	codigo serial primary key,
 	cpf varchar(14),
