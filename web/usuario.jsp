@@ -1,7 +1,4 @@
-<%-- 
-    Document   : usuario
-    Created on : 09/09/2021, 11:31:16
-    Author     : Vinicius
+<%--
     create table usuario(
         codigo serial primary key,
         cpf varchar(14),
@@ -91,22 +88,24 @@
         
     </head>
     <body>
-        <%
+<%
             request.setCharacterEncoding("UTF-8");
             Usuario obj;
             String b;
             UsuarioJpaController dao;
             Banco bb;
-            try
+            
+            try 
             {
                 bb = new Banco();
                 dao = new UsuarioJpaController(Banco.conexao);
                 SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
+                
                 if(request.getParameter("b1") == null)
                 {
                     if(request.getParameter("bCarregar") == null)
                     {
-                        %>
+%>
                             <form action="usuario.jsp" method="post" onsubmit="return verificar()">
                                 Código: <input type="text" name="txtCod" id="idCod"/> <br/>
                                 Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
@@ -118,13 +117,12 @@
                                 <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
                                 <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
                             </form>
-                        <%
+<%
                     }
                     else
                     {
-                    %><%
                         obj = dao.findUsuario(Integer.parseInt(request.getParameter("bCarregar")));
-                        %>
+%>
                             <form action="usuario.jsp" method="post" onsubmit="return verificar()">
                                 Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
                                 Nome: <input type="text" name="txtNome" id="idNome" value="<%=obj.getNome()%>"/>  <br/>
@@ -136,10 +134,9 @@
                                 <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
                                 <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
                             </form>
-                        <%
+<%
                     }
                 }
-            %><%
                 else
                 {
                     b = request.getParameter("b1");
@@ -147,6 +144,7 @@
                     String c;
                     Boolean achou;
                     DAOJPA daoJ = new DAOJPA();
+
                     switch(b)
                     {
                         case "Cadastrar":
@@ -160,12 +158,16 @@
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
                             obj.setCidade(request.getParameter("txtCidade"));
                             dao.create(obj);
-                            %> <h1>Usuário de nome <%=obj.getNome()%> cadastrado com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário<%
+%> 
+                            <h1>Usuário de nome <%=obj.getNome()%> cadastrado com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
+<%
                             break;
+                            
                         case "Alterar":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
                             obj = dao.findUsuario(cod);
                             c = request.getParameter("txtCPF");
+                            //checando se cpf para o qual se altera já existe
                             if(!obj.getCpf().equals(c))
                             {
                                 achou = daoJ.checarCPF(bb, c);
@@ -179,13 +181,19 @@
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
                             obj.setCidade(request.getParameter("txtCidade"));
                             dao.edit(obj);
-                            %><h1>Usuário de código <%=obj.getCodigo()%> alterado com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário<%
+%>
+                            <h1>Usuário de código <%=obj.getCodigo()%> alterado com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
+<%
                             break;
+                            
                         case "Remover":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
                             dao.destroy(cod);
-                            %><h1>Usuário de código <%=cod%> removido com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário<%
+%>
+                            <h1>Usuário de código <%=cod%> removido com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
+<%
                             break;
+                            
                         case "Consultar":
                             List<Usuario> lista = dao.findUsuarioEntities();
                             if(lista == null || lista.isEmpty())
@@ -197,7 +205,8 @@
                                 String aux = "";
                                 if(lista.size() > 1)
                                     aux = "s";
-                                %><h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1>
+%>
+                                <h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1>
                                 <form action="usuario.jsp" method="post">
                                     <table border="1">
                                         <thead>
@@ -210,30 +219,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <%
-                                                for(int i = 0; i < lista.size(); i++)
-                                                {
-                                                    obj = lista.get(i);
-                                                    %>
-                                                        <tr>
-                                                            <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
-                                                            <td><%=obj.getNome()%></td>
-                                                            <td><%=obj.getCpf()%></td>
-                                                            <td><%=dF.format(obj.getDataNascimento())%></td>
-                                                            <td><%=obj.getCidade()%></td>
-                                                        </tr>
-                                                    <%
-                                                }
-                                                %>
+<%
+                                        for(int i = 0; i < lista.size(); i++)
+                                        {
+                                            obj = lista.get(i);
+%>
+                                            <tr>
+                                                <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
+                                                <td><%=obj.getNome()%></td>
+                                                <td><%=obj.getCpf()%></td>
+                                                <td><%=dF.format(obj.getDataNascimento())%></td>
+                                                <td><%=obj.getCidade()%></td>
+                                            </tr>
+<%
+                                        }
+%>
                                         </tbody>
                                     </table>
                                 </form>
                                     Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
                                     Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
-                                <%
-
+<%
                             }
                             break;
+
                         default:
                             throw new Exception("Erro inesperado ao ler evento do botão.");
                     }
@@ -243,8 +252,10 @@
             catch(Exception ex)
             {
                 Banco.conexao.close();
-                %><h1>Erro: <%=ex.getMessage()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário<%
+%>
+                <h1>Erro: <%=ex.getMessage()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
+<%
             }
-            %>
+%>
     </body>
 </html>
