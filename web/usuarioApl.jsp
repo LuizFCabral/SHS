@@ -16,9 +16,11 @@ create table usuario_apl(
     </head>
     <body>
         <form action="usuarioApl.jsp" method="post">
-            Nome: <input type="text" name="txtNome" onblur="validaCampo()"/> <br/>
-            CPF: <input type="text" name="txtCPF" onblur="validaCampo()"/> <br/>
-            Tipo de funcionário: <input type="text" name="txtTipo" onblur="validaCampo()"/> <br/>
+            Código: <input type="text" name="txtNome""/> <br/>
+            Nome: <input type="text" name="txtNome""/> <br/>
+            CPF: <input type="text" name="txtCPF""/> <br/>
+            Tipo de funcionário: G: <input type="radio" name="tipo_user" value="G"/>
+            E: <input type="radio" name="tipo_user" value="E"/> <br/><br/>
             <input type="submit" name="b1" value="Cadastrar" onclick="callControlador()"/>&nbsp;&nbsp;
             <input type="submit" name="b1" value="Alterar" onclick="callControlador()"/>&nbsp;&nbsp;
             <input type="submit" name="b1" value="Remover" onclick="callControlador()"/>&nbsp;&nbsp;
