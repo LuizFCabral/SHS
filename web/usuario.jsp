@@ -47,7 +47,7 @@
                         //primeira vez a rodar
                         //FORM CRUD USUARIO A PREENCHER
 %>                      
-                        <form action="usuario.jsp" method="post" onsubmit="return verificar()">
+                        <form action="usuario.jsp" method="post" onsubmit="return verificar(1)">
                             Código: <input type="text" name="txtCod" id="idCod"/> <br/>
                             Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
                             CPF: <input type="text" name="txtCPF" id="idCPF"/> <br/>
@@ -66,7 +66,7 @@
                         obj = dao.findUsuario(Integer.parseInt(request.getParameter("bCarregar")));
                         //FORM CARREGADO DE DADOS DE USUARIO DA TABELA
 %>
-                        <form action="usuario.jsp" method="post" onsubmit="return verificar()">
+                        <form action="usuario.jsp" method="post" onsubmit="return verificar(1)">
                             Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
                             Nome: <input type="text" name="txtNome" id="idNome" value="<%=obj.getNome()%>"/>  <br/>
                             CPF: <input type="text" name="txtCPF" id="idCPF" value="<%=obj.getCpf()%>"/> <br/>
@@ -93,10 +93,10 @@
                     {
                         case "Cadastrar":
                             c = request.getParameter("txtCPF");
-                            achou = daoJ.checarCPF(bb, c);
+                            obj = new Usuario();
+                            achou = daoJ.checarCPF(bb, c, obj.getClass());
                             if(achou)
                                 throw new Exception("O CPF informado já está em uso!");
-                            obj = new Usuario();
                             obj.setNome(request.getParameter("txtNome"));
                             obj.setCpf(c);
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
@@ -117,7 +117,7 @@
                             if(!obj.getCpf().equals(c))
                             {
                                 //checando se cpf para o qual se altera já existe para outra pessoa
-                                achou = daoJ.checarCPF(bb, c);
+                                achou = daoJ.checarCPF(bb, c, obj.getClass());
                                 if(achou)
                                     throw new Exception("O CPF informado já está em uso!");
                             }

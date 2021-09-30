@@ -56,14 +56,18 @@ function definir(i)
 }
 
 //roda no envio de um form para testar se o código é válido
-function verificar()
+function verificar(j)
 {
     if (index === 1 || index === 2)
     {
         cod = document.getElementById("idCod").value.toString();
         if (cod.length === 0 || cod.includes('.') || cod.includes('-') || isNaN(cod))
         {
-            alert("Para alterar ou remover um usuário, informe o seu código. O código é um número inteiro positivo.");
+            if(j == 1)
+                j = "um usuário";
+            if(j == 2)
+                j = "uma vacina";
+            alert("Para alterar ou remover " + j + ", informe o seu código. O código é um número inteiro positivo.");
             return false;
         }
     }
