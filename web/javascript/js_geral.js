@@ -61,7 +61,7 @@ function verificar(j)
     if (index === 1 || index === 2)
     {
         cod = document.getElementById("idCod").value.toString();
-        if (cod.length === 0 || cod.includes('.') || cod.includes('-') || isNaN(cod))
+        if (cod.length === 0 || cod.includes('.') || cod.includes('-') || isNaN(cod) || parseInt(cod) == 0)
         {
             if(j == 1)
                 j = "um usuário";

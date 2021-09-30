@@ -23,6 +23,7 @@ create table usuario_apl(
         <script type="text/javascript" src="javascript/js_geral.js"></script>
     </head>
     <body>
+        <a href="index.jsp">Tela inicial</a>
         <%
             request.setCharacterEncoding("UTF-8");
             UsuarioApl obj;
