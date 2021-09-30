@@ -17,6 +17,7 @@
              
         </form>
         <a href="usuario.jsp">Usuário</a><br/>
-        <a href="usuarioApl.jsp">Gestor/Enfermeiro</a>
+        <a href="usuarioApl.jsp">Gestor/Enfermeiro</a><br/>
+        <a href="vacina.jsp">Vacina</a>
     </body>
 </html>

@@ -12,7 +12,8 @@ create table usuario_apl(
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Gerenciamento de gestores e enfermeiros</title>
+        <script type="text/javascript" src="javascript/js_geral.js"></script>
     </head>
     <body>
         <form action="usuarioApl.jsp" method="post">
