@@ -18,8 +18,8 @@
     <body>
         <%
             request.setCharacterEncoding("UTF-8");
-            boolean usouBanco = false;
             Usuario obj;
+            Banco bb = new Banco();
             try
             {
                 obj = (Usuario) session.getAttribute("sessao");
@@ -51,18 +51,15 @@
                     }
                     else
                     {
-                        Banco bb = new Banco();
-                        usouBanco = true;
                         DAOJPA daoJ = new DAOJPA();
                         String cpf = request.getParameter("txtCPF");
-                        boolean achou = daoJ.checarCPF(bb, cpf, obj.getClass());
-                        if(!achou)
+                        obj = (Usuario) daoJ.searchCPF(bb, cpf, obj.getClass());
+                        if(obj == null)
                         {
                             throw new Exception("CPF não cadastrado!");
                         }
                         else
                         {
-                            obj = (Usuario) daoJ.getByCPF(bb, cpf, obj.getClass());
                             Banco.conexao.close();
                             session.setAttribute("sessao", obj);
                             %><h1>Log-in feito com sucesso!</h1><%
@@ -72,8 +69,7 @@
             }
             catch(Exception ex)
             {
-                if(usouBanco)
-                    Banco.conexao.close();
+                Banco.conexao.close();
                 %><h1>Erro: <%=ex.getMessage()%></h1><%
             }
         %>

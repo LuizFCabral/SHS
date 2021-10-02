@@ -40,7 +40,6 @@
                 }
                 //Carregando dados de um registro da tabela no formulário
                 else {
-                    bb = new Banco();
                     dao = new VacinaJpaController(Banco.conexao);
                     obj = dao.findVacina(Integer.parseInt(request.getParameter("bCarregar")));
                     Banco.conexao.close();
@@ -67,7 +66,6 @@
                         obj.setDescricao(request.getParameter("txtDescricao"));
                         obj.setQtdeDose(Integer.parseInt(request.getParameter("txtQtdeDose")));
 
-                        bb = new Banco();
                         dao = new VacinaJpaController(Banco.conexao);
                         dao.create(obj);
 %> 
@@ -78,13 +76,15 @@
 
                     case "Alterar":
                         cod = Integer.parseInt(request.getParameter("txtCod"));
+                        dao = new VacinaJpaController(Banco.conexao);
+                        obj = dao.findVacina(cod);
+                            if(obj == null)
+                                throw new Exception("Essa vacina não existe.");
                         obj = new Vacina();
                         obj.setCodigo(cod);
                         obj.setDescricao(request.getParameter("txtDescricao"));
                         obj.setQtdeDose(Integer.parseInt(request.getParameter("txtQtdeDose")));
                         
-                        bb = new Banco();
-                        dao = new VacinaJpaController(Banco.conexao);
                         dao.edit(obj);
 %>
                         <h1>Vacina de código <%=obj.getCodigo()%> alterada com sucesso!</h1>Clique <a href="vacina.jsp">aqui</a> para voltar ao formulário CRUD vacina
@@ -95,8 +95,10 @@
                     case "Remover":
                         cod = Integer.parseInt(request.getParameter("txtCod"));
                         
-                        bb = new Banco();
                         dao = new VacinaJpaController(Banco.conexao);
+                        obj = dao.findVacina(cod);
+                            if(obj == null)
+                                throw new Exception("Essa vacina não existe.");
                         dao.destroy(cod);
 %>
                         <h1>Vacina de código <%=cod%> removida com sucesso!</h1>Clique <a href="vacina.jsp">aqui</a> para voltar ao formulário CRUD vacina
@@ -105,7 +107,6 @@
                         break;
 
                     case "Consultar":
-                        bb = new Banco();
                         dao = new VacinaJpaController(Banco.conexao);
                         List<Vacina> lista = dao.findVacinaEntities();
                         

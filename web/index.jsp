@@ -18,6 +18,7 @@
         </form>
         <a href="usuario.jsp">Usuário</a><br/>
         <a href="usuarioApl.jsp">Gestor/Enfermeiro</a><br/>
-        <a href="vacina.jsp">Vacina</a>
+        <a href="vacina.jsp">Vacina</a><br/>
+        <a href="loginUsuario.jsp">logar como usuário comum</a>
     </body>
 </html>

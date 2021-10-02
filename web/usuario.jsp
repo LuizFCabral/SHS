@@ -87,7 +87,6 @@
                     b = request.getParameter("b1");
                     int cod;
                     String c; //cpf
-                    Boolean achou;
                     DAOJPA daoJ = new DAOJPA();
 
                     switch(b)
@@ -95,9 +94,10 @@
                         case "Cadastrar":
                             c = request.getParameter("txtCPF");
                             obj = new Usuario();
-                            achou = daoJ.checarCPF(bb, c, obj.getClass());
-                            if(achou)
+                            obj = (Usuario) daoJ.searchCPF(bb, c, obj.getClass());
+                            if(obj != null)
                                 throw new Exception("O CPF informado já está em uso!");
+                            obj = new Usuario();
                             obj.setNome(request.getParameter("txtNome"));
                             obj.setCpf(c);
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
@@ -118,8 +118,8 @@
                             if(!obj.getCpf().equals(c))
                             {
                                 //checando se cpf para o qual se altera já existe para outra pessoa
-                                achou = daoJ.checarCPF(bb, c, obj.getClass());
-                                if(achou)
+                                obj = (Usuario) daoJ.searchCPF(bb, c, obj.getClass());
+                                if(obj != null)
                                     throw new Exception("O CPF informado já está em uso!");
                             }
                             obj = new Usuario();
@@ -136,6 +136,9 @@
                             
                         case "Remover":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
+                            obj = dao.findUsuario(cod);
+                            if(obj == null)
+                                throw new Exception("Esse usuário não existe.");
                             dao.destroy(cod);
 %>
                             <h1>Usuário de código <%=cod%> removido com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário

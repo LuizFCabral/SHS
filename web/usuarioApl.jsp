@@ -92,7 +92,6 @@ create table usuario_apl(
                     b = request.getParameter("b1");
                     int cod;
                     String c; //cpf
-                    Boolean achou;
                     DAOJPA daoJ = new DAOJPA();
                     t = request.getParameter("tipo_user");
                     switch(b)
@@ -100,9 +99,10 @@ create table usuario_apl(
                         case "Cadastrar":
                             c = request.getParameter("txtCPF");
                             obj = new UsuarioApl();
-                            achou = daoJ.checarCPF(bb, c, obj.getClass());
-                            if(achou)
+                            obj = (UsuarioApl) daoJ.searchCPF(bb, c, obj.getClass());
+                            if(obj != null)
                                 throw new Exception("O CPF informado já está em uso!");
+                            obj = new UsuarioApl();
                             obj.setNome(request.getParameter("txtNome"));
                             obj.setCpf(c);
                             obj.setTipoPessoa(t);
@@ -127,10 +127,11 @@ create table usuario_apl(
                             {
                                 obj = new UsuarioApl();
                                 //checando se cpf para o qual se altera já existe para outra pessoa
-                                achou = daoJ.checarCPF(bb, c, obj.getClass());
-                                if(achou)
+                                obj = (UsuarioApl) daoJ.searchCPF(bb, c, obj.getClass());
+                                if(obj != null)
                                     throw new Exception("O CPF informado já está em uso!");
                             }
+                            obj = new UsuarioApl();
                             obj.setNome(request.getParameter("txtNome"));
                             obj.setCpf(c);
                             obj.setCodigo(cod);
@@ -143,7 +144,10 @@ create table usuario_apl(
                             
                         case "Remover":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
-                            t = dao.findUsuarioApl(cod).getTipoPessoa();
+                            obj = dao.findUsuarioApl(cod);
+                            if(obj == null)
+                                throw new Exception("Esse usuário não existe.");
+                            t = obj.getTipoPessoa();
                             dao.destroy(cod);
                             if(t.equals("G"))
                                 t = "Gestor";
