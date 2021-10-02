@@ -29,4 +29,20 @@ public class DAOJPA {
             throw new Exception("Erro no checarCPF: " + ex.getMessage());
         }
     }
+    public Object getByCPF (Banco bb, String c, Class tipo) throws Exception
+    {
+        try
+        {
+            if(tipo == Usuario.class)
+                {
+                    Usuario obj = (Usuario)bb.sessao.createNamedQuery("Usuario.findByCpf").setParameter("cpf", c).getSingleResult();
+                    return obj;
+                }
+            return null;
+        }
+        catch(Exception ex)
+        {
+             throw new Exception("Erro no getByCPF: " + ex.getMessage());
+        }
+    }
 }
