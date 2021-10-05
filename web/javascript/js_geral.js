@@ -24,7 +24,7 @@ function definir(i)
             $('#idCPF').attr('required', true);
             $('#idDataNasc').attr('required', true);
             $('#idCidade').attr('required', true);
-            $('tipo_user').attr('required', true);
+            //$('tipo_user').attr('required', true);
             $('idQtdeDose').attr('required', true);
             break;
 
@@ -36,7 +36,7 @@ function definir(i)
             $('#idCPF').attr('required', true);
             $('#idDataNasc').attr('required', true);
             $('#idCidade').attr('required', true);
-            $('tipo_user').attr('required', true);
+            //$('tipo_user').attr('required', true);
             $('idQtdeDose').attr('required', true);
             break;
 
@@ -97,8 +97,9 @@ function validaCPF() {
         CPF === "88888888888" ||
         CPF === "99999999999") {
         alert("O CPF digitado está invalido");
+        $("#idCPF").val("");
+        $("#idCPF").focus();
         $("#idCPF").animate({backgroundColor: '#faa'}, 'slow');
-        return false;
     }
     else{
         //soma1:
@@ -136,11 +137,12 @@ function validaCPF() {
     }
     //aqui é onde ocorre efetivamente a validação do CPF
     if ((resto1 === (parseInt(CPF.substring( 9 , 10)))) &&(resto2 === (parseInt(CPF.substring( 10 , 11)))) ) {
-        return true;
+        alert("CPF válido!");
     }
     else {
         alert("O CPF digitado está invalido");
+        $("#idCPF").val("");
+        $("#idCPF").focus();
         $("#idCPF").animate({backgroundColor: '#faa'}, 'slow');
-        return false;
     }
 }

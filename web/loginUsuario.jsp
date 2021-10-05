@@ -35,6 +35,7 @@
                     }
                     else
                     {
+                        session.setAttribute("sessao", null);
                         %>
                     <!-- form para o log-in-->
                     <%
