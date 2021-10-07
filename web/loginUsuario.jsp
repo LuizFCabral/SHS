@@ -4,6 +4,7 @@
     Author     : Pedro
 --%>
 
+<%@page import="model.UsuarioApl"%>
 <%@page import="controller.UsuarioJpaController"%>
 <%@page import="model.Banco"%>
 <%@page import="controller.DAOJPA"%>
@@ -18,31 +19,45 @@
     <body>
 <%
             request.setCharacterEncoding("UTF-8");
-            Usuario obj;
+            Object obj;
             Banco bb = new Banco();
             
             try
             {
-                obj = (Usuario) session.getAttribute("sessao");
+                obj = session.getAttribute("login");
                 //Se já houver alguém logado...
-                if(session.getAttribute("sessao") != null)
+                if(obj != null)
                 {
                     //Se a pessoa não quiser deslogar
-                    if(request.getAttribute("bDeslog") == null)
+                    if(request.getParameter("bDeslog") == null)
                     {
-%>
-                        <h1><%=obj.getNome()%>, você já está logado, deseja deslogar?</h1>
-                        <form action="login.jsp" method="post">
-                            <input type="submit" name="bDeslog"/>
+                        String nome = "";
+                        if(session.getAttribute("classe").equals(Usuario.class))
+                        {
+                            nome = ((Usuario) obj).getNome();
+                        }
+                        if(session.getAttribute("classe").equals(UsuarioApl.class))
+                        {
+                            nome = ((UsuarioApl) obj).getNome();
+                        }
+%>                      
+                        <h1><%=nome%>, você já está logado, deseja deslogar?</h1>
+                        <form action="loginUsuario.jsp" method="post">
+                            <input type="submit" name="bDeslog" value="Deslogar"/>
                         </form>
 <%  
                     }
                     //Se a pessoa quiser deslogar
                     else
                     {
-                        session.setAttribute("sessao", null);
+                        session.setAttribute("login", null);
 %>
-                    <!-- form para o log-in-->
+                        <form action="loginUsuario.jsp" method="post">
+                            CPF: <input type="text" name="txtCPF"> <br/>
+                            Usuário: <input type="radio" name="rdbUser" value="0" checked="checked" /> 
+                            Enfermeiro/gestor: <input type="radio" name="rdbUser" value="1"/> <br/>
+                            <input type="submit" value="logar" name="b1"> <br/>
+                        </form>
 <%
                     }
                 }
@@ -52,25 +67,53 @@
                     if(request.getParameter("b1") == null)
                     {
 %>
-                        <!-- form para o log-in-->
+                        <form action="loginUsuario.jsp" method="post">
+                            CPF: <input type="text" name="txtCPF"> <br/>
+                            Usuário: <input type="radio" name="rdbUser" value="0" checked="checked" /> 
+                            Enfermeiro/gestor: <input type="radio" name="rdbUser" value="1"/> <br/>
+                            <input type="submit" value="logar" name="b1"> <br/>
+                        </form>
 <%
                     }
                     else
                     {
                         DAOJPA daoJ = new DAOJPA();
                         String cpf = request.getParameter("txtCPF");
-                        obj = (Usuario) daoJ.searchCPF(bb, cpf, obj.getClass());
-                        if(obj == null)
+                        if(request.getParameter("rdbUser").equals("0"))
                         {
-                            throw new Exception("CPF não cadastrado!");
+                            Usuario u = new Usuario();
+                            u = (Usuario) daoJ.searchCPF(bb, cpf, u.getClass());
+                            if(u == null)
+                            {
+                                throw new Exception("CPF não cadastrado!");
+                            }
+                            else
+                            {
+                                Banco.conexao.close();
+                                session.setAttribute("classe", u.getClass());
+                                session.setAttribute("login", u);
+    %>
+                                <h1>Log-in feito com sucesso!</h1>
+    <%
+                            }
                         }
-                        else
+                        if(request.getParameter("rdbUser").equals("1"))
                         {
-                            Banco.conexao.close();
-                            session.setAttribute("sessao", obj);
-%>
-                            <h1>Log-in feito com sucesso!</h1>
-<%
+                            UsuarioApl u = new UsuarioApl();
+                            u = (UsuarioApl) daoJ.searchCPF(bb, cpf, u.getClass());
+                            if(u == null)
+                            {
+                                throw new Exception("CPF não cadastrado!");
+                            }
+                            else
+                            {
+                                Banco.conexao.close();
+                                session.setAttribute("classe", u.getClass());
+                                session.setAttribute("login", u);
+    %>
+                                <h1>Log-in feito com sucesso!</h1>
+    <%
+                            }
                         }
                     }
                 }

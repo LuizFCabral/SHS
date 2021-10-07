@@ -7,7 +7,6 @@ function resetarCampos() {
     $('#idCPF').attr('required', false);
     $('#idDataNasc').attr('required', false);
     $('#idCidade').attr('required', false);
-    $('tipo_user').attr('required', true);
     $('idQtdeDose').attr('required', true);
 }
 
@@ -24,7 +23,6 @@ function definir(i)
             $('#idCPF').attr('required', true);
             $('#idDataNasc').attr('required', true);
             $('#idCidade').attr('required', true);
-            //$('tipo_user').attr('required', true);
             $('idQtdeDose').attr('required', true);
             break;
 
@@ -36,7 +34,6 @@ function definir(i)
             $('#idCPF').attr('required', true);
             $('#idDataNasc').attr('required', true);
             $('#idCidade').attr('required', true);
-            //$('tipo_user').attr('required', true);
             $('idQtdeDose').attr('required', true);
             break;
 
@@ -75,7 +72,7 @@ function verificar(j)
 }
 
 //algoritmo para validação do CPF
-function validaCPF() {
+/*function validaCPF() {
     var CPF;
     var soma1, soma2, resto1, resto2;
     CPF = $("#idCPF").val();
@@ -98,7 +95,7 @@ function validaCPF() {
         CPF === "99999999999") {
         alert("O CPF digitado está invalido");
         $("#idCPF").val("");
-        $("#idCPF").focus();
+        //$("#idCPF").focus();
         $("#idCPF").animate({backgroundColor: '#faa'}, 'slow');
     }
     else{
@@ -124,25 +121,28 @@ function validaCPF() {
         soma2+= (parseInt(CPF.substring(7,1)))*4;
         soma2+= (parseInt(CPF.substring(8,1)))*3;
         soma2+= (parseInt(CPF.substring(9,1)))*2;
+        let nun1 = parseInt(CPF.substring(8,1));
+        let nun2 = parseInt(CPF.substring(9,1));
+        
+
+        //atribuição dos restos
+        resto1 = (soma1 * 10) % 11;
+        resto2 = (soma2 *10) % 11;
+        if ((resto1 === 10) || (resto1 === 11)) {
+            resto1 = 0;
+        }
+        if ((resto2 === 10) || (resto2 === 11)) {
+            resto2 = 0;
+        }
+        //aqui é onde ocorre efetivamente a validação do CPF
+        if ((resto1 === nun1) && (resto2 === nun2)) {
+            alert("CPF válido!");
+        }
+        else {
+            alert("O CPF digitado está invalido");
+            $("#idCPF").val("");
+            //$("#idCPF").focus();
+            $("#idCPF").animate({backgroundColor: '#faa'}, 'slow');
+        }
     }
-    
-    //atribuição dos restos
-    resto1 = (soma1 * 10) % 11;
-    resto2 = (soma2 *10) % 11;
-    if ((resto1 === 10) || (resto1 === 11)) {
-        resto1 = 0;
-    }
-    if ((resto2 === 10) || (resto2 === 11)) {
-        resto2 = 0;
-    }
-    //aqui é onde ocorre efetivamente a validação do CPF
-    if ((resto1 === (parseInt(CPF.substring( 9 , 10)))) &&(resto2 === (parseInt(CPF.substring( 10 , 11)))) ) {
-        alert("CPF válido!");
-    }
-    else {
-        alert("O CPF digitado está invalido");
-        $("#idCPF").val("");
-        $("#idCPF").focus();
-        $("#idCPF").animate({backgroundColor: '#faa'}, 'slow');
-    }
-}
+}*/

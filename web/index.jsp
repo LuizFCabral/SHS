@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login</title>
+        <title>Início</title>
     </head>
     <body>
         <form action="index.jsp" method="post">
@@ -19,6 +19,6 @@
         <a href="usuario.jsp">Usuário</a><br/>
         <a href="usuarioApl.jsp">Gestor/Enfermeiro</a><br/>
         <a href="vacina.jsp">Vacina</a><br/>
-        <a href="loginUsuario.jsp">logar como usuário comum</a>
+        <a href="loginUsuario.jsp">Logar</a>
     </body>
 </html>
