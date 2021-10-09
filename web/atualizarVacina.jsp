@@ -21,22 +21,28 @@
     <body>
         <%
             request.setCharacterEncoding("UTF-8");
+            Usuario u = new Usuario();
+            Banco bb = new Banco();
+            DAOJPA daoJ = new DAOJPA();
             try
             {
                 if(request.getParameter("b1") == null)
                 {
-                 %> <!-- form aqui--><%
+                 %> <!-- form aqui (apenas o cpf)--><%
                 }
                 else
                 {
+                    if(request.getParameter("b1").equalsIgnoreCase("Procurar"))
+                    {
+                        u = (Usuario) daoJ.searchCPF(bb, request.getParameter("txtCPF"), u.getClass());
+                        %> <!-- form aqui (preencher as informações do usuário) --><%
+                    }
+
                     if(request.getParameter("b1").equalsIgnoreCase("confirmar"))
                     {
                         Date d = new Date();
-                        Usuario u = new Usuario();
                         Vacina v = new Vacina();
                         UsuarioJpaController daoU = new UsuarioJpaController(Banco.conexao);
-                        DAOJPA daoJ = new DAOJPA();
-                        Banco bb = new Banco();
                         int cod = Integer.parseInt(request.getParameter("txtCodigo"));
                         u = daoU.findUsuario(cod); //pega o obj usuário 
                         String descr = request.getParameter("txtDescr");
