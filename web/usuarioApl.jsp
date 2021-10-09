@@ -48,7 +48,7 @@ create table usuario_apl(
                         <form action="usuarioApl.jsp" method="post" onsubmit="return verificar(1)"/>&nbsp;&nbsp;
                             Código: <input type="text" name="txtCod" id="idCod"/> <br/>
                             Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
-                            CPF: <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()/> <br/>
+                            CPF: <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()"/> <br/>
                             Tipo de funcionário: Gestor: <input type="radio" name="tipo_user" value="G" checked="true"/>
                             Enfermeiro: <input type="radio" name="tipo_user" value="E"/> <br/><br/>
                             <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
