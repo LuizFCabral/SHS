@@ -28,14 +28,25 @@
             {
                 if(request.getParameter("b1") == null)
                 {
-                 %> <!-- form aqui (apenas o cpf)--><%
+        %>
+        <form>
+            <input type="text" name="txtCPF"/>
+            <input type="submit" name="b1" value="Procurar"/>
+        </form>
+        <%
                 }
                 else
                 {
                     if(request.getParameter("b1").equalsIgnoreCase("Procurar"))
                     {
                         u = (Usuario) daoJ.searchCPF(bb, request.getParameter("txtCPF"), u.getClass());
-                        %> <!-- form aqui (preencher as informações do usuário) --><%
+        %>
+                    <form>
+                        <input type="text" name="txtCPF" value="<%=u%>"/>
+                        <input type="submit" name="b1" value="confirmar"/>
+                    </form>
+        
+        <%
                     }
 
                     if(request.getParameter("b1").equalsIgnoreCase("confirmar"))
