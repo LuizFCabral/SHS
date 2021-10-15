@@ -29,6 +29,7 @@ public class DAOJPA {
             throw new Exception("Erro no searchCPF: " + ex.getMessage());
         }
     }
+    
     public Vacina vacinaByDescr(Banco bb, String descr) throws Exception
     {
         try
@@ -38,6 +39,22 @@ public class DAOJPA {
         catch(Exception ex)
         {
             throw new Exception("Erro no vacinaByDescr: " + ex.getMessage());
+        }
+    }
+    
+    public Agenda agendaByCodigoUsuario(Banco bb, int codigo) throws Exception
+    {
+        try
+        {
+            return (Agenda)bb.sessao.createNamedQuery("Agenda.findByCodigoUsuario").setParameter("codigo", codigo).getSingleResult();
+        }
+        catch(NoResultException ex) 
+        {
+            return (null);
+        }
+        catch(Exception ex)
+        {
+            throw new Exception("Erro no agendaByCodigoUsuario: " + ex.getMessage());
         }
     }
 }

@@ -92,9 +92,17 @@
                                 Banco.conexao.close();
                                 session.setAttribute("classe", u.getClass());
                                 session.setAttribute("login", u);
-    %>
-                                <h1>Log-in feito com sucesso!</h1>
-    <%
+
+                                out.println("<form action='agenda.jsp' method='post' onsubmit='return verificar(1)'>");
+                                    out.println("Código: <input type='text' name='txtCod' id='idCod'/> <br/>");
+                                    out.println("Data de vacinação: <input type='text' name='txtDataVacinacao' id='idDataVacinacao'/> <br/>");
+                                    out.println("Hora de vacinação: <input type='text' name='txtHoraVacinacao' id='idHoraVacinacao'/> <br/>");
+                                    out.println("Número de dose: <input type='text' name='txtDoseNum' id='idDoseNum'/><br/><br/>");
+                                    out.println("<input type='submit' name='b1' value='Cadastrar' onclick='definir(0)'/>&nbsp;&nbsp;");
+                                    out.println("<input type='submit' name='b1' value='Alterar' onclick='definir(1)'/>&nbsp;&nbsp;");
+                                    out.println("<input type='submit' name='b1' value='Remover' onclick='definir(2)'/>&nbsp;&nbsp;");
+                                    out.println("<input type='submit' name='b1' value='Consultar' onclick='definir(3)'/>");
+                                out.println("</form>");
                             }
                         }
                         if(request.getParameter("rdbUser").equals("1"))
@@ -110,9 +118,9 @@
                                 Banco.conexao.close();
                                 session.setAttribute("classe", u.getClass());
                                 session.setAttribute("login", u);
-    %>
+%>
                                 <h1>Log-in feito com sucesso!</h1>
-    <%
+<%
                             }
                         }
                     }

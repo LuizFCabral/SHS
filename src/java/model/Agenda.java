@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Agenda.findAll", query = "SELECT a FROM Agenda a"),
     @NamedQuery(name = "Agenda.findByCodigo", query = "SELECT a FROM Agenda a WHERE a.codigo = :codigo"),
+    @NamedQuery(name = "Agenda.findByCodigoUsuario", query = "SELECT a FROM Agenda a INNER JOIN a.usuario u WHERE u.codigo = :codigo"),
     @NamedQuery(name = "Agenda.findByDataAgendamento", query = "SELECT a FROM Agenda a WHERE a.dataAgendamento = :dataAgendamento"),
     @NamedQuery(name = "Agenda.findByDataVacinacao", query = "SELECT a FROM Agenda a WHERE a.dataVacinacao = :dataVacinacao"),
     @NamedQuery(name = "Agenda.findByDoseNumero", query = "SELECT a FROM Agenda a WHERE a.doseNumero = :doseNumero")})

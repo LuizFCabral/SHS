@@ -19,6 +19,7 @@
         <a href="usuario.jsp">Usuário</a><br/>
         <a href="usuarioApl.jsp">Gestor/Enfermeiro</a><br/>
         <a href="vacina.jsp">Vacina</a><br/>
-        <a href="loginUsuario.jsp">Logar</a>
+        <a href="loginUsuario.jsp">Logar</a><br/>
+        <a href="agenda.jsp">Agendar</a><br/>
     </body>
 </html>
