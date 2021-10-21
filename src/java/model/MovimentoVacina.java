@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.io.Serializable;
@@ -10,24 +5,19 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author Pedro
- */
 @Entity
 @Table(name = "movimento_vacina")
 @XmlRootElement
@@ -47,7 +37,7 @@ public class MovimentoVacina implements Serializable {
     @Column(name = "codigo")
     private Integer codigo;
     @Column(name = "data_movimento")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date dataMovimento;
     @Size(max = 1)
     @Column(name = "tipo_movimento")
@@ -56,31 +46,13 @@ public class MovimentoVacina implements Serializable {
     private Integer qtde;
     @Column(name = "lote")
     private Integer lote;
-    @JoinColumn(name = "codigo_vacina", referencedColumnName = "codigo")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Vacina codigoVacina;
+    @JoinColumn(name = "codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Vacina vacina;
 
     public MovimentoVacina() {
     }
-    
-    public String completarTipo() throws Exception
-    {
-        String t = tipoMovimento;
-        try
-        {
-            if(!t.equals("S") && !t.equals("E"))
-                throw new Exception("Tipo não válido!");
-            if(t.equals("S"))
-                t = "Saída";
-            if(t.equals("E"))
-                t = "Entrada";
-        }
-        catch(Exception ex)
-        {
-            throw new Exception("Erro na função completarTipo: " + ex.getMessage());
-        }
-        return t;
-    }
+
     public MovimentoVacina(Integer codigo) {
         this.codigo = codigo;
     }
@@ -125,12 +97,12 @@ public class MovimentoVacina implements Serializable {
         this.lote = lote;
     }
 
-    public Vacina getCodigoVacina() {
-        return codigoVacina;
+    public Vacina getVacina() {
+        return vacina;
     }
 
-    public void setCodigoVacina(Vacina codigoVacina) {
-        this.codigoVacina = codigoVacina;
+    public void setVacina(Vacina vacina) {
+        this.vacina = vacina;
     }
 
     @Override
@@ -152,7 +124,7 @@ public class MovimentoVacina implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "model.MovimentoVacina[ codigo=" + codigo + " ]";

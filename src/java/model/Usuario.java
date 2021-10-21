@@ -1,34 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Pedro
- */
 @Entity
 @Table(name = "usuario")
 @XmlRootElement
@@ -54,13 +43,13 @@ public class Usuario implements Serializable {
     @Column(name = "nome")
     private String nome;
     @Column(name = "data_nascimento")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date dataNascimento;
     @Size(max = 30)
     @Column(name = "cidade")
     private String cidade;
-    @OneToMany(mappedBy = "codigoUsuario", fetch = FetchType.EAGER)
-    private List<Agenda> agendaList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private Agenda agenda;
 
     public Usuario() {
     }
@@ -109,13 +98,12 @@ public class Usuario implements Serializable {
         this.cidade = cidade;
     }
 
-    @XmlTransient
-    public List<Agenda> getAgendaList() {
-        return agendaList;
+    public Agenda getAgenda() {
+        return agenda;
     }
 
-    public void setAgendaList(List<Agenda> agendaList) {
-        this.agendaList = agendaList;
+    public void setAgenda(Agenda agenda) {
+        this.agenda = agenda;
     }
 
     @Override

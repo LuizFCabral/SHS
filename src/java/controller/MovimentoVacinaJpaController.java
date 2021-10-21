@@ -1,26 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
+import controller.exceptions.IllegalOrphanException;
 import controller.exceptions.NonexistentEntityException;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import model.MovimentoVacina;
 import model.Vacina;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import model.MovimentoVacina;
 
-/**
- *
- * @author Pedro
- */
 public class MovimentoVacinaJpaController implements Serializable {
 
     public MovimentoVacinaJpaController(EntityManagerFactory emf) {
@@ -32,20 +25,34 @@ public class MovimentoVacinaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(MovimentoVacina movimentoVacina) {
+    public void create(MovimentoVacina movimentoVacina) throws IllegalOrphanException {
+        List<String> illegalOrphanMessages = null;
+        Vacina vacinaOrphanCheck = movimentoVacina.getVacina();
+        if (vacinaOrphanCheck != null) {
+            MovimentoVacina oldMovimentoVacinaOfVacina = vacinaOrphanCheck.getMovimentoVacina();
+            if (oldMovimentoVacinaOfVacina != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("The Vacina " + vacinaOrphanCheck + " already has an item of type MovimentoVacina whose vacina column cannot be null. Please make another selection for the vacina field.");
+            }
+        }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Vacina codigoVacina = movimentoVacina.getCodigoVacina();
-            if (codigoVacina != null) {
-                codigoVacina = em.getReference(codigoVacina.getClass(), codigoVacina.getCodigo());
-                movimentoVacina.setCodigoVacina(codigoVacina);
+            Vacina vacina = movimentoVacina.getVacina();
+            if (vacina != null) {
+                vacina = em.getReference(vacina.getClass(), vacina.getCodigo());
+                movimentoVacina.setVacina(vacina);
             }
             em.persist(movimentoVacina);
-            if (codigoVacina != null) {
-                codigoVacina.getMovimentoVacinaList().add(movimentoVacina);
-                codigoVacina = em.merge(codigoVacina);
+            if (vacina != null) {
+                vacina.setMovimentoVacina(movimentoVacina);
+                vacina = em.merge(vacina);
             }
             em.getTransaction().commit();
         } finally {
@@ -55,26 +62,39 @@ public class MovimentoVacinaJpaController implements Serializable {
         }
     }
 
-    public void edit(MovimentoVacina movimentoVacina) throws NonexistentEntityException, Exception {
+    public void edit(MovimentoVacina movimentoVacina) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             MovimentoVacina persistentMovimentoVacina = em.find(MovimentoVacina.class, movimentoVacina.getCodigo());
-            Vacina codigoVacinaOld = persistentMovimentoVacina.getCodigoVacina();
-            Vacina codigoVacinaNew = movimentoVacina.getCodigoVacina();
-            if (codigoVacinaNew != null) {
-                codigoVacinaNew = em.getReference(codigoVacinaNew.getClass(), codigoVacinaNew.getCodigo());
-                movimentoVacina.setCodigoVacina(codigoVacinaNew);
+            Vacina vacinaOld = persistentMovimentoVacina.getVacina();
+            Vacina vacinaNew = movimentoVacina.getVacina();
+            List<String> illegalOrphanMessages = null;
+            if (vacinaNew != null && !vacinaNew.equals(vacinaOld)) {
+                MovimentoVacina oldMovimentoVacinaOfVacina = vacinaNew.getMovimentoVacina();
+                if (oldMovimentoVacinaOfVacina != null) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("The Vacina " + vacinaNew + " already has an item of type MovimentoVacina whose vacina column cannot be null. Please make another selection for the vacina field.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (vacinaNew != null) {
+                vacinaNew = em.getReference(vacinaNew.getClass(), vacinaNew.getCodigo());
+                movimentoVacina.setVacina(vacinaNew);
             }
             movimentoVacina = em.merge(movimentoVacina);
-            if (codigoVacinaOld != null && !codigoVacinaOld.equals(codigoVacinaNew)) {
-                codigoVacinaOld.getMovimentoVacinaList().remove(movimentoVacina);
-                codigoVacinaOld = em.merge(codigoVacinaOld);
+            if (vacinaOld != null && !vacinaOld.equals(vacinaNew)) {
+                vacinaOld.setMovimentoVacina(null);
+                vacinaOld = em.merge(vacinaOld);
             }
-            if (codigoVacinaNew != null && !codigoVacinaNew.equals(codigoVacinaOld)) {
-                codigoVacinaNew.getMovimentoVacinaList().add(movimentoVacina);
-                codigoVacinaNew = em.merge(codigoVacinaNew);
+            if (vacinaNew != null && !vacinaNew.equals(vacinaOld)) {
+                vacinaNew.setMovimentoVacina(movimentoVacina);
+                vacinaNew = em.merge(vacinaNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -105,10 +125,10 @@ public class MovimentoVacinaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The movimentoVacina with id " + id + " no longer exists.", enfe);
             }
-            Vacina codigoVacina = movimentoVacina.getCodigoVacina();
-            if (codigoVacina != null) {
-                codigoVacina.getMovimentoVacinaList().remove(movimentoVacina);
-                codigoVacina = em.merge(codigoVacina);
+            Vacina vacina = movimentoVacina.getVacina();
+            if (vacina != null) {
+                vacina.setMovimentoVacina(null);
+                vacina = em.merge(vacina);
             }
             em.remove(movimentoVacina);
             em.getTransaction().commit();

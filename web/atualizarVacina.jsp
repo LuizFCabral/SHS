@@ -4,10 +4,7 @@
     Author     : Pedro
 --%>
 
-<%@page import="controller.MovimentoVacinaJpaController"%>
-<%@page import="java.time.LocalDateTime"%>
-<%@page import="java.security.Timestamp"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="model.MovimentoVacina"%>
 <%@page import="model.Vacina"%>
 <%@page import="controller.UsuarioJpaController"%>
@@ -27,16 +24,13 @@
             Usuario u = new Usuario();
             Banco bb = new Banco();
             DAOJPA daoJ = new DAOJPA();
-            SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat dFHora = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-            MovimentoVacinaJpaController dao = new MovimentoVacinaJpaController(Banco.conexao);
             try
             {
                 if(request.getParameter("b1") == null)
                 {
         %>
-        <form action="atualizarVacina.jsp">
-            CPF: <input type="text" name="txtCPF"/>
+        <form>
+            <input type="text" name="txtCPF"/>
             <input type="submit" name="b1" value="Procurar"/>
         </form>
         <%
@@ -47,16 +41,8 @@
                     {
                         u = (Usuario) daoJ.searchCPF(bb, request.getParameter("txtCPF"), u.getClass());
         %>
-                    <form action="atualizarVacina.jsp">
-                        <h1>Dados da pessoa</h1>
-                        CPF: <input type="text" name="txtCPF" value="<%=u.getCpf()%>" readonly/> <br/>
-                        Código: <input type="text" name="txtCodigo" value="<%=u.getCodigo()%>" readonly/> <br/>
-                        Nome: <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/> <br/>
-                        Data de nascimento: <input type="date" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>"/> <br/>
-                        Cidade:<input type="text" name="txtCidade" value="<%=u.getCidade()%>"/> <br/>
-                        <h1>Dados da vacina</h1>
-                        Descrição: <input type="text" name="txtDescr"/><br/>
-                        Lote utilizado: <input type="text" name="txtLote"/><br/>
+                    <form>
+                        <input type="text" name="txtCPF" value="<%=u%>"/>
                         <input type="submit" name="b1" value="confirmar"/>
                     </form>
         
@@ -65,6 +51,7 @@
 
                     if(request.getParameter("b1").equalsIgnoreCase("confirmar"))
                     {
+                        Date d = new Date();
                         Vacina v = new Vacina();
                         UsuarioJpaController daoU = new UsuarioJpaController(Banco.conexao);
                         int cod = Integer.parseInt(request.getParameter("txtCodigo"));
@@ -73,13 +60,11 @@
                         v = daoJ.vacinaByDescr(bb, descr); //pega o obj vacina
                         MovimentoVacina mov = new MovimentoVacina();
                         mov.setTipoMovimento("S");
-                        mov.setCodigoVacina(v);
+                        mov.setVacina(v);
                         mov.setQtde(1);
-                        int lote = Integer.parseInt(request.getParameter("txtLote"));
+                        int lote = Integer.parseInt("txtLote");
                         mov.setLote(lote);
-                        //mov.setDataMovimento(dFHora.parse(LocalDateTime.now().toString()));
-                        dao.create(mov);
-                        %>pronto!<%
+                        mov.setDataMovimento(d);
                         Banco.conexao.close();
                     }
                 }

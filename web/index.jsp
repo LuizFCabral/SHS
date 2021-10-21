@@ -21,7 +21,5 @@
         <a href="vacina.jsp">Vacina</a><br/>
         <a href="loginUsuario.jsp">Logar</a><br/>
         <a href="agenda.jsp">Agendar</a><br/>
-        <a href="controleMovimento.jsp">controleMovimento</a><br/>
-        <a href="atualizarVacina.jsp">atualizarVacina</a><br/>
     </body>
 </html>

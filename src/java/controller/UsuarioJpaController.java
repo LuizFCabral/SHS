@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
+import controller.exceptions.IllegalOrphanException;
 import controller.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -18,10 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import model.Usuario;
 
-/**
- *
- * @author Pedro
- */
 public class UsuarioJpaController implements Serializable {
 
     public UsuarioJpaController(EntityManagerFactory emf) {
@@ -34,28 +26,24 @@ public class UsuarioJpaController implements Serializable {
     }
 
     public void create(Usuario usuario) {
-        if (usuario.getAgendaList() == null) {
-            usuario.setAgendaList(new ArrayList<Agenda>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Agenda> attachedAgendaList = new ArrayList<Agenda>();
-            for (Agenda agendaListAgendaToAttach : usuario.getAgendaList()) {
-                agendaListAgendaToAttach = em.getReference(agendaListAgendaToAttach.getClass(), agendaListAgendaToAttach.getCodigo());
-                attachedAgendaList.add(agendaListAgendaToAttach);
+            Agenda agenda = usuario.getAgenda();
+            if (agenda != null) {
+                agenda = em.getReference(agenda.getClass(), agenda.getCodigo());
+                usuario.setAgenda(agenda);
             }
-            usuario.setAgendaList(attachedAgendaList);
             em.persist(usuario);
-            for (Agenda agendaListAgenda : usuario.getAgendaList()) {
-                Usuario oldCodigoUsuarioOfAgendaListAgenda = agendaListAgenda.getCodigoUsuario();
-                agendaListAgenda.setCodigoUsuario(usuario);
-                agendaListAgenda = em.merge(agendaListAgenda);
-                if (oldCodigoUsuarioOfAgendaListAgenda != null) {
-                    oldCodigoUsuarioOfAgendaListAgenda.getAgendaList().remove(agendaListAgenda);
-                    oldCodigoUsuarioOfAgendaListAgenda = em.merge(oldCodigoUsuarioOfAgendaListAgenda);
+            if (agenda != null) {
+                Usuario oldUsuarioOfAgenda = agenda.getUsuario();
+                if (oldUsuarioOfAgenda != null) {
+                    oldUsuarioOfAgenda.setAgenda(null);
+                    oldUsuarioOfAgenda = em.merge(oldUsuarioOfAgenda);
                 }
+                agenda.setUsuario(usuario);
+                agenda = em.merge(agenda);
             }
             em.getTransaction().commit();
         } finally {
@@ -65,38 +53,37 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public void edit(Usuario usuario) throws NonexistentEntityException, Exception {
+    public void edit(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Usuario persistentUsuario = em.find(Usuario.class, usuario.getCodigo());
-            List<Agenda> agendaListOld = persistentUsuario.getAgendaList();
-            List<Agenda> agendaListNew = usuario.getAgendaList();
-            List<Agenda> attachedAgendaListNew = new ArrayList<Agenda>();
-            for (Agenda agendaListNewAgendaToAttach : agendaListNew) {
-                agendaListNewAgendaToAttach = em.getReference(agendaListNewAgendaToAttach.getClass(), agendaListNewAgendaToAttach.getCodigo());
-                attachedAgendaListNew.add(agendaListNewAgendaToAttach);
+            Agenda agendaOld = persistentUsuario.getAgenda();
+            Agenda agendaNew = usuario.getAgenda();
+            List<String> illegalOrphanMessages = null;
+            if (agendaOld != null && !agendaOld.equals(agendaNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain Agenda " + agendaOld + " since its usuario field is not nullable.");
             }
-            agendaListNew = attachedAgendaListNew;
-            usuario.setAgendaList(agendaListNew);
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (agendaNew != null) {
+                agendaNew = em.getReference(agendaNew.getClass(), agendaNew.getCodigo());
+                usuario.setAgenda(agendaNew);
+            }
             usuario = em.merge(usuario);
-            for (Agenda agendaListOldAgenda : agendaListOld) {
-                if (!agendaListNew.contains(agendaListOldAgenda)) {
-                    agendaListOldAgenda.setCodigoUsuario(null);
-                    agendaListOldAgenda = em.merge(agendaListOldAgenda);
+            if (agendaNew != null && !agendaNew.equals(agendaOld)) {
+                Usuario oldUsuarioOfAgenda = agendaNew.getUsuario();
+                if (oldUsuarioOfAgenda != null) {
+                    oldUsuarioOfAgenda.setAgenda(null);
+                    oldUsuarioOfAgenda = em.merge(oldUsuarioOfAgenda);
                 }
-            }
-            for (Agenda agendaListNewAgenda : agendaListNew) {
-                if (!agendaListOld.contains(agendaListNewAgenda)) {
-                    Usuario oldCodigoUsuarioOfAgendaListNewAgenda = agendaListNewAgenda.getCodigoUsuario();
-                    agendaListNewAgenda.setCodigoUsuario(usuario);
-                    agendaListNewAgenda = em.merge(agendaListNewAgenda);
-                    if (oldCodigoUsuarioOfAgendaListNewAgenda != null && !oldCodigoUsuarioOfAgendaListNewAgenda.equals(usuario)) {
-                        oldCodigoUsuarioOfAgendaListNewAgenda.getAgendaList().remove(agendaListNewAgenda);
-                        oldCodigoUsuarioOfAgendaListNewAgenda = em.merge(oldCodigoUsuarioOfAgendaListNewAgenda);
-                    }
-                }
+                agendaNew.setUsuario(usuario);
+                agendaNew = em.merge(agendaNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -115,7 +102,7 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -127,10 +114,16 @@ public class UsuarioJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.", enfe);
             }
-            List<Agenda> agendaList = usuario.getAgendaList();
-            for (Agenda agendaListAgenda : agendaList) {
-                agendaListAgenda.setCodigoUsuario(null);
-                agendaListAgenda = em.merge(agendaListAgenda);
+            List<String> illegalOrphanMessages = null;
+            Agenda agendaOrphanCheck = usuario.getAgenda();
+            if (agendaOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Agenda " + agendaOrphanCheck + " in its agenda field has a non-nullable usuario field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(usuario);
             em.getTransaction().commit();
