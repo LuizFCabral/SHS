@@ -72,13 +72,6 @@
 %> 
                         <h1>Vacina <%=obj.getDescricao()%> foi cadastrada. Código: <%=obj.getCodigo()%></h1>Clique <a href="vacina.jsp">aqui</a> para voltar ao formulário CRUD vacina.
 <%
-                        MovimentoVacina mov = new MovimentoVacina();
-                        mov.setVacina(obj);
-                        mov.setQtde(null);//?
-                        mov.setLote(null);//?
-                        mov.setTipoMovimento("E");
-                        Date d = new Date();
-                        mov.setDataMovimento(d);
                         Banco.conexao.close();
                         break;
 
