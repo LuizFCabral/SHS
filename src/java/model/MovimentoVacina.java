@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "movimento_vacina")
@@ -30,7 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "MovimentoVacina.findByCodigo", query = "SELECT m FROM MovimentoVacina m WHERE m.codigo = :codigo"),
     @NamedQuery(name = "MovimentoVacina.findByDataMovimento", query = "SELECT m FROM MovimentoVacina m WHERE m.dataMovimento = :dataMovimento"),
     @NamedQuery(name = "MovimentoVacina.findByTipoMovimento", query = "SELECT m FROM MovimentoVacina m WHERE m.tipoMovimento = :tipoMovimento"),
-    @NamedQuery(name = "MovimentoVacina.findByQtdeDose", query = "SELECT m FROM MovimentoVacina m WHERE m.qtdeDose = :qtdeDose")})
+    @NamedQuery(name = "MovimentoVacina.findByQtde", query = "SELECT m FROM MovimentoVacina m WHERE m.qtde = :qtde"),
+    @NamedQuery(name = "MovimentoVacina.findByLote", query = "SELECT m FROM MovimentoVacina m WHERE m.lote = :lote")})
 public class MovimentoVacina implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,13 +47,12 @@ public class MovimentoVacina implements Serializable {
     @Size(max = 1)
     @Column(name = "tipo_movimento")
     private String tipoMovimento;
-    @Column(name = "qtde_dose")
-    private Integer qtdeDose;
-    @JoinColumn(name = "codigo_lote", referencedColumnName = "codigo")
-    @ManyToOne
-    private Lote codigoLote;
+    @Column(name = "qtde")
+    private Integer qtde;
+    @Column(name = "lote")
+    private Integer lote;
     @JoinColumn(name = "codigo_vacina", referencedColumnName = "codigo")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Vacina codigoVacina;
 
     public MovimentoVacina() {
@@ -75,7 +76,6 @@ public class MovimentoVacina implements Serializable {
         }
         return t;
     }
-
     public MovimentoVacina(Integer codigo) {
         this.codigo = codigo;
     }
@@ -104,20 +104,20 @@ public class MovimentoVacina implements Serializable {
         this.tipoMovimento = tipoMovimento;
     }
 
-    public Integer getQtdeDose() {
-        return qtdeDose;
+    public Integer getQtde() {
+        return qtde;
     }
 
-    public void setQtdeDose(Integer qtdeDose) {
-        this.qtdeDose = qtdeDose;
+    public void setQtde(Integer qtde) {
+        this.qtde = qtde;
     }
 
-    public Lote getCodigoLote() {
-        return codigoLote;
+    public Integer getLote() {
+        return lote;
     }
 
-    public void setCodigoLote(Lote codigoLote) {
-        this.codigoLote = codigoLote;
+    public void setLote(Integer lote) {
+        this.lote = lote;
     }
 
     public Vacina getVacina() {
@@ -147,7 +147,7 @@ public class MovimentoVacina implements Serializable {
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return "model.MovimentoVacina[ codigo=" + codigo + " ]";

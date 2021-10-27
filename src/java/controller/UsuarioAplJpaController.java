@@ -13,7 +13,7 @@ import model.UsuarioApl;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 public class UsuarioAplJpaController implements Serializable {
 

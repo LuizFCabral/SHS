@@ -5,6 +5,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "vacina")
@@ -40,9 +41,7 @@ public class Vacina implements Serializable {
     private String descricao;
     @Column(name = "qtde_dose")
     private Integer qtdeDose;
-    @OneToMany(mappedBy = "codigoVacina")
-    private List<Lote> loteList;
-    @OneToMany(mappedBy = "codigoVacina")
+    @OneToMany(mappedBy = "codigoVacina", fetch = FetchType.EAGER)
     private List<MovimentoVacina> movimentoVacinaList;
 
     public Vacina() {
@@ -74,15 +73,6 @@ public class Vacina implements Serializable {
 
     public void setQtdeDose(Integer qtdeDose) {
         this.qtdeDose = qtdeDose;
-    }
-
-    @XmlTransient
-    public List<Lote> getLoteList() {
-        return loteList;
-    }
-
-    public void setLoteList(List<Lote> loteList) {
-        this.loteList = loteList;
     }
 
     @XmlTransient

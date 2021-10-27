@@ -6,6 +6,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "usuario")
@@ -47,14 +48,12 @@ public class Usuario implements Serializable {
     @Column(name = "nome")
     private String nome;
     @Column(name = "data_nascimento")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dataNascimento;
     @Size(max = 30)
     @Column(name = "cidade")
     private String cidade;
-    @OneToMany(mappedBy = "codigoUsuario")
-    private List<Vacinacao> vacinacaoList;
-    @OneToMany(mappedBy = "codigoUsuario")
+    @OneToMany(mappedBy = "codigoUsuario", fetch = FetchType.EAGER)
     private List<Agenda> agendaList;
 
     public Usuario() {
@@ -102,15 +101,6 @@ public class Usuario implements Serializable {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
-    }
-
-    @XmlTransient
-    public List<Vacinacao> getVacinacaoList() {
-        return vacinacaoList;
-    }
-
-    public void setVacinacaoList(List<Vacinacao> vacinacaoList) {
-        this.vacinacaoList = vacinacaoList;
     }
 
     @XmlTransient
