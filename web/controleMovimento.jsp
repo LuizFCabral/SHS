@@ -4,16 +4,14 @@
     Author     : Pedro
 --%>
 
+<%@page import="model.*"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="controller.VacinaJpaController"%>
 <%@page import="controller.DAOJPA"%>
 <%@page import="controller.UsuarioJpaController"%>
-<%@page import="model.Usuario"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="model.Vacina"%>
 <%@page import="java.util.List"%>
-<%@page import="model.MovimentoVacina"%>
-<%@page import="model.Banco"%>
 <%@page import="controller.MovimentoVacinaJpaController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -30,6 +28,7 @@
             String b;
             MovimentoVacinaJpaController dao;
             VacinaJpaController daoV;
+            DAOJPA daoJ;
             Banco bb;
             
             try 
@@ -67,8 +66,8 @@
                             Código da vacina: <input type="text" name="txtCodVac" value="<%=obj.getCodigoVacina().getCodigo()%>"/> <br/>
                             Data do movimento: <input type="datetime-local" name="txtDataMov" readonly value="<%--<%=dataHora.format((obj.getDataMovimento().toString()))%>--%>"/> <br/>
                             Tipo do movimento: <input type="text" name="txtTipo" value="<%=obj.getTipoMovimento()%>"/> <br/>
-                            Quantidade: <input type="text" name="txtQuant" value="<%=obj.getQtde()%>"/><br/>
-                            Lote: <input type="text" name="txtLote" value="<%=obj.getLote()%>"/><br/><br/>
+                            Quantidade: <input type="text" name="txtQuant" value="<%=obj.getQtdeDose()%>"/><br/>
+                            Lote: <input type="text" name="txtLote" value="<%=obj.getCodigoLote().getDescricao()%>"/><br/><br/>
                             <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
@@ -88,8 +87,9 @@
                             obj.setCodigoVacina(daoV.findVacina(Integer.parseInt(request.getParameter("txtCodVac"))));
                             //obj.setDataMovimento(dataHora.parse(request.getParameter("txtDataMov")));
                             obj.setTipoMovimento(request.getParameter("txtTipo"));
-                            obj.setQtde(Integer.parseInt(request.getParameter("txtQuant")));
-                            obj.setLote(Integer.parseInt(request.getParameter("txtLote")));
+                            obj.setQtdeDose(Integer.parseInt(request.getParameter("txtQuant")));
+                            daoJ = new DAOJPA();
+                            obj.setCodigoLote(daoJ.loteByDescricao(bb, request.getParameter("txtLote")));
                             dao.create(obj);
 %> 
                             <h1>Movimento de <%=obj.completarTipo()%> cadastrado com sucesso. </h1>
@@ -104,8 +104,9 @@
                             obj.setCodigoVacina(daoV.findVacina(Integer.parseInt(request.getParameter("txtCodVac"))));
                             //obj.setDataMovimento(dF.parse(request.getParameter("txtDataMov")));
                             obj.setTipoMovimento(request.getParameter("txtTipo"));
-                            obj.setQtde(Integer.parseInt(request.getParameter("txtQuant")));
-                            obj.setLote(Integer.parseInt(request.getParameter("txtLote")));
+                            obj.setQtdeDose(Integer.parseInt(request.getParameter("txtQuant")));
+                            daoJ = new DAOJPA();
+                            obj.setCodigoLote(daoJ.loteByDescricao(bb, request.getParameter("txtLote")));
                             dao.edit(obj);
 %>
 <h1>Movimento de <%=obj.completarTipo()%> alterado com sucesso. </h1><%
@@ -158,8 +159,8 @@
                                                 <td><%=obj.getCodigoVacina().getCodigo()%></td>
                                                 <td>n implementado<%--<%=dataHora.format(dataHora.format((obj.getDataMovimento().toString())))%>--%></td>
                                                 <td><%=obj.completarTipo()%></td>
-                                                <td><%=obj.getQtde()%></td>
-                                                <td><%=obj.getLote()%></td>
+                                                <td><%=obj.getQtdeDose()%></td>
+                                                <td><%=obj.getCodigoLote()%></td>
                                             </tr>
 <%
                                         }

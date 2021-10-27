@@ -74,9 +74,10 @@
                         MovimentoVacina mov = new MovimentoVacina();
                         mov.setTipoMovimento("S");
                         mov.setCodigoVacina(v);
-                        mov.setQtde(1);
-                        int lote = Integer.parseInt(request.getParameter("txtLote"));
-                        mov.setLote(lote);
+                        mov.setQtdeDose(1);
+                        String lote = request.getParameter("txtLote");
+                        daoJ = new DAOJPA();
+                        mov.setCodigoLote(daoJ.loteByDescricao(bb, lote));
                         //mov.setDataMovimento(dFHora.parse(LocalDateTime.now().toString()));
                         dao.create(mov);
                         %>pronto!<%

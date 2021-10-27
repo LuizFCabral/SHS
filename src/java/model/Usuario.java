@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package model;
 
 import java.io.Serializable;
@@ -6,7 +11,6 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Pedro
+ * @author vinif
  */
 @Entity
 @Table(name = "usuario")
@@ -49,12 +53,14 @@ public class Usuario implements Serializable {
     @Column(name = "nome")
     private String nome;
     @Column(name = "data_nascimento")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date dataNascimento;
     @Size(max = 30)
     @Column(name = "cidade")
     private String cidade;
-    @OneToMany(mappedBy = "codigoUsuario", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "codigoUsuario")
+    private List<Vacinacao> vacinacaoList;
+    @OneToMany(mappedBy = "codigoUsuario")
     private List<Agenda> agendaList;
 
     public Usuario() {
@@ -102,6 +108,15 @@ public class Usuario implements Serializable {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
+    }
+
+    @XmlTransient
+    public List<Vacinacao> getVacinacaoList() {
+        return vacinacaoList;
+    }
+
+    public void setVacinacaoList(List<Vacinacao> vacinacaoList) {
+        this.vacinacaoList = vacinacaoList;
     }
 
     @XmlTransient

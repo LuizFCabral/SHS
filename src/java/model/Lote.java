@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -26,14 +28,15 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author vinif
  */
 @Entity
-@Table(name = "vacina")
+@Table(name = "lote")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Vacina.findAll", query = "SELECT v FROM Vacina v"),
-    @NamedQuery(name = "Vacina.findByCodigo", query = "SELECT v FROM Vacina v WHERE v.codigo = :codigo"),
-    @NamedQuery(name = "Vacina.findByDescricao", query = "SELECT v FROM Vacina v WHERE v.descricao = :descricao"),
-    @NamedQuery(name = "Vacina.findByQtdeDose", query = "SELECT v FROM Vacina v WHERE v.qtdeDose = :qtdeDose")})
-public class Vacina implements Serializable {
+    @NamedQuery(name = "Lote.findAll", query = "SELECT l FROM Lote l"),
+    @NamedQuery(name = "Lote.findByCodigo", query = "SELECT l FROM Lote l WHERE l.codigo = :codigo"),
+    @NamedQuery(name = "Lote.findByDescricao", query = "SELECT l FROM Lote l WHERE l.descricao = :descricao"),
+    @NamedQuery(name = "Lote.findByQtdeUnidade", query = "SELECT l FROM Lote l WHERE l.qtdeUnidade = :qtdeUnidade"),
+    @NamedQuery(name = "Lote.findByDoseDisponivel", query = "SELECT l FROM Lote l WHERE l.doseDisponivel = :doseDisponivel")})
+public class Lote implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,20 +44,25 @@ public class Vacina implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigo")
     private Integer codigo;
-    @Size(max = 20)
+    @Size(max = 10)
     @Column(name = "descricao")
     private String descricao;
-    @Column(name = "qtde_dose")
-    private Integer qtdeDose;
-    @OneToMany(mappedBy = "codigoVacina")
-    private List<Lote> loteList;
-    @OneToMany(mappedBy = "codigoVacina")
+    @Column(name = "qtde_unidade")
+    private Integer qtdeUnidade;
+    @Column(name = "dose_disponivel")
+    private Integer doseDisponivel;
+    @OneToMany(mappedBy = "codigoLote")
+    private List<Vacinacao> vacinacaoList;
+    @JoinColumn(name = "codigo_vacina", referencedColumnName = "codigo")
+    @ManyToOne
+    private Vacina codigoVacina;
+    @OneToMany(mappedBy = "codigoLote")
     private List<MovimentoVacina> movimentoVacinaList;
 
-    public Vacina() {
+    public Lote() {
     }
 
-    public Vacina(Integer codigo) {
+    public Lote(Integer codigo) {
         this.codigo = codigo;
     }
 
@@ -74,21 +82,37 @@ public class Vacina implements Serializable {
         this.descricao = descricao;
     }
 
-    public Integer getQtdeDose() {
-        return qtdeDose;
+    public Integer getQtdeUnidade() {
+        return qtdeUnidade;
     }
 
-    public void setQtdeDose(Integer qtdeDose) {
-        this.qtdeDose = qtdeDose;
+    public void setQtdeUnidade(Integer qtdeUnidade) {
+        this.qtdeUnidade = qtdeUnidade;
+    }
+
+    public Integer getDoseDisponivel() {
+        return doseDisponivel;
+    }
+
+    public void setDoseDisponivel(Integer doseDisponivel) {
+        this.doseDisponivel = doseDisponivel;
     }
 
     @XmlTransient
-    public List<Lote> getLoteList() {
-        return loteList;
+    public List<Vacinacao> getVacinacaoList() {
+        return vacinacaoList;
     }
 
-    public void setLoteList(List<Lote> loteList) {
-        this.loteList = loteList;
+    public void setVacinacaoList(List<Vacinacao> vacinacaoList) {
+        this.vacinacaoList = vacinacaoList;
+    }
+
+    public Vacina getCodigoVacina() {
+        return codigoVacina;
+    }
+
+    public void setCodigoVacina(Vacina codigoVacina) {
+        this.codigoVacina = codigoVacina;
     }
 
     @XmlTransient
@@ -110,10 +134,10 @@ public class Vacina implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Vacina)) {
+        if (!(object instanceof Lote)) {
             return false;
         }
-        Vacina other = (Vacina) object;
+        Lote other = (Lote) object;
         if ((this.codigo == null && other.codigo != null) || (this.codigo != null && !this.codigo.equals(other.codigo))) {
             return false;
         }
@@ -122,7 +146,7 @@ public class Vacina implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Vacina[ codigo=" + codigo + " ]";
+        return "model.Lote[ codigo=" + codigo + " ]";
     }
     
 }

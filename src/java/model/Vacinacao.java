@@ -12,10 +12,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -23,15 +24,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author vinif
  */
 @Entity
-@Table(name = "usuario_apl")
+@Table(name = "vacinacao")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UsuarioApl.findAll", query = "SELECT u FROM UsuarioApl u"),
-    @NamedQuery(name = "UsuarioApl.findByCodigo", query = "SELECT u FROM UsuarioApl u WHERE u.codigo = :codigo"),
-    @NamedQuery(name = "UsuarioApl.findByCpf", query = "SELECT u FROM UsuarioApl u WHERE u.cpf = :cpf"),
-    @NamedQuery(name = "UsuarioApl.findByNome", query = "SELECT u FROM UsuarioApl u WHERE u.nome = :nome"),
-    @NamedQuery(name = "UsuarioApl.findByTipoPessoa", query = "SELECT u FROM UsuarioApl u WHERE u.tipoPessoa = :tipoPessoa")})
-public class UsuarioApl implements Serializable {
+    @NamedQuery(name = "Vacinacao.findAll", query = "SELECT v FROM Vacinacao v"),
+    @NamedQuery(name = "Vacinacao.findByCodigo", query = "SELECT v FROM Vacinacao v WHERE v.codigo = :codigo")})
+public class Vacinacao implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,20 +37,20 @@ public class UsuarioApl implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigo")
     private Integer codigo;
-    @Size(max = 14)
-    @Column(name = "cpf")
-    private String cpf;
-    @Size(max = 40)
-    @Column(name = "nome")
-    private String nome;
-    @Size(max = 1)
-    @Column(name = "tipo_pessoa")
-    private String tipoPessoa;
+    @JoinColumn(name = "codigo_agenda", referencedColumnName = "codigo")
+    @ManyToOne
+    private Agenda codigoAgenda;
+    @JoinColumn(name = "codigo_lote", referencedColumnName = "codigo")
+    @ManyToOne
+    private Lote codigoLote;
+    @JoinColumn(name = "codigo_usuario", referencedColumnName = "codigo")
+    @ManyToOne
+    private Usuario codigoUsuario;
 
-    public UsuarioApl() {
+    public Vacinacao() {
     }
 
-    public UsuarioApl(Integer codigo) {
+    public Vacinacao(Integer codigo) {
         this.codigo = codigo;
     }
 
@@ -64,28 +62,28 @@ public class UsuarioApl implements Serializable {
         this.codigo = codigo;
     }
 
-    public String getCpf() {
-        return cpf;
+    public Agenda getCodigoAgenda() {
+        return codigoAgenda;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCodigoAgenda(Agenda codigoAgenda) {
+        this.codigoAgenda = codigoAgenda;
     }
 
-    public String getNome() {
-        return nome;
+    public Lote getCodigoLote() {
+        return codigoLote;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setCodigoLote(Lote codigoLote) {
+        this.codigoLote = codigoLote;
     }
 
-    public String getTipoPessoa() {
-        return tipoPessoa;
+    public Usuario getCodigoUsuario() {
+        return codigoUsuario;
     }
 
-    public void setTipoPessoa(String tipoPessoa) {
-        this.tipoPessoa = tipoPessoa;
+    public void setCodigoUsuario(Usuario codigoUsuario) {
+        this.codigoUsuario = codigoUsuario;
     }
 
     @Override
@@ -98,10 +96,10 @@ public class UsuarioApl implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UsuarioApl)) {
+        if (!(object instanceof Vacinacao)) {
             return false;
         }
-        UsuarioApl other = (UsuarioApl) object;
+        Vacinacao other = (Vacinacao) object;
         if ((this.codigo == null && other.codigo != null) || (this.codigo != null && !this.codigo.equals(other.codigo))) {
             return false;
         }
@@ -110,7 +108,7 @@ public class UsuarioApl implements Serializable {
 
     @Override
     public String toString() {
-        return "model.UsuarioApl[ codigo=" + codigo + " ]";
+        return "model.Vacinacao[ codigo=" + codigo + " ]";
     }
     
 }
