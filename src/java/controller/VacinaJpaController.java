@@ -7,13 +7,18 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import model.MovimentoVacina;
+import model.Lote;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import model.MovimentoVacina;
 import model.Vacina;
 
+/**
+ *
+ * @author vinif
+ */
 public class VacinaJpaController implements Serializable {
 
     public VacinaJpaController(EntityManagerFactory emf) {
@@ -26,21 +31,44 @@ public class VacinaJpaController implements Serializable {
     }
 
     public void create(Vacina vacina) {
+        if (vacina.getLoteList() == null) {
+            vacina.setLoteList(new ArrayList<Lote>());
+        }
+        if (vacina.getMovimentoVacinaList() == null) {
+            vacina.setMovimentoVacinaList(new ArrayList<MovimentoVacina>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            MovimentoVacina movimentoVacina = vacina.getMovimentoVacina();
-            if (movimentoVacina != null) {
-                movimentoVacina = em.getReference(movimentoVacina.getClass(), movimentoVacina.getCodigo());
-                vacina.setMovimentoVacina(movimentoVacina);
+            List<Lote> attachedLoteList = new ArrayList<Lote>();
+            for (Lote loteListLoteToAttach : vacina.getLoteList()) {
+                loteListLoteToAttach = em.getReference(loteListLoteToAttach.getClass(), loteListLoteToAttach.getCodigo());
+                attachedLoteList.add(loteListLoteToAttach);
+            }
+            vacina.setLoteList(attachedLoteList);
+            List<MovimentoVacina> attachedMovimentoVacinaList = new ArrayList<MovimentoVacina>();
+            for (MovimentoVacina movimentoVacinaListMovimentoVacinaToAttach : vacina.getMovimentoVacinaList()) {
+                movimentoVacinaListMovimentoVacinaToAttach = em.getReference(movimentoVacinaListMovimentoVacinaToAttach.getClass(), movimentoVacinaListMovimentoVacinaToAttach.getCodigo());
+                attachedMovimentoVacinaList.add(movimentoVacinaListMovimentoVacinaToAttach);
             }
             em.persist(vacina);
-            if (movimentoVacina != null) {
-                Vacina oldVacinaOfMovimentoVacina = movimentoVacina.getVacina();
-                if (oldVacinaOfMovimentoVacina != null) {
-                    oldVacinaOfMovimentoVacina.setMovimentoVacina(null);
-                    oldVacinaOfMovimentoVacina = em.merge(oldVacinaOfMovimentoVacina);
+            for (Lote loteListLote : vacina.getLoteList()) {
+                Vacina oldCodigoVacinaOfLoteListLote = loteListLote.getCodigoVacina();
+                loteListLote.setCodigoVacina(vacina);
+                loteListLote = em.merge(loteListLote);
+                if (oldCodigoVacinaOfLoteListLote != null) {
+                    oldCodigoVacinaOfLoteListLote.getLoteList().remove(loteListLote);
+                    oldCodigoVacinaOfLoteListLote = em.merge(oldCodigoVacinaOfLoteListLote);
+                }
+            }
+            for (MovimentoVacina movimentoVacinaListMovimentoVacina : vacina.getMovimentoVacinaList()) {
+                Vacina oldCodigoVacinaOfMovimentoVacinaListMovimentoVacina = movimentoVacinaListMovimentoVacina.getCodigoVacina();
+                movimentoVacinaListMovimentoVacina.setCodigoVacina(vacina);
+                movimentoVacinaListMovimentoVacina = em.merge(movimentoVacinaListMovimentoVacina);
+                if (oldCodigoVacinaOfMovimentoVacinaListMovimentoVacina != null) {
+                    oldCodigoVacinaOfMovimentoVacinaListMovimentoVacina.getMovimentoVacinaList().remove(movimentoVacinaListMovimentoVacina);
+                    oldCodigoVacinaOfMovimentoVacinaListMovimentoVacina = em.merge(oldCodigoVacinaOfMovimentoVacinaListMovimentoVacina);
                 }
                 movimentoVacina.setVacina(vacina);
                 movimentoVacina = em.merge(movimentoVacina);
@@ -59,12 +87,46 @@ public class VacinaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Vacina persistentVacina = em.find(Vacina.class, vacina.getCodigo());
-            MovimentoVacina movimentoVacinaOld = persistentVacina.getMovimentoVacina();
-            MovimentoVacina movimentoVacinaNew = vacina.getMovimentoVacina();
-            List<String> illegalOrphanMessages = null;
-            if (movimentoVacinaOld != null && !movimentoVacinaOld.equals(movimentoVacinaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+            List<Lote> loteListOld = persistentVacina.getLoteList();
+            List<Lote> loteListNew = vacina.getLoteList();
+            List<MovimentoVacina> movimentoVacinaListOld = persistentVacina.getMovimentoVacinaList();
+            List<MovimentoVacina> movimentoVacinaListNew = vacina.getMovimentoVacinaList();
+            List<Lote> attachedLoteListNew = new ArrayList<Lote>();
+            for (Lote loteListNewLoteToAttach : loteListNew) {
+                loteListNewLoteToAttach = em.getReference(loteListNewLoteToAttach.getClass(), loteListNewLoteToAttach.getCodigo());
+                attachedLoteListNew.add(loteListNewLoteToAttach);
+            }
+            loteListNew = attachedLoteListNew;
+            vacina.setLoteList(loteListNew);
+            List<MovimentoVacina> attachedMovimentoVacinaListNew = new ArrayList<MovimentoVacina>();
+            for (MovimentoVacina movimentoVacinaListNewMovimentoVacinaToAttach : movimentoVacinaListNew) {
+                movimentoVacinaListNewMovimentoVacinaToAttach = em.getReference(movimentoVacinaListNewMovimentoVacinaToAttach.getClass(), movimentoVacinaListNewMovimentoVacinaToAttach.getCodigo());
+                attachedMovimentoVacinaListNew.add(movimentoVacinaListNewMovimentoVacinaToAttach);
+            }
+            movimentoVacinaListNew = attachedMovimentoVacinaListNew;
+            vacina.setMovimentoVacinaList(movimentoVacinaListNew);
+            vacina = em.merge(vacina);
+            for (Lote loteListOldLote : loteListOld) {
+                if (!loteListNew.contains(loteListOldLote)) {
+                    loteListOldLote.setCodigoVacina(null);
+                    loteListOldLote = em.merge(loteListOldLote);
+                }
+            }
+            for (Lote loteListNewLote : loteListNew) {
+                if (!loteListOld.contains(loteListNewLote)) {
+                    Vacina oldCodigoVacinaOfLoteListNewLote = loteListNewLote.getCodigoVacina();
+                    loteListNewLote.setCodigoVacina(vacina);
+                    loteListNewLote = em.merge(loteListNewLote);
+                    if (oldCodigoVacinaOfLoteListNewLote != null && !oldCodigoVacinaOfLoteListNewLote.equals(vacina)) {
+                        oldCodigoVacinaOfLoteListNewLote.getLoteList().remove(loteListNewLote);
+                        oldCodigoVacinaOfLoteListNewLote = em.merge(oldCodigoVacinaOfLoteListNewLote);
+                    }
+                }
+            }
+            for (MovimentoVacina movimentoVacinaListOldMovimentoVacina : movimentoVacinaListOld) {
+                if (!movimentoVacinaListNew.contains(movimentoVacinaListOldMovimentoVacina)) {
+                    movimentoVacinaListOldMovimentoVacina.setCodigoVacina(null);
+                    movimentoVacinaListOldMovimentoVacina = em.merge(movimentoVacinaListOldMovimentoVacina);
                 }
                 illegalOrphanMessages.add("You must retain MovimentoVacina " + movimentoVacinaOld + " since its vacina field is not nullable.");
             }
@@ -114,16 +176,15 @@ public class VacinaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The vacina with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            MovimentoVacina movimentoVacinaOrphanCheck = vacina.getMovimentoVacina();
-            if (movimentoVacinaOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Vacina (" + vacina + ") cannot be destroyed since the MovimentoVacina " + movimentoVacinaOrphanCheck + " in its movimentoVacina field has a non-nullable vacina field.");
+            List<Lote> loteList = vacina.getLoteList();
+            for (Lote loteListLote : loteList) {
+                loteListLote.setCodigoVacina(null);
+                loteListLote = em.merge(loteListLote);
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            List<MovimentoVacina> movimentoVacinaList = vacina.getMovimentoVacinaList();
+            for (MovimentoVacina movimentoVacinaListMovimentoVacina : movimentoVacinaList) {
+                movimentoVacinaListMovimentoVacina.setCodigoVacina(null);
+                movimentoVacinaListMovimentoVacina = em.merge(movimentoVacinaListMovimentoVacina);
             }
             em.remove(vacina);
             em.getTransaction().commit();

@@ -15,6 +15,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author vinif
+ */
 @Entity
 @Table(name = "vacina")
 @XmlRootElement
@@ -36,8 +40,10 @@ public class Vacina implements Serializable {
     private String descricao;
     @Column(name = "qtde_dose")
     private Integer qtdeDose;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "vacina")
-    private MovimentoVacina movimentoVacina;
+    @OneToMany(mappedBy = "codigoVacina")
+    private List<Lote> loteList;
+    @OneToMany(mappedBy = "codigoVacina")
+    private List<MovimentoVacina> movimentoVacinaList;
 
     public Vacina() {
     }
@@ -70,8 +76,18 @@ public class Vacina implements Serializable {
         this.qtdeDose = qtdeDose;
     }
 
-    public MovimentoVacina getMovimentoVacina() {
-        return movimentoVacina;
+    @XmlTransient
+    public List<Lote> getLoteList() {
+        return loteList;
+    }
+
+    public void setLoteList(List<Lote> loteList) {
+        this.loteList = loteList;
+    }
+
+    @XmlTransient
+    public List<MovimentoVacina> getMovimentoVacinaList() {
+        return movimentoVacinaList;
     }
 
     public void setMovimentoVacina(MovimentoVacina movimentoVacina) {

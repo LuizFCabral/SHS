@@ -18,6 +18,10 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author vinif
+ */
 @Entity
 @Table(name = "movimento_vacina")
 @XmlRootElement
@@ -26,8 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "MovimentoVacina.findByCodigo", query = "SELECT m FROM MovimentoVacina m WHERE m.codigo = :codigo"),
     @NamedQuery(name = "MovimentoVacina.findByDataMovimento", query = "SELECT m FROM MovimentoVacina m WHERE m.dataMovimento = :dataMovimento"),
     @NamedQuery(name = "MovimentoVacina.findByTipoMovimento", query = "SELECT m FROM MovimentoVacina m WHERE m.tipoMovimento = :tipoMovimento"),
-    @NamedQuery(name = "MovimentoVacina.findByQtde", query = "SELECT m FROM MovimentoVacina m WHERE m.qtde = :qtde"),
-    @NamedQuery(name = "MovimentoVacina.findByLote", query = "SELECT m FROM MovimentoVacina m WHERE m.lote = :lote")})
+    @NamedQuery(name = "MovimentoVacina.findByQtdeDose", query = "SELECT m FROM MovimentoVacina m WHERE m.qtdeDose = :qtdeDose")})
 public class MovimentoVacina implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,15 +45,35 @@ public class MovimentoVacina implements Serializable {
     @Size(max = 1)
     @Column(name = "tipo_movimento")
     private String tipoMovimento;
-    @Column(name = "qtde")
-    private Integer qtde;
-    @Column(name = "lote")
-    private Integer lote;
-    @JoinColumn(name = "codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Vacina vacina;
+    @Column(name = "qtde_dose")
+    private Integer qtdeDose;
+    @JoinColumn(name = "codigo_lote", referencedColumnName = "codigo")
+    @ManyToOne
+    private Lote codigoLote;
+    @JoinColumn(name = "codigo_vacina", referencedColumnName = "codigo")
+    @ManyToOne
+    private Vacina codigoVacina;
 
     public MovimentoVacina() {
+    }
+    
+    public String completarTipo() throws Exception
+    {
+        String t = tipoMovimento;
+        try
+        {
+            if(!t.equals("S") && !t.equals("E"))
+                throw new Exception("Tipo não válido!");
+            if(t.equals("S"))
+                t = "Saída";
+            if(t.equals("E"))
+                t = "Entrada";
+        }
+        catch(Exception ex)
+        {
+            throw new Exception("Erro na função completarTipo: " + ex.getMessage());
+        }
+        return t;
     }
 
     public MovimentoVacina(Integer codigo) {
@@ -81,20 +104,20 @@ public class MovimentoVacina implements Serializable {
         this.tipoMovimento = tipoMovimento;
     }
 
-    public Integer getQtde() {
-        return qtde;
+    public Integer getQtdeDose() {
+        return qtdeDose;
     }
 
-    public void setQtde(Integer qtde) {
-        this.qtde = qtde;
+    public void setQtdeDose(Integer qtdeDose) {
+        this.qtdeDose = qtdeDose;
     }
 
-    public Integer getLote() {
-        return lote;
+    public Lote getCodigoLote() {
+        return codigoLote;
     }
 
-    public void setLote(Integer lote) {
-        this.lote = lote;
+    public void setCodigoLote(Lote codigoLote) {
+        this.codigoLote = codigoLote;
     }
 
     public Vacina getVacina() {

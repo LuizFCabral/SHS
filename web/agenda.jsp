@@ -1,11 +1,11 @@
 <%--
     create table agenda(
-	codigo serial primary key,
-	data_agendamento date,
-	CONSTRAINT codigo_usuario FOREIGN KEY (codigo) REFERENCES usuario (codigo),
-	data_vacinacao date,
-	dose_numero int
-);
+        codigo serial primary key,
+        data_agendamento timestamp default current_timestamp,
+        codigo_usuario int REFERENCES usuario (codigo),
+        data_vacinacao timestamp,
+        dose_numero int
+    );
 --%>
 
 <%@page import="java.sql.Timestamp"%>
@@ -76,8 +76,8 @@
 %>
                             <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
                                 Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
-                                Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao" value="<%=obj.getDataVacinacao()%>"/> <br/>
-                                Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao"/> <br/>
+                                Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao" value="<%=dF.format(obj.getDataVacinacao())%>"/> <br/>
+                                Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" value="<%=hF.format(obj.getDataVacinacao())%>"/> <br/>
                                 Número de dose: <input type="text" name="txtDoseNum" id="idDoseNum" value="<%=obj.getDoseNumero()%>"/><br/><br/>
                                 <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
                                 <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
@@ -99,13 +99,11 @@
                         switch(b)
                         {
                             case "Cadastrar":
-                                obj = new Agenda();
-                                obj = login.getAgenda();
-                                if(obj == null) {
+                                if(login.getAgendaList().isEmpty()) {
                                     obj = new Agenda();
                                     hoje = new Timestamp(System.currentTimeMillis());
                                     obj.setDataAgendamento(hoje);
-                                    obj.setUsuario(login);
+                                    obj.setCodigoUsuario(login);
                                     dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
                                     obj.setDataVacinacao(tF.parse(dataHora));
                                     obj.setDoseNumero(Integer.parseInt(request.getParameter("txtDoseNum")));
@@ -125,10 +123,8 @@
                                 if(obj == null)
                                     throw new Exception("Esse agendamento não existe.");
 
-                                obj = new Agenda();
-                                obj.setCodigo(Integer.parseInt(request.getParameter("txtCod")));
-                                obj.setDataAgendamento(dF.parse(request.getParameter("txtDataAgendamento")));
-                                obj.setUsuario(login);
+                                hoje = new Timestamp(System.currentTimeMillis());
+                                obj.setDataAgendamento(hoje);
                                 dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
                                 obj.setDataVacinacao(tF.parse(dataHora));
                                 obj.setDoseNumero(Integer.parseInt(request.getParameter("txtDoseNum")));
@@ -143,10 +139,13 @@
                                 obj = dao.findAgenda(cod);
                                 if(obj == null)
                                     throw new Exception("Esse agendamento não existe.");
-                                    
+                                
+                                UsuarioJpaController daoU = new UsuarioJpaController(Banco.conexao);
                                 dao.destroy(cod);
+                                login = daoU.findUsuario(login.getCodigo());
+                                session.setAttribute("login", login);
 %>
-                                <h1>Agendamento concluído com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+                                <h1>Agendamento removido com sucesso.</h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
 <%
                             break;
 
@@ -166,8 +165,10 @@
                                             <tr>
                                                 <th>Código</th>
                                                 <th>Data de agendamento</th>
+                                                <th>Hora de agendamento</th>
                                                 <th>Código de usuário</th>
                                                 <th>Data de vacinação</th>
+                                                <th>Hora de vacinação</th>
                                                 <th>Número de dose</th>
                                             </tr>
                                         </thead>
@@ -179,9 +180,11 @@
 %>
                                                 <tr>
                                                     <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
-                                                    <td><%=obj.getDataAgendamento()%></td>
-                                                    <td><%=obj.getUsuario().getCodigo()%></td>
+                                                    <td><%=dF.format(obj.getDataAgendamento())%></td>
+                                                    <td><%=hF.format(obj.getDataAgendamento())%></td>
+                                                    <td><%=obj.getCodigoUsuario().getCodigo()%></td>
                                                     <td><%=dF.format(obj.getDataVacinacao())%></td>
+                                                    <td><%=hF.format(obj.getDataVacinacao())%></td>
                                                     <td><%=obj.getDoseNumero()%></td>
                                                 </tr>
 <%

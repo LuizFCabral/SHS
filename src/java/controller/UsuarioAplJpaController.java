@@ -11,6 +11,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import model.UsuarioApl;
 
+/**
+ *
+ * @author vinif
+ */
 public class UsuarioAplJpaController implements Serializable {
 
     public UsuarioAplJpaController(EntityManagerFactory emf) {

@@ -7,13 +7,18 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import model.Agenda;
+import model.Vacinacao;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import model.Agenda;
 import model.Usuario;
 
+/**
+ *
+ * @author vinif
+ */
 public class UsuarioJpaController implements Serializable {
 
     public UsuarioJpaController(EntityManagerFactory emf) {
@@ -26,21 +31,44 @@ public class UsuarioJpaController implements Serializable {
     }
 
     public void create(Usuario usuario) {
+        if (usuario.getVacinacaoList() == null) {
+            usuario.setVacinacaoList(new ArrayList<Vacinacao>());
+        }
+        if (usuario.getAgendaList() == null) {
+            usuario.setAgendaList(new ArrayList<Agenda>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Agenda agenda = usuario.getAgenda();
-            if (agenda != null) {
-                agenda = em.getReference(agenda.getClass(), agenda.getCodigo());
-                usuario.setAgenda(agenda);
+            List<Vacinacao> attachedVacinacaoList = new ArrayList<Vacinacao>();
+            for (Vacinacao vacinacaoListVacinacaoToAttach : usuario.getVacinacaoList()) {
+                vacinacaoListVacinacaoToAttach = em.getReference(vacinacaoListVacinacaoToAttach.getClass(), vacinacaoListVacinacaoToAttach.getCodigo());
+                attachedVacinacaoList.add(vacinacaoListVacinacaoToAttach);
+            }
+            usuario.setVacinacaoList(attachedVacinacaoList);
+            List<Agenda> attachedAgendaList = new ArrayList<Agenda>();
+            for (Agenda agendaListAgendaToAttach : usuario.getAgendaList()) {
+                agendaListAgendaToAttach = em.getReference(agendaListAgendaToAttach.getClass(), agendaListAgendaToAttach.getCodigo());
+                attachedAgendaList.add(agendaListAgendaToAttach);
             }
             em.persist(usuario);
-            if (agenda != null) {
-                Usuario oldUsuarioOfAgenda = agenda.getUsuario();
-                if (oldUsuarioOfAgenda != null) {
-                    oldUsuarioOfAgenda.setAgenda(null);
-                    oldUsuarioOfAgenda = em.merge(oldUsuarioOfAgenda);
+            for (Vacinacao vacinacaoListVacinacao : usuario.getVacinacaoList()) {
+                Usuario oldCodigoUsuarioOfVacinacaoListVacinacao = vacinacaoListVacinacao.getCodigoUsuario();
+                vacinacaoListVacinacao.setCodigoUsuario(usuario);
+                vacinacaoListVacinacao = em.merge(vacinacaoListVacinacao);
+                if (oldCodigoUsuarioOfVacinacaoListVacinacao != null) {
+                    oldCodigoUsuarioOfVacinacaoListVacinacao.getVacinacaoList().remove(vacinacaoListVacinacao);
+                    oldCodigoUsuarioOfVacinacaoListVacinacao = em.merge(oldCodigoUsuarioOfVacinacaoListVacinacao);
+                }
+            }
+            for (Agenda agendaListAgenda : usuario.getAgendaList()) {
+                Usuario oldCodigoUsuarioOfAgendaListAgenda = agendaListAgenda.getCodigoUsuario();
+                agendaListAgenda.setCodigoUsuario(usuario);
+                agendaListAgenda = em.merge(agendaListAgenda);
+                if (oldCodigoUsuarioOfAgendaListAgenda != null) {
+                    oldCodigoUsuarioOfAgendaListAgenda.getAgendaList().remove(agendaListAgenda);
+                    oldCodigoUsuarioOfAgendaListAgenda = em.merge(oldCodigoUsuarioOfAgendaListAgenda);
                 }
                 agenda.setUsuario(usuario);
                 agenda = em.merge(agenda);
@@ -59,12 +87,46 @@ public class UsuarioJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Usuario persistentUsuario = em.find(Usuario.class, usuario.getCodigo());
-            Agenda agendaOld = persistentUsuario.getAgenda();
-            Agenda agendaNew = usuario.getAgenda();
-            List<String> illegalOrphanMessages = null;
-            if (agendaOld != null && !agendaOld.equals(agendaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+            List<Vacinacao> vacinacaoListOld = persistentUsuario.getVacinacaoList();
+            List<Vacinacao> vacinacaoListNew = usuario.getVacinacaoList();
+            List<Agenda> agendaListOld = persistentUsuario.getAgendaList();
+            List<Agenda> agendaListNew = usuario.getAgendaList();
+            List<Vacinacao> attachedVacinacaoListNew = new ArrayList<Vacinacao>();
+            for (Vacinacao vacinacaoListNewVacinacaoToAttach : vacinacaoListNew) {
+                vacinacaoListNewVacinacaoToAttach = em.getReference(vacinacaoListNewVacinacaoToAttach.getClass(), vacinacaoListNewVacinacaoToAttach.getCodigo());
+                attachedVacinacaoListNew.add(vacinacaoListNewVacinacaoToAttach);
+            }
+            vacinacaoListNew = attachedVacinacaoListNew;
+            usuario.setVacinacaoList(vacinacaoListNew);
+            List<Agenda> attachedAgendaListNew = new ArrayList<Agenda>();
+            for (Agenda agendaListNewAgendaToAttach : agendaListNew) {
+                agendaListNewAgendaToAttach = em.getReference(agendaListNewAgendaToAttach.getClass(), agendaListNewAgendaToAttach.getCodigo());
+                attachedAgendaListNew.add(agendaListNewAgendaToAttach);
+            }
+            agendaListNew = attachedAgendaListNew;
+            usuario.setAgendaList(agendaListNew);
+            usuario = em.merge(usuario);
+            for (Vacinacao vacinacaoListOldVacinacao : vacinacaoListOld) {
+                if (!vacinacaoListNew.contains(vacinacaoListOldVacinacao)) {
+                    vacinacaoListOldVacinacao.setCodigoUsuario(null);
+                    vacinacaoListOldVacinacao = em.merge(vacinacaoListOldVacinacao);
+                }
+            }
+            for (Vacinacao vacinacaoListNewVacinacao : vacinacaoListNew) {
+                if (!vacinacaoListOld.contains(vacinacaoListNewVacinacao)) {
+                    Usuario oldCodigoUsuarioOfVacinacaoListNewVacinacao = vacinacaoListNewVacinacao.getCodigoUsuario();
+                    vacinacaoListNewVacinacao.setCodigoUsuario(usuario);
+                    vacinacaoListNewVacinacao = em.merge(vacinacaoListNewVacinacao);
+                    if (oldCodigoUsuarioOfVacinacaoListNewVacinacao != null && !oldCodigoUsuarioOfVacinacaoListNewVacinacao.equals(usuario)) {
+                        oldCodigoUsuarioOfVacinacaoListNewVacinacao.getVacinacaoList().remove(vacinacaoListNewVacinacao);
+                        oldCodigoUsuarioOfVacinacaoListNewVacinacao = em.merge(oldCodigoUsuarioOfVacinacaoListNewVacinacao);
+                    }
+                }
+            }
+            for (Agenda agendaListOldAgenda : agendaListOld) {
+                if (!agendaListNew.contains(agendaListOldAgenda)) {
+                    agendaListOldAgenda.setCodigoUsuario(null);
+                    agendaListOldAgenda = em.merge(agendaListOldAgenda);
                 }
                 illegalOrphanMessages.add("You must retain Agenda " + agendaOld + " since its usuario field is not nullable.");
             }
@@ -114,16 +176,15 @@ public class UsuarioJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Agenda agendaOrphanCheck = usuario.getAgenda();
-            if (agendaOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Agenda " + agendaOrphanCheck + " in its agenda field has a non-nullable usuario field.");
+            List<Vacinacao> vacinacaoList = usuario.getVacinacaoList();
+            for (Vacinacao vacinacaoListVacinacao : vacinacaoList) {
+                vacinacaoListVacinacao.setCodigoUsuario(null);
+                vacinacaoListVacinacao = em.merge(vacinacaoListVacinacao);
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            List<Agenda> agendaList = usuario.getAgendaList();
+            for (Agenda agendaListAgenda : agendaList) {
+                agendaListAgenda.setCodigoUsuario(null);
+                agendaListAgenda = em.merge(agendaListAgenda);
             }
             em.remove(usuario);
             em.getTransaction().commit();

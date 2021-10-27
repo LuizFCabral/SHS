@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,12 +12,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author vinif
+ */
 @Entity
 @Table(name = "agenda")
 @XmlRootElement
@@ -43,9 +49,11 @@ public class Agenda implements Serializable {
     private Date dataVacinacao;
     @Column(name = "dose_numero")
     private Integer doseNumero;
-    @JoinColumn(name = "codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Usuario usuario;
+    @OneToMany(mappedBy = "codigoAgenda")
+    private List<Vacinacao> vacinacaoList;
+    @JoinColumn(name = "codigo_usuario", referencedColumnName = "codigo")
+    @ManyToOne
+    private Usuario codigoUsuario;
 
     public Agenda() {
     }
@@ -86,8 +94,17 @@ public class Agenda implements Serializable {
         this.doseNumero = doseNumero;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    @XmlTransient
+    public List<Vacinacao> getVacinacaoList() {
+        return vacinacaoList;
+    }
+
+    public void setVacinacaoList(List<Vacinacao> vacinacaoList) {
+        this.vacinacaoList = vacinacaoList;
+    }
+
+    public Usuario getCodigoUsuario() {
+        return codigoUsuario;
     }
 
     public void setUsuario(Usuario usuario) {

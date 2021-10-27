@@ -57,4 +57,17 @@ public class DAOJPA {
             throw new Exception("Erro no agendaByCodigoUsuario: " + ex.getMessage());
         }
     }
+    
+    public Lote loteByDescricao(Banco bb, String descricao) throws Exception {
+        try {
+            return (Lote)bb.sessao.createNamedQuery("Lote.findByDescricao").setParameter("descricao", descricao).getSingleResult();
+        }
+        catch(NoResultException ex) 
+        {
+            return (null);
+        }
+        catch(Exception ex) {
+            throw new Exception("Erro no codigoLoteByDescricao: " + ex.getMessage());
+        }
+    }
 }

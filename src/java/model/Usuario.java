@@ -18,6 +18,10 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author vinif
+ */
 @Entity
 @Table(name = "usuario")
 @XmlRootElement
@@ -48,8 +52,10 @@ public class Usuario implements Serializable {
     @Size(max = 30)
     @Column(name = "cidade")
     private String cidade;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private Agenda agenda;
+    @OneToMany(mappedBy = "codigoUsuario")
+    private List<Vacinacao> vacinacaoList;
+    @OneToMany(mappedBy = "codigoUsuario")
+    private List<Agenda> agendaList;
 
     public Usuario() {
     }
@@ -98,8 +104,18 @@ public class Usuario implements Serializable {
         this.cidade = cidade;
     }
 
-    public Agenda getAgenda() {
-        return agenda;
+    @XmlTransient
+    public List<Vacinacao> getVacinacaoList() {
+        return vacinacaoList;
+    }
+
+    public void setVacinacaoList(List<Vacinacao> vacinacaoList) {
+        this.vacinacaoList = vacinacaoList;
+    }
+
+    @XmlTransient
+    public List<Agenda> getAgendaList() {
+        return agendaList;
     }
 
     public void setAgenda(Agenda agenda) {
