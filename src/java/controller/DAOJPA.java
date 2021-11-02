@@ -71,16 +71,4 @@ public class DAOJPA {
             throw new Exception("Erro no codigoLoteByDescricao: " + ex.getMessage());
         }
     }
-    public Agenda agendaVigente(Banco bb, Usuario u) throws Exception{
-        try
-        {
-            Timestamp hoje = new Timestamp(System.currentTimeMillis());
-            return (Agenda)bb.sessao.createQuery("select a from Agenda a where a.codigo_usuario = :u AND a.data_vacinacao = :hoje")
-                    .setParameter("u", u).setParameter("hoje", hoje).getSingleResult();
-        }
-        catch(Exception ex)
-        {
-            throw new Exception("Erro no agendaVigente: " + ex.getMessage());
-        }
-    }
 }

@@ -4,6 +4,9 @@
     Author     : Pedro
 --%>
 
+<%@page import="controller.VacinacaoJpaController"%>
+<%@page import="model.Agenda"%>
+<%@page import="java.util.List"%>
 <%@page import="model.Vacinacao"%>
 <%@page import="model.Lote"%>
 <%@page import="controller.LoteJpaController"%>
@@ -91,7 +94,19 @@
                         Vacinacao vac = new Vacinacao();
                         vac.setCodigoLote(l);
                         vac.setCodigoUsuario(u);
-                        vac.setCodigoAgenda(daoJ.agendaVigente(bb, u));
+                        List<Agenda> lista = u.getAgendaList();
+                        Agenda a = new Agenda();
+                        for(int i = 0; i<lista.size(); i++)
+                        {
+                            a = lista.get(i);
+                            if(hoje.after(a.getDataVacinacao()))
+                            {
+                                break;
+                            }
+                        }
+                        vac.setCodigoAgenda(a);
+                        VacinacaoJpaController daoVac = new VacinacaoJpaController(Banco.conexao);
+                        daoVac.create(vac);
                         %>pronto!<%
                         Banco.conexao.close();
                     }

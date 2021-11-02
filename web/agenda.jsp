@@ -194,6 +194,7 @@
                                                 <th>Data de vacinação</th>
                                                 <th>Hora de vacinação</th>
                                                 <th>Número de dose</th>
+                                                <th>Comprovante</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -210,6 +211,19 @@
                                                     <td><%=dF.format(obj.getDataVacinacao())%></td>
                                                     <td><%=hF.format(obj.getDataVacinacao())%></td>
                                                     <td><%=obj.getDoseNumero()%></td>
+                                                    <td>
+                                                    <%
+                                                        if(!obj.getVacinacaoList().isEmpty())
+                                                        { 
+                                                            int codVac = obj.getVacinacaoList().get(0).getCodigo();
+                                                            %><a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>">Acessar</a> <%
+                                                        }
+                                                        else
+                                                        {
+%>                                                          <p>Indisponível</p><%
+                                                        }
+                                                    %>
+                                                    </td>
                                                 </tr>
 <%
                                             }
