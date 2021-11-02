@@ -28,6 +28,9 @@
             Timestamp hoje;
             try
             {
+                if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class)
+                    throw new Exception("Log-in não feito ou credenciais insuficientes");
+                
                 if(request.getParameter("b1") == null)
                 {
         %>

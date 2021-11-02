@@ -31,14 +31,24 @@
             Usuario obj;
             String b;
             UsuarioJpaController dao;
-            Banco bb;
-            
+            Banco bb = new Banco();
+            Usuario login = new Usuario();
+            boolean comum = false;
             try 
             {
-                bb = new Banco();
+                if(session.getAttribute("login") == null)
+                    throw new Exception("Faça log-in antes!");
                 dao = new UsuarioJpaController(Banco.conexao);
+                if(session.getAttribute("classe") == Usuario.class)
+                {
+                    login = (Usuario) session.getAttribute("login");
+                //atualizando o usuário logado para garantir "frescor" dos dados
+                    login = dao.findUsuario(login.getCodigo());
+                    session.setAttribute("login", login);
+                    comum = true;
+                }
                 SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
-                
+
                 //não há operações crud a fazer
                 if(request.getParameter("b1") == null)
                 {
@@ -49,7 +59,7 @@
                         //FORM CRUD USUARIO A PREENCHER
 %>                      
                         <form action="usuario.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod" id="idCod"/> <br/>
+                            Código: <input type="text" name="txtCod" id="idCod" readonly/> <br/>
                             Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
                             CPF: <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()"/> <br/>
                             Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc"/> <br/>
@@ -68,7 +78,7 @@
                         //FORM CARREGADO DE DADOS DE USUARIO DA TABELA
 %>
                         <form action="usuario.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
+                            Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>" readonly/> <br/>
                             Nome: <input type="text" name="txtNome" id="idNome" value="<%=obj.getNome()%>"/>  <br/>
                             CPF: <input type="text" name="txtCPF" id="idCPF" value="<%=obj.getCpf()%>"/> <br/>
                             Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc" value="<%=dF.format(obj.getDataNascimento())%>"/> <br/>
@@ -107,7 +117,7 @@
                             <h1>Usuário de nome <%=obj.getNome()%> cadastrado com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%
                             break;
-                            
+
                         case "Alterar":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
                             obj = dao.findUsuario(cod);
@@ -132,7 +142,7 @@
                             <h1>Usuário de código <%=obj.getCodigo()%> alterado com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%
                             break;
-                            
+
                         case "Remover":
                             cod = Integer.parseInt(request.getParameter("txtCod"));
                             obj = dao.findUsuario(cod);
@@ -143,7 +153,7 @@
                             <h1>Usuário de código <%=cod%> removido com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%
                             break;
-                            
+
                         case "Consultar":
                             List<Usuario> lista = dao.findUsuarioEntities();
                             if(lista == null || lista.isEmpty())
@@ -170,6 +180,16 @@
                                         </thead>
                                         <tbody>
 <%
+                                        if(comum)
+                                        {
+                                            %><tr>
+                                                <td><input type="submit" name="bCarregar" value="<%=login.getCodigo()%>"/></td>
+                                                <td><%=login.getNome()%></td>
+                                                <td><%=login.getCpf()%></td>
+                                                <td><%=dF.format(login.getDataNascimento())%></td>
+                                                <td><%=login.getCidade()%></td>
+                                            </tr><%
+                                        }
                                         for(int i = 0; i < lista.size(); i++)
                                         {
                                             obj = lista.get(i);
@@ -203,7 +223,7 @@
             {
                 Banco.conexao.close();
 %>
-                <h1>Erro: <%=ex.getMessage()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
+                <h1>Erro: <%=ex.getMessage()%></h1>
 <%
             }
 %>

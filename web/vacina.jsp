@@ -22,6 +22,8 @@
         int cod;
         
         try {
+            if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class)
+                    throw new Exception("Log-in não feito ou credenciais insuficientes");
             //SEM FUNÇÕES DO CRUD A EXECUTAR
             //Testando se houve redirecionamento desta página para ela mesma
             if(request.getParameter("b1") == null) {

@@ -33,6 +33,8 @@ create table usuario_apl(
             
             try 
             {
+                if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class)
+                    throw new Exception("Log-in não feito ou credenciais insuficientes");
                 bb = new Banco();
                 dao = new UsuarioAplJpaController(Banco.conexao);
                 

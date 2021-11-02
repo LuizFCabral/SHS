@@ -73,6 +73,16 @@
                             Enfermeiro/gestor: <input type="radio" name="rdbUser" value="1"/> <br/>
                             <input type="submit" value="logar" name="b1"> <br/>
                         </form>
+                        <br/><br/>
+                        <h3>Usuário novo? Cadastre-se abaixo!</h3>
+                        <form action="cadastrar.jsp" method="post" onsubmit="return verificar(1)">
+                            Código: <input type="text" name="txtCod" id="idCod" readonly/> <br/>
+                            Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
+                            CPF: <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()"/> <br/>
+                            Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc"/> <br/>
+                            Cidade: <input type="text" name="txtCidade" id="idCidade"/><br/><br/>
+                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>
+                        </form>
 <%
                     }
                     else

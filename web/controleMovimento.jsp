@@ -33,6 +33,9 @@
             
             try 
             {
+                if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class || 
+                        !((UsuarioApl)session.getAttribute("login")).getTipoPessoa().equals("G"))
+                    throw new Exception("Log-in não feito ou credenciais insuficientes");
                 bb = new Banco();
                 dao = new MovimentoVacinaJpaController(Banco.conexao);
                 daoV = new VacinaJpaController(Banco.conexao);
