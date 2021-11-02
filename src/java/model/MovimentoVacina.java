@@ -140,4 +140,22 @@ public class MovimentoVacina implements Serializable {
         return "model.MovimentoVacina[ codigo=" + codigo + " ]";
     }
     
+    public String completarTipo() throws Exception
+    {
+        String t = tipoMovimento;
+        try{
+            if(!t.equals("S") && !t.equals("E"))
+                throw new Exception("Tipo não válido!");
+            if(t.equals("S"))
+                t = "Saída";
+            if(t.equals("E"))
+                t = "Entrada";
+        }
+        catch(Exception ex)
+        {
+            throw new Exception("Erro na função completarTipo: " + ex.getMessage());
+        }
+        return t;
+    }
+    
 }

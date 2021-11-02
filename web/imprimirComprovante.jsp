@@ -59,9 +59,9 @@
                         <fieldset class="dados_apl">
                             <legend>Dados da Vacinação</legend>
                             <p>Vacina aplicada: <%=l.getCodigoVacina().getDescricao()%></p>
-                            <p>Data e hora de aplicação: <%=dF.format(vac.getCodigoAgenda().getDataVacinacao()) + " às " + hF.format(vac.getCodigoAgenda().getDataVacinacao())%></p>
+                            <p>Data e hora de aplicação: <%=dF.format(vac.getDataAplicacao()) + " às " + hF.format(vac.getDataAplicacao())%></p>
                             <p>Lote da vacina: <%=l.getDescricao()%></p>
-                            <p>Responsável pela aplciação: Joséfa</p>
+                            <p>Responsável pela aplciação: <%=vac.getCodigoUsuarioApl().getNome()%></p>
                         </fieldset>
                     </div>
                 </div><br>

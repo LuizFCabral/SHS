@@ -20,8 +20,27 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Gerenciamento de usuários</title>
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script type="text/javascript" src="javascript/js_geral.js"></script>
+        <script type="text/javascript">
+            function mensagem(p, d)
+            {
+                t = "";
+                switch(p)
+                {
+                    case 1:
+                       t = "A vacinação ainda não chegou. Vá ao posto de saúde no dia " + d + " para vacinar-se.";
+                       break;
+                   case 2:
+                       t = "O seu agendamento está atrasado, estava marcado para " + d + ". Vá no posto o quanto antes ou altere o seu agendamento.";
+                       break;
+                   default:
+                       t = "Erro inesperado!";
+                       break;
+                }
+                alert(t);
+            }
+        </script>
     </head>
     <body>
         <a href="index.jsp">Tela inicial</a>
@@ -119,12 +138,20 @@
                                     List<Agenda> lista = login.getAgendaList();
                                     for(int i = 0; i < lista.size(); i++)
                                     {
-                                        hoje = new Timestamp(System.currentTimeMillis());
-                                        if(hoje.before(lista.get(i).getDataVacinacao()))
+                                        Agenda aux = lista.get(i);
+                                        if(aux.getVacinacaoList().isEmpty())
                                         {
-                                            
-                                            throw new Exception("Esse usuário já possui um agendamento vigente, o qual vencerá em " + 
-                                                            dF.format(lista.get(i).getDataVacinacao()) + ", às " + hF.format(lista.get(i).getDataVacinacao() + "."));
+                                            hoje = new Timestamp(System.currentTimeMillis());
+                                            String t = "Este usuário já possui um agendamento vigente. ";
+                                            if(hoje.before(aux.getDataVacinacao()))
+                                            {
+                                                t += "Vá para o posto de vacinação no dia " + dF.format(aux.getDataVacinacao()) + ", às " + hF.format(aux.getDataVacinacao()) + ".";
+                                            }
+                                            else
+                                            {
+                                                t += "Seu agendamento passou do prazo, vacine-se o quanto antes ou altere o seu agendamento.";
+                                            }
+                                            throw new Exception(t);
                                         }
                                     }
                                     obj = new Agenda();
@@ -188,12 +215,14 @@
                                         <thead>
                                             <tr>
                                                 <th>Código</th>
-                                                <th>Data de agendamento</th>
-                                                <th>Hora de agendamento</th>
+                                                <th>Data de modificação</th>
+                                                <th>Hora de modificação</th>
                                                 <th>Código de usuário</th>
-                                                <th>Data de vacinação</th>
-                                                <th>Hora de vacinação</th>
-                                                <th>Número de dose</th>
+                                                <th>Data marcada</th>
+                                                <th>Hora marcada</th>
+                                                <th>Data da aplicação</th>
+                                                <th>Hora da aplicação</th>
+                                                <th>Número da dose</th>
                                                 <th>Comprovante</th>
                                             </tr>
                                         </thead>
@@ -210,17 +239,44 @@
                                                     <td><%=obj.getCodigoUsuario().getCodigo()%></td>
                                                     <td><%=dF.format(obj.getDataVacinacao())%></td>
                                                     <td><%=hF.format(obj.getDataVacinacao())%></td>
+                                                    <%
+                                                        boolean vacinou = false;
+                                                        Vacinacao vac = new Vacinacao();
+                                                        if(!obj.getVacinacaoList().isEmpty())
+                                                        {
+                                                            vac = obj.getVacinacaoList().get(0);
+                                                            vacinou = true;
+                                                            %><td><%=dF.format(vac.getDataAplicacao())%></td>
+                                                            <td><%=hF.format(vac.getDataAplicacao())%></td><%
+                                                        }
+                                                        else
+                                                        {
+                                                            %><td>--/--/----</td>
+                                                            <td>--:--</td><%
+                                                        }
+                                                    %>
                                                     <td><%=obj.getDoseNumero()%></td>
                                                     <td>
                                                     <%
-                                                        if(!obj.getVacinacaoList().isEmpty())
+                                                        if(vacinou)
                                                         { 
-                                                            int codVac = obj.getVacinacaoList().get(0).getCodigo();
+                                                            int codVac = vac.getCodigo();
                                                             %><a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>">Acessar</a> <%
                                                         }
                                                         else
                                                         {
-%>                                                          <p>Indisponível</p><%
+                                                            int param = 2; //1 para agendamento futuro e 2 para atrasado
+                                                            hoje = new Timestamp(System.currentTimeMillis());
+                                                            if(hoje.before(obj.getDataVacinacao()))
+                                                                param = 1;
+                                                            %>                                                              
+                                                            <input type="text" id="p1" value="<%=param%>"> <input type="text" id="p2" value="<%=dF.format(obj.getDataVacinacao()) + ", às " + hF.format(obj.getDataVacinacao())%>"><i id="saibaMais">rejkejw</i>
+                                                            <script>
+                                                                saibaMais.onclick = function()
+                                                                {
+                                                                    mensagem($("#p1").val().toString(), $("#p2").val().toString());
+                                                                }
+                                                            </script><%
                                                         }
                                                     %>
                                                     </td>

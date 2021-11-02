@@ -4,21 +4,11 @@
     Author     : Pedro
 --%>
 
-<%@page import="controller.VacinacaoJpaController"%>
-<%@page import="model.Agenda"%>
+<%@page import="controller.*"%>
 <%@page import="java.util.List"%>
-<%@page import="model.Vacinacao"%>
-<%@page import="model.Lote"%>
-<%@page import="controller.LoteJpaController"%>
-<%@page import="controller.MovimentoVacinaJpaController"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="model.MovimentoVacina"%>
-<%@page import="model.Vacina"%>
-<%@page import="controller.UsuarioJpaController"%>
-<%@page import="controller.DAOJPA"%>
-<%@page import="model.Banco"%>
-<%@page import="model.Usuario"%>
+<%@page import="model.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -63,6 +53,9 @@
                         <h1>Dados da vacina</h1>
                         Descrição: <input type="text" name="txtDescr"/><br/>
                         Lote utilizado: <input type="text" name="txtLote"/><br/>
+                        <br/><br/>
+                        Seu CPF: <input type="text" name="txtEnfermeiro"/>
+                        <br/><br/>
                         <input type="submit" name="b1" value="confirmar"/>
                     </form>
         
@@ -99,12 +92,14 @@
                         for(int i = 0; i<lista.size(); i++)
                         {
                             a = lista.get(i);
-                            if(hoje.after(a.getDataVacinacao()))
+                            if(a.getVacinacaoList().isEmpty())
                             {
                                 break;
                             }
                         }
                         vac.setCodigoAgenda(a);
+                        vac.setDataAplicacao(hoje);
+                        vac.setCodigoUsuarioApl((UsuarioApl) daoJ.searchCPF(bb, request.getParameter("txtEnfermeiro"), UsuarioApl.class));
                         VacinacaoJpaController daoVac = new VacinacaoJpaController(Banco.conexao);
                         daoVac.create(vac);
                         %>pronto!<%
