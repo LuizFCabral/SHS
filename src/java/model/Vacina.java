@@ -44,7 +44,7 @@ public class Vacina implements Serializable {
     @Size(max = 20)
     @Column(name = "descricao")
     private String descricao;
-    @Column(name = "qtde_dose")
+    @Column(name = "qtde_dose") 
     private Integer qtdeDose;
     @OneToMany(mappedBy = "codigoVacina")
     private List<Lote> loteList;

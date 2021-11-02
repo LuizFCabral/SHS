@@ -32,21 +32,24 @@
             AgendaJpaController dao;
             Banco bb;
             Usuario login;
-            
+            UsuarioJpaController daoU;
             try 
             {
                 bb = new Banco();
                 dao = new AgendaJpaController(Banco.conexao);
+                daoU = new UsuarioJpaController(Banco.conexao);
                 SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy"); //Formatador de datas
-                SimpleDateFormat tF = new SimpleDateFormat("dd/MM/yyyy hh:mm"); //Formatador geral
-                SimpleDateFormat hF = new SimpleDateFormat("hh:mm"); //Formatador de horas
+                SimpleDateFormat tF = new SimpleDateFormat("dd/MM/yyyy HH:mm"); //Formatador geral
+                SimpleDateFormat hF = new SimpleDateFormat("HH:mm"); //Formatador de horas
                 
                 //Obtendo o usuário logado...
                 login = new Usuario();
                 login = (Usuario)session.getAttribute("login");
-                
                 //Se alguém estiver logado
                 if(login != null) {
+                    //atualizando o usuário logado para garantir "frescor" dos dados
+                    login = daoU.findUsuario(login.getCodigo());
+                    session.setAttribute("login", login);
                     
                     //Sem operações do CRUD a executar...
                     if(request.getParameter("b1") == null)
@@ -113,7 +116,29 @@
 <%
                                 }
                                 else {
-                                    throw new Exception("Esse usuário já possui um agendamento");
+                                    List<Agenda> lista = login.getAgendaList();
+                                    for(int i = 0; i < lista.size(); i++)
+                                    {
+                                        hoje = new Timestamp(System.currentTimeMillis());
+                                        if(hoje.before(lista.get(i).getDataVacinacao()))
+                                        {
+                                            
+                                            throw new Exception("Esse usuário já possui um agendamento vigente, o qual vencerá em " + 
+                                                            dF.format(lista.get(i).getDataVacinacao()) + ", às " + hF.format(lista.get(i).getDataVacinacao() + "."));
+                                        }
+                                    }
+                                    obj = new Agenda();
+                                    hoje = new Timestamp(System.currentTimeMillis());
+                                    obj.setDataAgendamento(hoje);
+                                    obj.setCodigoUsuario(login);
+                                    dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
+                                    obj.setDataVacinacao(tF.parse(dataHora));
+                                    obj.setDoseNumero(Integer.parseInt(request.getParameter("txtDoseNum")));
+                                    dao.create(obj);
+%>
+                                    <h1>Agendamento concluído com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+<%
+                                    
                                 }
                             break;
 
@@ -140,7 +165,6 @@
                                 if(obj == null)
                                     throw new Exception("Esse agendamento não existe.");
                                 
-                                UsuarioJpaController daoU = new UsuarioJpaController(Banco.conexao);
                                 dao.destroy(cod);
                                 login = daoU.findUsuario(login.getCodigo());
                                 session.setAttribute("login", login);
@@ -206,7 +230,7 @@
                     }
                 } 
                 else {
-                    throw new Exception("Nenhum usuário está logado.");
+                    throw new Exception("Nenhum usuário está logado. <a href='loginUsuario.jsp'>Logar agora</a>");
                 }
             }
             catch(Exception ex) {

@@ -4,9 +4,11 @@
     Author     : Pedro
 --%>
 
+<%@page import="model.Vacinacao"%>
+<%@page import="model.Lote"%>
+<%@page import="controller.LoteJpaController"%>
 <%@page import="controller.MovimentoVacinaJpaController"%>
-<%@page import="java.time.LocalDateTime"%>
-<%@page import="java.security.Timestamp"%>
+<%@page import="java.sql.Timestamp"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="model.MovimentoVacina"%>
 <%@page import="model.Vacina"%>
@@ -27,9 +29,10 @@
             Usuario u = new Usuario();
             Banco bb = new Banco();
             DAOJPA daoJ = new DAOJPA();
-            SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat dFHora = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+            SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy"); //Formatador de datas
+            SimpleDateFormat tF = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //Formatador geral
             MovimentoVacinaJpaController dao = new MovimentoVacinaJpaController(Banco.conexao);
+            Timestamp hoje;
             try
             {
                 if(request.getParameter("b1") == null)
@@ -52,8 +55,8 @@
                         CPF: <input type="text" name="txtCPF" value="<%=u.getCpf()%>" readonly/> <br/>
                         Código: <input type="text" name="txtCodigo" value="<%=u.getCodigo()%>" readonly/> <br/>
                         Nome: <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/> <br/>
-                        Data de nascimento: <input type="date" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>"/> <br/>
-                        Cidade:<input type="text" name="txtCidade" value="<%=u.getCidade()%>"/> <br/>
+                        Data de nascimento: <input type="text" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>" readonly/> <br/>
+                        Cidade:<input type="text" name="txtCidade" value="<%=u.getCidade()%>" readonly/> <br/>
                         <h1>Dados da vacina</h1>
                         Descrição: <input type="text" name="txtDescr"/><br/>
                         Lote utilizado: <input type="text" name="txtLote"/><br/>
@@ -75,11 +78,20 @@
                         mov.setTipoMovimento("S");
                         mov.setCodigoVacina(v);
                         mov.setQtdeDose(1);
+                        hoje = new Timestamp(System.currentTimeMillis());
+                        mov.setDataMovimento(hoje);
                         String lote = request.getParameter("txtLote");
                         daoJ = new DAOJPA();
-                        mov.setCodigoLote(daoJ.loteByDescricao(bb, lote));
-                        //mov.setDataMovimento(dFHora.parse(LocalDateTime.now().toString()));
+                        Lote l = daoJ.loteByDescricao(bb, lote);
+                        mov.setCodigoLote(l);
+                        LoteJpaController daoL = new LoteJpaController(Banco.conexao);
+                        l.setDoseDisponivel(l.getDoseDisponivel() - 1);
+                        daoL.edit(l);
                         dao.create(mov);
+                        Vacinacao vac = new Vacinacao();
+                        vac.setCodigoLote(l);
+                        vac.setCodigoUsuario(u);
+                        vac.setCodigoAgenda(daoJ.agendaVigente(bb, u));
                         %>pronto!<%
                         Banco.conexao.close();
                     }

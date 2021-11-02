@@ -36,7 +36,10 @@
                 bb = new Banco();
                 dao = new MovimentoVacinaJpaController(Banco.conexao);
                 daoV = new VacinaJpaController(Banco.conexao);
-                DateTimeFormatter dataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
+                SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy"); //Formatador de datas
+                SimpleDateFormat tF = new SimpleDateFormat("dd/MM/yyyy HH:mm"); //Formatador geral
+                SimpleDateFormat hF = new SimpleDateFormat("HH:mm"); //Formatador de horas
+                
                 //código de mesma estrutura dos CRUDs, consultá-los caso haja necessidade de melhor entendimento do seu funcionamento.
                 if(request.getParameter("b1") == null)
                 {
@@ -46,7 +49,8 @@
                         <form action="controleMovimento.jsp" method="post" onsubmit="return verificar(1)">
                             Código: <input type="text" name="txtCod"/> <br/>
                             Código da vacina: <input type="text" name="txtCodVac"/> <br/>
-                            Data do movimento: <input type="datetime-local" name="txtDataMov" readonly/> <br/>
+                            Data do movimento: <input type="text" name="txtDataMov" readonly/> <br/>
+                            Hora do movimento: <input type="text" name="txtHoraMov"/> <br/>
                             Tipo do movimento: <input type="text" name="txtTipo"/> <br/>
                             Quantidade: <input type="text" name="txtQuant"/><br/>
                             Lote: <input type="text" name="txtLote"/><br/><br/>
@@ -64,7 +68,8 @@
                         <form action="controleMovimento.jsp" method="post" onsubmit="return verificar(1)">
                             Código: <input type="text" name="txtCod" value="<%=obj.getCodigo()%>"/> <br/>
                             Código da vacina: <input type="text" name="txtCodVac" value="<%=obj.getCodigoVacina().getCodigo()%>"/> <br/>
-                            Data do movimento: <input type="datetime-local" name="txtDataMov" readonly value="<%--<%=dataHora.format((obj.getDataMovimento().toString()))%>--%>"/> <br/>
+                            Data do movimento: <input type="text" name="txtDataMov" value="<%=dF.format(obj.getDataMovimento())%>"/> <br/>
+                            Hora do movimento: <input type="text" name="txtHoraMov" value="<%=hF.format(obj.getDataMovimento())%>"/> <br/>
                             Tipo do movimento: <input type="text" name="txtTipo" value="<%=obj.getTipoMovimento()%>"/> <br/>
                             Quantidade: <input type="text" name="txtQuant" value="<%=obj.getQtdeDose()%>"/><br/>
                             Lote: <input type="text" name="txtLote" value="<%=obj.getCodigoLote().getDescricao()%>"/><br/><br/>
@@ -85,14 +90,14 @@
                         case "Cadastrar":
                             obj = new MovimentoVacina();
                             obj.setCodigoVacina(daoV.findVacina(Integer.parseInt(request.getParameter("txtCodVac"))));
-                            //obj.setDataMovimento(dataHora.parse(request.getParameter("txtDataMov")));
+                            obj.setDataMovimento(tF.parse(request.getParameter("txtDataMov") + " " + request.getParameter("txtHoraMov")));
                             obj.setTipoMovimento(request.getParameter("txtTipo"));
                             obj.setQtdeDose(Integer.parseInt(request.getParameter("txtQuant")));
                             daoJ = new DAOJPA();
                             obj.setCodigoLote(daoJ.loteByDescricao(bb, request.getParameter("txtLote")));
                             dao.create(obj);
 %> 
-                            <h1>Movimento de <%=obj.completarTipo()%> cadastrado com sucesso. </h1>
+                            <h1>Movimento de <%=obj.completarTipo()%> cadastrado com sucesso. </h1>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
 <%
                             break;
                             
@@ -102,14 +107,14 @@
                             if(obj == null)
                                 throw new Exception("Esse movimento não existe.");
                             obj.setCodigoVacina(daoV.findVacina(Integer.parseInt(request.getParameter("txtCodVac"))));
-                            //obj.setDataMovimento(dF.parse(request.getParameter("txtDataMov")));
+                            obj.setDataMovimento(tF.parse(request.getParameter("txtDataMov") + " " + request.getParameter("txtHoraMov")));
                             obj.setTipoMovimento(request.getParameter("txtTipo"));
                             obj.setQtdeDose(Integer.parseInt(request.getParameter("txtQuant")));
                             daoJ = new DAOJPA();
                             obj.setCodigoLote(daoJ.loteByDescricao(bb, request.getParameter("txtLote")));
                             dao.edit(obj);
 %>
-<h1>Movimento de <%=obj.completarTipo()%> alterado com sucesso. </h1><%
+<h1>Movimento de <%=obj.completarTipo()%> alterado com sucesso. </h1>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento<%
                             break;
                             
                         case "Remover":
@@ -119,7 +124,7 @@
                                 throw new Exception("Esse movimento não existe.");
                             dao.destroy(cod);
 %>
-                           <h1>Movimento de <%=obj.completarTipo()%> removido com sucesso.</h1>
+                           <h1>Movimento de <%=obj.completarTipo()%> removido com sucesso.</h1>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
 <%
                             break;
                             
@@ -143,6 +148,7 @@
                                                 <th>Código</th>
                                                 <th>Código da vacina</th>
                                                 <th>Data do movimento</th>
+                                                <th>Hora do movimento</th>
                                                 <th>Tipo</th>
                                                 <th>Quantidade</th>
                                                 <th>Lote</th>
@@ -157,7 +163,8 @@
                                             <tr>
                                                 <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
                                                 <td><%=obj.getCodigoVacina().getCodigo()%></td>
-                                                <td>n implementado<%--<%=dataHora.format(dataHora.format((obj.getDataMovimento().toString())))%>--%></td>
+                                                <td><%=dF.format(obj.getDataMovimento())%></td>
+                                                <td><%=hF.format(obj.getDataMovimento())%></td>
                                                 <td><%=obj.completarTipo()%></td>
                                                 <td><%=obj.getQtdeDose()%></td>
                                                 <td><%=obj.getCodigoLote()%></td>
@@ -168,7 +175,7 @@
                                         </tbody>
                                     </table>
                                 </form>
-                                Selecione o campo código de um movimento para carregar seus dados no formulário.<br/>
+                                Selecione o campo código de um movimento para carregar seus dados no formulário.<br/>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
 <%
                             }
                             break;
@@ -183,7 +190,7 @@
             {
                 Banco.conexao.close();
 %>
-                <h1>Erro: <%=ex.getMessage()%></h1>
+<h1>Erro: <%=ex.getMessage()%></h1>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
 <%
             }
 %>

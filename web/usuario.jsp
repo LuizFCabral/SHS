@@ -117,15 +117,14 @@
                             //checando se o cpf que estou alterando é igual ao anterior
                             if(!obj.getCpf().equals(c))
                             {
+                                obj = new Usuario();
                                 //checando se cpf para o qual se altera já existe para outra pessoa
                                 obj = (Usuario) daoJ.searchCPF(bb, c, obj.getClass());
                                 if(obj != null)
                                     throw new Exception("O CPF informado já está em uso!");
                             }
-                            obj = new Usuario();
                             obj.setNome(request.getParameter("txtNome"));
                             obj.setCpf(c);
-                            obj.setCodigo(cod);
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
                             obj.setCidade(request.getParameter("txtCidade"));
                             dao.edit(obj);
