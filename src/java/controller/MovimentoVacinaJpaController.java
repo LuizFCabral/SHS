@@ -20,7 +20,7 @@ import model.Vacina;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 public class MovimentoVacinaJpaController implements Serializable {
 

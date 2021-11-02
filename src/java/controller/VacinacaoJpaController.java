@@ -17,11 +17,12 @@ import javax.persistence.criteria.Root;
 import model.Agenda;
 import model.Lote;
 import model.Usuario;
+import model.UsuarioApl;
 import model.Vacinacao;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 public class VacinacaoJpaController implements Serializable {
 
@@ -54,6 +55,11 @@ public class VacinacaoJpaController implements Serializable {
                 codigoUsuario = em.getReference(codigoUsuario.getClass(), codigoUsuario.getCodigo());
                 vacinacao.setCodigoUsuario(codigoUsuario);
             }
+            UsuarioApl codigoUsuarioApl = vacinacao.getCodigoUsuarioApl();
+            if (codigoUsuarioApl != null) {
+                codigoUsuarioApl = em.getReference(codigoUsuarioApl.getClass(), codigoUsuarioApl.getCodigo());
+                vacinacao.setCodigoUsuarioApl(codigoUsuarioApl);
+            }
             em.persist(vacinacao);
             if (codigoAgenda != null) {
                 codigoAgenda.getVacinacaoList().add(vacinacao);
@@ -66,6 +72,10 @@ public class VacinacaoJpaController implements Serializable {
             if (codigoUsuario != null) {
                 codigoUsuario.getVacinacaoList().add(vacinacao);
                 codigoUsuario = em.merge(codigoUsuario);
+            }
+            if (codigoUsuarioApl != null) {
+                codigoUsuarioApl.getVacinacaoList().add(vacinacao);
+                codigoUsuarioApl = em.merge(codigoUsuarioApl);
             }
             em.getTransaction().commit();
         } finally {
@@ -87,6 +97,8 @@ public class VacinacaoJpaController implements Serializable {
             Lote codigoLoteNew = vacinacao.getCodigoLote();
             Usuario codigoUsuarioOld = persistentVacinacao.getCodigoUsuario();
             Usuario codigoUsuarioNew = vacinacao.getCodigoUsuario();
+            UsuarioApl codigoUsuarioAplOld = persistentVacinacao.getCodigoUsuarioApl();
+            UsuarioApl codigoUsuarioAplNew = vacinacao.getCodigoUsuarioApl();
             if (codigoAgendaNew != null) {
                 codigoAgendaNew = em.getReference(codigoAgendaNew.getClass(), codigoAgendaNew.getCodigo());
                 vacinacao.setCodigoAgenda(codigoAgendaNew);
@@ -98,6 +110,10 @@ public class VacinacaoJpaController implements Serializable {
             if (codigoUsuarioNew != null) {
                 codigoUsuarioNew = em.getReference(codigoUsuarioNew.getClass(), codigoUsuarioNew.getCodigo());
                 vacinacao.setCodigoUsuario(codigoUsuarioNew);
+            }
+            if (codigoUsuarioAplNew != null) {
+                codigoUsuarioAplNew = em.getReference(codigoUsuarioAplNew.getClass(), codigoUsuarioAplNew.getCodigo());
+                vacinacao.setCodigoUsuarioApl(codigoUsuarioAplNew);
             }
             vacinacao = em.merge(vacinacao);
             if (codigoAgendaOld != null && !codigoAgendaOld.equals(codigoAgendaNew)) {
@@ -123,6 +139,14 @@ public class VacinacaoJpaController implements Serializable {
             if (codigoUsuarioNew != null && !codigoUsuarioNew.equals(codigoUsuarioOld)) {
                 codigoUsuarioNew.getVacinacaoList().add(vacinacao);
                 codigoUsuarioNew = em.merge(codigoUsuarioNew);
+            }
+            if (codigoUsuarioAplOld != null && !codigoUsuarioAplOld.equals(codigoUsuarioAplNew)) {
+                codigoUsuarioAplOld.getVacinacaoList().remove(vacinacao);
+                codigoUsuarioAplOld = em.merge(codigoUsuarioAplOld);
+            }
+            if (codigoUsuarioAplNew != null && !codigoUsuarioAplNew.equals(codigoUsuarioAplOld)) {
+                codigoUsuarioAplNew.getVacinacaoList().add(vacinacao);
+                codigoUsuarioAplNew = em.merge(codigoUsuarioAplNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -167,6 +191,11 @@ public class VacinacaoJpaController implements Serializable {
             if (codigoUsuario != null) {
                 codigoUsuario.getVacinacaoList().remove(vacinacao);
                 codigoUsuario = em.merge(codigoUsuario);
+            }
+            UsuarioApl codigoUsuarioApl = vacinacao.getCodigoUsuarioApl();
+            if (codigoUsuarioApl != null) {
+                codigoUsuarioApl.getVacinacaoList().remove(vacinacao);
+                codigoUsuarioApl = em.merge(codigoUsuarioApl);
             }
             em.remove(vacinacao);
             em.getTransaction().commit();

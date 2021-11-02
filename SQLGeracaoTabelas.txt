@@ -47,5 +47,7 @@ CREATE TABLE vacinacao(
 	codigo SERIAL PRIMARY KEY,
 	codigo_usuario INT REFERENCES usuario (codigo),
 	codigo_agenda INT REFERENCES agenda (codigo),
-	codigo_lote INT REFERENCES lote (codigo)
+	codigo_lote INT REFERENCES lote (codigo),
+        codigo_usuario_apl INT REFERENCES usuario_apl (codigo),
+        data_aplicacao timestamp
 );

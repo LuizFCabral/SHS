@@ -6,21 +6,25 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "usuario_apl")
@@ -48,6 +52,8 @@ public class UsuarioApl implements Serializable {
     @Size(max = 1)
     @Column(name = "tipo_pessoa")
     private String tipoPessoa;
+    @OneToMany(mappedBy = "codigoUsuarioApl", fetch = FetchType.EAGER)
+    private List<Vacinacao> vacinacaoList;
 
     public UsuarioApl() {
     }
@@ -86,6 +92,15 @@ public class UsuarioApl implements Serializable {
 
     public void setTipoPessoa(String tipoPessoa) {
         this.tipoPessoa = tipoPessoa;
+    }
+
+    @XmlTransient
+    public List<Vacinacao> getVacinacaoList() {
+        return vacinacaoList;
+    }
+
+    public void setVacinacaoList(List<Vacinacao> vacinacaoList) {
+        this.vacinacaoList = vacinacaoList;
     }
 
     @Override

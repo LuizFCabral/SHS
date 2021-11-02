@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "agenda")
@@ -54,10 +55,10 @@ public class Agenda implements Serializable {
     private Date dataVacinacao;
     @Column(name = "dose_numero")
     private Integer doseNumero;
-    @OneToMany(mappedBy = "codigoAgenda")
+    @OneToMany(mappedBy = "codigoAgenda", fetch = FetchType.EAGER)
     private List<Vacinacao> vacinacaoList;
     @JoinColumn(name = "codigo_usuario", referencedColumnName = "codigo")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Usuario codigoUsuario;
 
     public Agenda() {

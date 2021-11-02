@@ -125,16 +125,14 @@ create table usuario_apl(
                             //checando se o cpf que estou alterando é igual ao anterior
                             if(!obj.getCpf().equals(c))
                             {
-                                obj = new UsuarioApl();
+                                UsuarioApl aux = new UsuarioApl();
                                 //checando se cpf para o qual se altera já existe para outra pessoa
-                                obj = (UsuarioApl) daoJ.searchCPF(bb, c, obj.getClass());
-                                if(obj != null)
+                                aux = (UsuarioApl) daoJ.searchCPF(bb, c, obj.getClass());
+                                if(aux != null)
                                     throw new Exception("O CPF informado já está em uso!");
                             }
-                            obj = new UsuarioApl();
                             obj.setNome(request.getParameter("txtNome"));
                             obj.setCpf(c);
-                            obj.setCodigo(cod);
                             obj.setTipoPessoa(t);
                             dao.edit(obj);
 %>

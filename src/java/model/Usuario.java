@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "usuario")
@@ -58,9 +59,9 @@ public class Usuario implements Serializable {
     @Size(max = 30)
     @Column(name = "cidade")
     private String cidade;
-    @OneToMany(mappedBy = "codigoUsuario")
+    @OneToMany(mappedBy = "codigoUsuario", fetch = FetchType.EAGER)
     private List<Vacinacao> vacinacaoList;
-    @OneToMany(mappedBy = "codigoUsuario")
+    @OneToMany(mappedBy = "codigoUsuario", fetch = FetchType.EAGER)
     private List<Agenda> agendaList;
 
     public Usuario() {

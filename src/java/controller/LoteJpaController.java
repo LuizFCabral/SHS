@@ -22,7 +22,7 @@ import model.MovimentoVacina;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 public class LoteJpaController implements Serializable {
 

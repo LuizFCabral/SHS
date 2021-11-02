@@ -6,9 +6,11 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,18 +19,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "vacinacao")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Vacinacao.findAll", query = "SELECT v FROM Vacinacao v"),
-    @NamedQuery(name = "Vacinacao.findByCodigo", query = "SELECT v FROM Vacinacao v WHERE v.codigo = :codigo")})
+    @NamedQuery(name = "Vacinacao.findByCodigo", query = "SELECT v FROM Vacinacao v WHERE v.codigo = :codigo"),
+    @NamedQuery(name = "Vacinacao.findByDataAplicacao", query = "SELECT v FROM Vacinacao v WHERE v.dataAplicacao = :dataAplicacao")})
 public class Vacinacao implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,15 +42,21 @@ public class Vacinacao implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigo")
     private Integer codigo;
+    @Column(name = "data_aplicacao")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataAplicacao;
     @JoinColumn(name = "codigo_agenda", referencedColumnName = "codigo")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Agenda codigoAgenda;
     @JoinColumn(name = "codigo_lote", referencedColumnName = "codigo")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Lote codigoLote;
     @JoinColumn(name = "codigo_usuario", referencedColumnName = "codigo")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Usuario codigoUsuario;
+    @JoinColumn(name = "codigo_usuario_apl", referencedColumnName = "codigo")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private UsuarioApl codigoUsuarioApl;
 
     public Vacinacao() {
     }
@@ -60,6 +71,14 @@ public class Vacinacao implements Serializable {
 
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
+    }
+
+    public Date getDataAplicacao() {
+        return dataAplicacao;
+    }
+
+    public void setDataAplicacao(Date dataAplicacao) {
+        this.dataAplicacao = dataAplicacao;
     }
 
     public Agenda getCodigoAgenda() {
@@ -84,6 +103,14 @@ public class Vacinacao implements Serializable {
 
     public void setCodigoUsuario(Usuario codigoUsuario) {
         this.codigoUsuario = codigoUsuario;
+    }
+
+    public UsuarioApl getCodigoUsuarioApl() {
+        return codigoUsuarioApl;
+    }
+
+    public void setCodigoUsuarioApl(UsuarioApl codigoUsuarioApl) {
+        this.codigoUsuarioApl = codigoUsuarioApl;
     }
 
     @Override

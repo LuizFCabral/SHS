@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "vacina")
@@ -44,11 +45,11 @@ public class Vacina implements Serializable {
     @Size(max = 20)
     @Column(name = "descricao")
     private String descricao;
-    @Column(name = "qtde_dose") 
+    @Column(name = "qtde_dose")
     private Integer qtdeDose;
-    @OneToMany(mappedBy = "codigoVacina")
+    @OneToMany(mappedBy = "codigoVacina", fetch = FetchType.EAGER)
     private List<Lote> loteList;
-    @OneToMany(mappedBy = "codigoVacina")
+    @OneToMany(mappedBy = "codigoVacina", fetch = FetchType.EAGER)
     private List<MovimentoVacina> movimentoVacinaList;
 
     public Vacina() {

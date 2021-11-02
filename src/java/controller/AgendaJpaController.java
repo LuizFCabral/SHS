@@ -21,7 +21,7 @@ import model.Agenda;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 public class AgendaJpaController implements Serializable {
 

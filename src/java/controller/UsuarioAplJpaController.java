@@ -7,18 +7,20 @@ package controller;
 
 import controller.exceptions.NonexistentEntityException;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import model.Vacinacao;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import model.UsuarioApl;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 public class UsuarioAplJpaController implements Serializable {
 
@@ -32,11 +34,29 @@ public class UsuarioAplJpaController implements Serializable {
     }
 
     public void create(UsuarioApl usuarioApl) {
+        if (usuarioApl.getVacinacaoList() == null) {
+            usuarioApl.setVacinacaoList(new ArrayList<Vacinacao>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            List<Vacinacao> attachedVacinacaoList = new ArrayList<Vacinacao>();
+            for (Vacinacao vacinacaoListVacinacaoToAttach : usuarioApl.getVacinacaoList()) {
+                vacinacaoListVacinacaoToAttach = em.getReference(vacinacaoListVacinacaoToAttach.getClass(), vacinacaoListVacinacaoToAttach.getCodigo());
+                attachedVacinacaoList.add(vacinacaoListVacinacaoToAttach);
+            }
+            usuarioApl.setVacinacaoList(attachedVacinacaoList);
             em.persist(usuarioApl);
+            for (Vacinacao vacinacaoListVacinacao : usuarioApl.getVacinacaoList()) {
+                UsuarioApl oldCodigoUsuarioAplOfVacinacaoListVacinacao = vacinacaoListVacinacao.getCodigoUsuarioApl();
+                vacinacaoListVacinacao.setCodigoUsuarioApl(usuarioApl);
+                vacinacaoListVacinacao = em.merge(vacinacaoListVacinacao);
+                if (oldCodigoUsuarioAplOfVacinacaoListVacinacao != null) {
+                    oldCodigoUsuarioAplOfVacinacaoListVacinacao.getVacinacaoList().remove(vacinacaoListVacinacao);
+                    oldCodigoUsuarioAplOfVacinacaoListVacinacao = em.merge(oldCodigoUsuarioAplOfVacinacaoListVacinacao);
+                }
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -50,7 +70,34 @@ public class UsuarioAplJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            UsuarioApl persistentUsuarioApl = em.find(UsuarioApl.class, usuarioApl.getCodigo());
+            List<Vacinacao> vacinacaoListOld = persistentUsuarioApl.getVacinacaoList();
+            List<Vacinacao> vacinacaoListNew = usuarioApl.getVacinacaoList();
+            List<Vacinacao> attachedVacinacaoListNew = new ArrayList<Vacinacao>();
+            for (Vacinacao vacinacaoListNewVacinacaoToAttach : vacinacaoListNew) {
+                vacinacaoListNewVacinacaoToAttach = em.getReference(vacinacaoListNewVacinacaoToAttach.getClass(), vacinacaoListNewVacinacaoToAttach.getCodigo());
+                attachedVacinacaoListNew.add(vacinacaoListNewVacinacaoToAttach);
+            }
+            vacinacaoListNew = attachedVacinacaoListNew;
+            usuarioApl.setVacinacaoList(vacinacaoListNew);
             usuarioApl = em.merge(usuarioApl);
+            for (Vacinacao vacinacaoListOldVacinacao : vacinacaoListOld) {
+                if (!vacinacaoListNew.contains(vacinacaoListOldVacinacao)) {
+                    vacinacaoListOldVacinacao.setCodigoUsuarioApl(null);
+                    vacinacaoListOldVacinacao = em.merge(vacinacaoListOldVacinacao);
+                }
+            }
+            for (Vacinacao vacinacaoListNewVacinacao : vacinacaoListNew) {
+                if (!vacinacaoListOld.contains(vacinacaoListNewVacinacao)) {
+                    UsuarioApl oldCodigoUsuarioAplOfVacinacaoListNewVacinacao = vacinacaoListNewVacinacao.getCodigoUsuarioApl();
+                    vacinacaoListNewVacinacao.setCodigoUsuarioApl(usuarioApl);
+                    vacinacaoListNewVacinacao = em.merge(vacinacaoListNewVacinacao);
+                    if (oldCodigoUsuarioAplOfVacinacaoListNewVacinacao != null && !oldCodigoUsuarioAplOfVacinacaoListNewVacinacao.equals(usuarioApl)) {
+                        oldCodigoUsuarioAplOfVacinacaoListNewVacinacao.getVacinacaoList().remove(vacinacaoListNewVacinacao);
+                        oldCodigoUsuarioAplOfVacinacaoListNewVacinacao = em.merge(oldCodigoUsuarioAplOfVacinacaoListNewVacinacao);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -79,6 +126,11 @@ public class UsuarioAplJpaController implements Serializable {
                 usuarioApl.getCodigo();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuarioApl with id " + id + " no longer exists.", enfe);
+            }
+            List<Vacinacao> vacinacaoList = usuarioApl.getVacinacaoList();
+            for (Vacinacao vacinacaoListVacinacao : vacinacaoList) {
+                vacinacaoListVacinacao.setCodigoUsuarioApl(null);
+                vacinacaoListVacinacao = em.merge(vacinacaoListVacinacao);
             }
             em.remove(usuarioApl);
             em.getTransaction().commit();

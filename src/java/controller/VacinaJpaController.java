@@ -21,7 +21,7 @@ import model.Vacina;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 public class VacinaJpaController implements Serializable {
 

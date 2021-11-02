@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author vinif
+ * @author Pedro
  */
 @Entity
 @Table(name = "movimento_vacina")
@@ -53,32 +54,13 @@ public class MovimentoVacina implements Serializable {
     @Column(name = "qtde_dose")
     private Integer qtdeDose;
     @JoinColumn(name = "codigo_lote", referencedColumnName = "codigo")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Lote codigoLote;
     @JoinColumn(name = "codigo_vacina", referencedColumnName = "codigo")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Vacina codigoVacina;
 
     public MovimentoVacina() {
-    }
-    
-    public String completarTipo() throws Exception
-    {
-        String t = tipoMovimento;
-        try
-        {
-            if(!t.equals("S") && !t.equals("E"))
-                throw new Exception("Tipo não válido!");
-            if(t.equals("S"))
-                t = "Saída";
-            if(t.equals("E"))
-                t = "Entrada";
-        }
-        catch(Exception ex)
-        {
-            throw new Exception("Erro na função completarTipo: " + ex.getMessage());
-        }
-        return t;
     }
 
     public MovimentoVacina(Integer codigo) {
