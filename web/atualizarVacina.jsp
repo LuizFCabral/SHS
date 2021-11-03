@@ -15,6 +15,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Confirmar aplicação de vacina</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            
+        </script>
     </head>
     <body>
         <%
@@ -24,8 +28,9 @@
             DAOJPA daoJ = new DAOJPA();
             SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy"); //Formatador de datas
             SimpleDateFormat tF = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //Formatador geral
+            SimpleDateFormat hF = new SimpleDateFormat("HH:mm"); //Formatador de hora
             MovimentoVacinaJpaController dao = new MovimentoVacinaJpaController(Banco.conexao);
-            Timestamp hoje;
+            Timestamp hoje = new Timestamp(System.currentTimeMillis());
             UsuarioApl apl;
             try
             {
@@ -54,10 +59,84 @@
                         Nome: <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/> <br/>
                         Data de nascimento: <input type="text" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>" readonly/> <br/>
                         Cidade:<input type="text" name="txtCidade" value="<%=u.getCidade()%>" readonly/> <br/>
+                        <h1>Agendamento vigente</h1>
+                        <%
+                            boolean isVigente = false;
+                            if(u.getAgendaList().isEmpty())
+                            {
+                                %><h4>Não há agendamento vigente.</h4><%
+                            }
+                            else
+                            {
+                                List<Agenda> lista = u.getAgendaList();
+                                for(int i = 0; i < lista.size(); i++)
+                                {
+                                    if(lista.get(i).getVacinacaoList().isEmpty())
+                                    {
+                                        Agenda vigente = lista.get(i);
+                                        isVigente = true;
+                                        %>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Código</th>
+                                                    <th>Data de modificação</th>
+                                                    <th>Hora de modificação</th>
+                                                    <th>Código de usuário</th>
+                                                    <th>Data marcada</th>
+                                                    <th>Hora marcada</th>
+                                                    <th>Número da dose</th>
+                                                    <th>Situação</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><%=vigente.getCodigo()%></td>
+                                                    <td><%=dF.format(vigente.getDataAgendamento())%></td>
+                                                    <td><%=hF.format(vigente.getDataAgendamento())%></td>
+                                                    <td><%=vigente.getCodigoUsuario().getCodigo()%></td>
+                                                    <td><%=dF.format(vigente.getDataVacinacao())%></td>
+                                                    <td><%=hF.format(vigente.getDataVacinacao())%></td>
+                                                    <td><%=vigente.getDoseNumero()%></td>
+                                                    <%
+                                                        if(hoje.getDate() == vigente.getDataVacinacao().getDate())
+                                                        {
+                                                            %><td>dia certo</td><%
+                                                        }
+                                                        else
+                                                        {
+                                                            if(hoje.before(vigente.getDataVacinacao()))
+                                                            {
+                                                                %><td>adiantado</td><%
+                                                            }
+                                                            else
+                                                            {
+                                                                %><td>atrasado</td><%
+                                                            }
+                                                        }
+                                                    %>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                            <%
+                                        break;
+                                    }
+                                }
+                                if(!isVigente)
+                                {
+                                    %><h4>Não há agendamento vigente.</h4><%
+                                }
+                            }
+                        %>
                         <h1>Dados da vacina</h1>
                         Descrição: <input type="text" name="txtDescr"/><br/>
                         Lote utilizado: <input type="text" name="txtLote"/><br/>
                         <br/><br/>
+                        <%
+                            if(!isVigente)
+                                {
+                                    %><h4>Criar agendamento agora e confirmar:</h4>
+                                    Num. da dose: <input type="text" name="txtNumDose"/><br/><br/><%
+                                }
+                        %>
                         <input type="submit" name="b1" value="confirmar"/>
                     </form>
         
@@ -76,7 +155,6 @@
                         mov.setTipoMovimento("S");
                         mov.setCodigoVacina(v);
                         mov.setQtdeDose(1);
-                        hoje = new Timestamp(System.currentTimeMillis());
                         mov.setDataMovimento(hoje);
                         String lote = request.getParameter("txtLote");
                         daoJ = new DAOJPA();
@@ -91,13 +169,24 @@
                         vac.setCodigoUsuario(u);
                         List<Agenda> lista = u.getAgendaList();
                         Agenda a = new Agenda();
-                        for(int i = 0; i<lista.size(); i++)
+                        int i;
+                        for(i = 0; i<lista.size(); i++)
                         {
                             a = lista.get(i);
                             if(a.getVacinacaoList().isEmpty())
                             {
                                 break;
                             }
+                        }
+                        if(i == lista.size() - 1)
+                        {
+                            a = new Agenda();
+                            a.setCodigoUsuario(u);
+                            a.setDataAgendamento(hoje);
+                            a.setDataVacinacao(hoje);
+                            a.setDoseNumero(Integer.parseInt(request.getParameter("txtNumDose")));
+                            AgendaJpaController daoA = new AgendaJpaController(Banco.conexao);
+                            daoA.create(a);
                         }
                         vac.setCodigoAgenda(a);
                         vac.setDataAplicacao(hoje);

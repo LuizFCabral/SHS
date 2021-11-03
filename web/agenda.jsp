@@ -223,10 +223,12 @@
                                 <h1>Agendamento</h1>
                                <%
                                    if(!comum)
+                                    {
                                    %><form action="agenda.jsp" method="post">
                                        Filtrar dados pelo CPF:<br/>
                                        <input type="text" name="txtCPF"/><input type="submit" name="b1" value="Pesquisar"/>
                                     </form><%
+                                        }
                                %>
                                 <table border="1">
                                     <thead>
@@ -250,7 +252,7 @@
                                             obj = lista.get(i);
 %>
                                             <tr>
-                                                <td><a href="agenda.jsp?bCarregar=<%=obj.getCodigo()%>">Carregar</a></td>
+                                                <td><a href="agenda.jsp?bCarregar=<%=obj.getCodigo()%>"><%=obj.getCodigo()%></a></td>
                                                 <td><%=dF.format(obj.getDataAgendamento())%></td>
                                                 <td><%=hF.format(obj.getDataAgendamento())%></td>
                                                 <td><%=obj.getCodigoUsuario().getCodigo()%></td>
@@ -320,10 +322,12 @@
                                 <h1>Agendamento</h1>
                                <%
                                    if(!comum)
+                                    {
                                    %><form action="agenda.jsp" method="post">
                                        Filtrar dados pelo CPF:<br/>
                                        <input type="text" name="txtCPF"/><input type="submit" name="b1" value="Pesquisar"/>
                                     </form><%
+                                        }
                                %>
                                 <table border="1">
                                     <thead>
