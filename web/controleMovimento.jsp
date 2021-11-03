@@ -29,14 +29,13 @@
             MovimentoVacinaJpaController dao;
             VacinaJpaController daoV;
             DAOJPA daoJ;
-            Banco bb;
+            Banco bb = new Banco();
             
             try 
             {
                 if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class || 
                         !((UsuarioApl)session.getAttribute("login")).getTipoPessoa().equals("G"))
                     throw new Exception("Log-in não feito ou credenciais insuficientes");
-                bb = new Banco();
                 dao = new MovimentoVacinaJpaController(Banco.conexao);
                 daoV = new VacinaJpaController(Banco.conexao);
                 SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy"); //Formatador de datas
@@ -144,7 +143,6 @@
                                     aux = "s";
 %>
                                 <h1>Lista com <%=lista.size()%> movimento<%=aux%> encontrado<%=aux%></h1>
-                                <form action="controleMovimento.jsp" method="post">
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -164,7 +162,7 @@
                                             obj = lista.get(i);
 %>
                                             <tr>
-                                                <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
+                                                <td><a href="controleMovimento.jsp?bCarregar=<%=obj.getCodigo()%>"><%=obj.getCodigo()%></a></td>
                                                 <td><%=obj.getCodigoVacina().getCodigo()%></td>
                                                 <td><%=dF.format(obj.getDataMovimento())%></td>
                                                 <td><%=hF.format(obj.getDataMovimento())%></td>
@@ -177,7 +175,6 @@
 %>
                                         </tbody>
                                     </table>
-                                </form>
                                 Selecione o campo código de um movimento para carregar seus dados no formulário.<br/>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
 <%
                             }

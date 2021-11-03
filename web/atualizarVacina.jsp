@@ -26,11 +26,12 @@
             SimpleDateFormat tF = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //Formatador geral
             MovimentoVacinaJpaController dao = new MovimentoVacinaJpaController(Banco.conexao);
             Timestamp hoje;
+            UsuarioApl apl;
             try
             {
                 if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class)
                     throw new Exception("Log-in não feito ou credenciais insuficientes");
-                
+                apl = (UsuarioApl)session.getAttribute("login");
                 if(request.getParameter("b1") == null)
                 {
         %>
@@ -56,8 +57,6 @@
                         <h1>Dados da vacina</h1>
                         Descrição: <input type="text" name="txtDescr"/><br/>
                         Lote utilizado: <input type="text" name="txtLote"/><br/>
-                        <br/><br/>
-                        Seu CPF: <input type="text" name="txtEnfermeiro"/>
                         <br/><br/>
                         <input type="submit" name="b1" value="confirmar"/>
                     </form>
@@ -102,7 +101,8 @@
                         }
                         vac.setCodigoAgenda(a);
                         vac.setDataAplicacao(hoje);
-                        vac.setCodigoUsuarioApl((UsuarioApl) daoJ.searchCPF(bb, request.getParameter("txtEnfermeiro"), UsuarioApl.class));
+                        UsuarioAplJpaController daoApl = new UsuarioAplJpaController(Banco.conexao);
+                        vac.setCodigoUsuarioApl(daoApl.findUsuarioApl(apl.getCodigo()));
                         VacinacaoJpaController daoVac = new VacinacaoJpaController(Banco.conexao);
                         daoVac.create(vac);
                         %>pronto!<%

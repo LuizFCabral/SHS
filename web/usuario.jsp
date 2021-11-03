@@ -64,7 +64,11 @@
                             CPF: <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()"/> <br/>
                             Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc"/> <br/>
                             Cidade: <input type="text" name="txtCidade" id="idCidade"/><br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                            <%if(!comum)
+                            {
+                                %><input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;<%
+                            }
+%>
                             <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
@@ -83,7 +87,10 @@
                             CPF: <input type="text" name="txtCPF" id="idCPF" value="<%=obj.getCpf()%>"/> <br/>
                             Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc" value="<%=dF.format(obj.getDataNascimento())%>"/> <br/>
                             Cidade: <input type="text" name="txtCidade" id="idCidade" value="<%=obj.getCidade()%>"/><br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                            <%if(!comum)
+                            {
+                                %><input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;<%
+                            }%>
                             <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
@@ -149,9 +156,23 @@
                             if(obj == null)
                                 throw new Exception("Esse usuário não existe.");
                             dao.destroy(cod);
-%>
-                            <h1>Usuário de código <%=cod%> removido com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
+%>                          
+                            <h1>Usuário de código <%=cod%> removido com sucesso!</h1>
 <%
+                            if(comum)
+                            {
+                                session.removeAttribute("login");
+                                session.removeAttribute("classe");
+%> 
+                            <h1>Clique <a href="index.jsp">aqui</a> para voltar à tela inicial</h1> 
+<%
+                            }
+                            else
+                            {
+%> 
+                            <h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário</h1> 
+<%
+                            }
                             break;
 
                         case "Consultar":
@@ -165,9 +186,13 @@
                                 String aux = "";
                                 if(lista.size() > 1)
                                     aux = "s";
+                                if(!comum)
+                                {
 %>
-                                <h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1>
-                                <form action="usuario.jsp" method="post">
+                                <h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1><%
+                                    }
+%>
+                                    
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -176,6 +201,7 @@
                                                 <th>CPF</th>
                                                 <th>Data de nascimento</th>
                                                 <th>Cidade</th>
+                                                <th>Agendamentos</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -183,30 +209,34 @@
                                         if(comum)
                                         {
                                             %><tr>
-                                                <td><input type="submit" name="bCarregar" value="<%=login.getCodigo()%>"/></td>
+                                                <td><a href="usuario.jsp?bCarregar=<%=login.getCodigo()%>"><%=login.getCodigo()%></a></td>
                                                 <td><%=login.getNome()%></td>
                                                 <td><%=login.getCpf()%></td>
                                                 <td><%=dF.format(login.getDataNascimento())%></td>
                                                 <td><%=login.getCidade()%></td>
+                                                <td><a href="agenda.jsp?b1=Pesquisar&txtCPF=<%=login.getCpf()%>">Acessar</a></td>
                                             </tr><%
                                         }
-                                        for(int i = 0; i < lista.size(); i++)
+                                        else
                                         {
-                                            obj = lista.get(i);
-%>
-                                            <tr>
-                                                <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
-                                                <td><%=obj.getNome()%></td>
-                                                <td><%=obj.getCpf()%></td>
-                                                <td><%=dF.format(obj.getDataNascimento())%></td>
-                                                <td><%=obj.getCidade()%></td>
-                                            </tr>
-<%
+                                            for(int i = 0; i < lista.size(); i++)
+                                            {
+                                                obj = lista.get(i);
+    %>
+                                                <tr>
+                                                    <td><a href="usuario.jsp?bCarregar=<%=obj.getCodigo()%>"><%=obj.getCodigo()%></a></td>
+                                                    <td><%=obj.getNome()%></td>
+                                                    <td><%=obj.getCpf()%></td>
+                                                    <td><%=dF.format(obj.getDataNascimento())%></td>
+                                                    <td><%=obj.getCidade()%></td>
+                                                    <td><a href="agenda.jsp?b1=Pesquisar&txtCPF=<%=obj.getCpf()%>">Acessar</a></td>
+                                                </tr>
+    <%
+                                            }
                                         }
 %>
                                         </tbody>
                                     </table>
-                                </form>
                                 Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
                                 Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%

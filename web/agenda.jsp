@@ -29,7 +29,7 @@
                 switch(p)
                 {
                     case 1:
-                       t = "A vacinação ainda não chegou. Vá ao posto de saúde no dia " + d + " para vacinar-se.";
+                       t = "A vacinação ainda não chegou. Vá ao posto de saúde no dia " + d + ", para vacinar-se.";
                        break;
                    case 2:
                        t = "O seu agendamento está atrasado, estava marcado para " + d + ". Vá no posto o quanto antes ou altere o seu agendamento.";
@@ -50,10 +50,12 @@
             String b;
             AgendaJpaController dao;
             Banco bb;
-            Usuario login;
+            Usuario login = new Usuario();
             UsuarioJpaController daoU;
+            boolean comum = false;
             try 
             {
+                DAOJPA daoJ = new DAOJPA();
                 bb = new Banco();
                 dao = new AgendaJpaController(Banco.conexao);
                 daoU = new UsuarioJpaController(Banco.conexao);
@@ -62,247 +64,351 @@
                 SimpleDateFormat hF = new SimpleDateFormat("HH:mm"); //Formatador de horas
                 
                 //Obtendo o usuário logado...
-                login = new Usuario();
-                login = (Usuario)session.getAttribute("login");
-                //Se alguém estiver logado
-                if(login != null) {
-                    //atualizando o usuário logado para garantir "frescor" dos dados
+                if(session.getAttribute("login") == null)
+                {
+                    throw new Exception("Faça log-in antes!");
+                }
+                //se o usuário for comum
+                if(session.getAttribute("classe") == Usuario.class)
+                {
+                    login = (Usuario) session.getAttribute("login");
+                //atualizando o usuário logado para garantir "frescor" dos dados
                     login = daoU.findUsuario(login.getCodigo());
                     session.setAttribute("login", login);
-                    
-                    //Sem operações do CRUD a executar...
-                    if(request.getParameter("b1") == null)
+                    comum = true;
+                }
+
+                //Sem operações do CRUD a executar...
+                if(request.getParameter("b1") == null)
+                {
+                    //Sem dados de tabela a carregar...
+                    if(request.getParameter("bCarregar") == null)
                     {
-                        //Sem dados de tabela a carregar...
-                        if(request.getParameter("bCarregar") == null)
-                        {
-                            //Form para o CRUD...
+                        //Form para o CRUD...
 %>                      
-                            <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
-                                Código: <input type="text" name="txtCod" id="idCod"/> <br/>
-                                Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao"/> <br/>
-                                Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao"/> <br/>
-                                Número de dose: <input type="text" name="txtDoseNum" id="idDoseNum"/><br/><br/>
-                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
-                            </form>
+                        <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
+                            Código: <input type="text" name="txtCod" id="idCod" readonly/><br/>
+                            Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao"/> <br/>
+                            Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao"/> <br/>
+                            Número de dose: <input type="text" name="txtDoseNum" id="idDoseNum"/><br/><br/>
+                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                        </form>
 <%
-                        }
-                        //Carregando dados da tabela...
-                        else
-                        {
-                            obj = dao.findAgenda(Integer.parseInt(request.getParameter("bCarregar")));
-                            //Form com os dados carregados
-%>
-                            <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
-                                Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
-                                Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao" value="<%=dF.format(obj.getDataVacinacao())%>"/> <br/>
-                                Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" value="<%=hF.format(obj.getDataVacinacao())%>"/> <br/>
-                                Número de dose: <input type="text" name="txtDoseNum" id="idDoseNum" value="<%=obj.getDoseNumero()%>"/><br/><br/>
-                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
-                            </form>
-<%
-                        }
                     }
-                    //CRUD agenda...
+                    //Carregando dados da tabela...
                     else
                     {
-                        b = request.getParameter("b1");
-                        DAOJPA daoJ = new DAOJPA();
-                        int cod;
-                        Timestamp hoje; //Pega data e hora do momento do agendamento
-                        String dataHora;
-
-                        switch(b)
-                        {
-                            case "Cadastrar":
-                                if(login.getAgendaList().isEmpty()) {
-                                    obj = new Agenda();
-                                    hoje = new Timestamp(System.currentTimeMillis());
-                                    obj.setDataAgendamento(hoje);
-                                    obj.setCodigoUsuario(login);
-                                    dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
-                                    obj.setDataVacinacao(tF.parse(dataHora));
-                                    obj.setDoseNumero(Integer.parseInt(request.getParameter("txtDoseNum")));
-                                    dao.create(obj);
+                        obj = dao.findAgenda(Integer.parseInt(request.getParameter("bCarregar")));
+                        //Form com os dados carregados
 %>
-                                    <h1>Agendamento concluído com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+                        <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
+                            Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>" readonly/> <br/>
+                            Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao" value="<%=dF.format(obj.getDataVacinacao())%>"/> <br/>
+                            Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" value="<%=hF.format(obj.getDataVacinacao())%>"/> <br/>
+                            Número de dose: <input type="text" name="txtDoseNum" id="idDoseNum" value="<%=obj.getDoseNumero()%>"/><br/><br/>
+                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                        </form>
 <%
-                                }
-                                else {
-                                    List<Agenda> lista = login.getAgendaList();
-                                    for(int i = 0; i < lista.size(); i++)
-                                    {
-                                        Agenda aux = lista.get(i);
-                                        if(aux.getVacinacaoList().isEmpty())
-                                        {
-                                            hoje = new Timestamp(System.currentTimeMillis());
-                                            String t = "Este usuário já possui um agendamento vigente. ";
-                                            if(hoje.before(aux.getDataVacinacao()))
-                                            {
-                                                t += "Vá para o posto de vacinação no dia " + dF.format(aux.getDataVacinacao()) + ", às " + hF.format(aux.getDataVacinacao()) + ".";
-                                            }
-                                            else
-                                            {
-                                                t += "Seu agendamento passou do prazo, vacine-se o quanto antes ou altere o seu agendamento.";
-                                            }
-                                            throw new Exception(t);
-                                        }
-                                    }
-                                    obj = new Agenda();
-                                    hoje = new Timestamp(System.currentTimeMillis());
-                                    obj.setDataAgendamento(hoje);
-                                    obj.setCodigoUsuario(login);
-                                    dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
-                                    obj.setDataVacinacao(tF.parse(dataHora));
-                                    obj.setDoseNumero(Integer.parseInt(request.getParameter("txtDoseNum")));
-                                    dao.create(obj);
-%>
-                                    <h1>Agendamento concluído com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
-<%
-                                    
-                                }
-                            break;
+                    }
+                }
+                //CRUD agenda...
+                else
+                {
+                    b = request.getParameter("b1");
+                    int cod;
+                    Timestamp hoje; //Pega data e hora do momento do agendamento
+                    String dataHora;
 
-                            case "Alterar":
-                                cod = Integer.parseInt(request.getParameter("txtCod"));
-                                obj = dao.findAgenda(cod);
-                                if(obj == null)
-                                    throw new Exception("Esse agendamento não existe.");
-
+                    switch(b)
+                    {
+                        case "Cadastrar":
+                            if(login.getAgendaList().isEmpty()) {
+                                obj = new Agenda();
                                 hoje = new Timestamp(System.currentTimeMillis());
                                 obj.setDataAgendamento(hoje);
+                                obj.setCodigoUsuario(login);
                                 dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
                                 obj.setDataVacinacao(tF.parse(dataHora));
                                 obj.setDoseNumero(Integer.parseInt(request.getParameter("txtDoseNum")));
-                                dao.edit(obj);
+                                dao.create(obj);
 %>
-                                <h1>Agendamento alterado com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+                                <h1>Agendamento concluído com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
 <%
-                            break;
-
-                            case "Remover":
-                                cod = Integer.parseInt(request.getParameter("txtCod"));
-                                obj = dao.findAgenda(cod);
-                                if(obj == null)
-                                    throw new Exception("Esse agendamento não existe.");
-                                
-                                dao.destroy(cod);
-                                login = daoU.findUsuario(login.getCodigo());
-                                session.setAttribute("login", login);
-%>
-                                <h1>Agendamento removido com sucesso.</h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
-<%
-                            break;
-
-                            case "Consultar":
-                                List<Agenda> lista = dao.findAgendaEntities();
-                                if(lista == null || lista.isEmpty())
+                            }
+                            else {
+                                List<Agenda> lista = login.getAgendaList();
+                                for(int i = 0; i < lista.size(); i++)
                                 {
-                                    throw new Exception("Lista nula ou vazia.");
+                                    Agenda aux = lista.get(i);
+                                    if(aux.getVacinacaoList().isEmpty())
+                                    {
+                                        hoje = new Timestamp(System.currentTimeMillis());
+                                        String t = "Este usuário já possui um agendamento vigente. ";
+                                        if(hoje.before(aux.getDataVacinacao()))
+                                        {
+                                            t += "Vá para o posto de vacinação no dia " + dF.format(aux.getDataVacinacao()) + ", às " + hF.format(aux.getDataVacinacao()) + ".";
+                                        }
+                                        else
+                                        {
+                                            t += "Seu agendamento passou do prazo, vacine-se o quanto antes ou altere o seu agendamento.";
+                                        }
+                                        throw new Exception(t);
+                                    }
                                 }
-                                else
-                                {
+                                obj = new Agenda();
+                                hoje = new Timestamp(System.currentTimeMillis());
+                                obj.setDataAgendamento(hoje);
+                                obj.setCodigoUsuario(login);
+                                dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
+                                obj.setDataVacinacao(tF.parse(dataHora));
+                                obj.setDoseNumero(Integer.parseInt(request.getParameter("txtDoseNum")));
+                                dao.create(obj);
 %>
-                                    <h1>Agendamento</h1>
-                                    <form action="agenda.jsp" method="post">
-                                    <table border="1">
-                                        <thead>
+                                <h1>Agendamento concluído com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+<%
+
+                            }
+                        break;
+
+                        case "Alterar":
+                            cod = Integer.parseInt(request.getParameter("txtCod"));
+                            obj = dao.findAgenda(cod);
+                            if(obj == null)
+                                throw new Exception("Esse agendamento não existe.");
+
+                            hoje = new Timestamp(System.currentTimeMillis());
+                            obj.setDataAgendamento(hoje);
+                            dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
+                            obj.setDataVacinacao(tF.parse(dataHora));
+                            obj.setDoseNumero(Integer.parseInt(request.getParameter("txtDoseNum")));
+                            dao.edit(obj);
+%>
+                            <h1>Agendamento alterado com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+<%
+                        break;
+
+                        case "Remover":
+                            cod = Integer.parseInt(request.getParameter("txtCod"));
+                            obj = dao.findAgenda(cod);
+                            if(obj == null)
+                                throw new Exception("Esse agendamento não existe.");
+
+                            dao.destroy(cod);
+                            login = daoU.findUsuario(login.getCodigo());
+                            session.setAttribute("login", login);
+%>
+                            <h1>Agendamento removido com sucesso.</h1>Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+<%
+                        break;
+
+                        case "Consultar":
+                            List<Agenda> lista;
+                            if(comum)
+                                lista = login.getAgendaList();
+                            else
+                                lista = dao.findAgendaEntities();
+                            if(lista == null || lista.isEmpty())
+                            {
+                                throw new Exception("Lista nula ou vazia.");
+                            }
+                            else
+                            {
+%>
+                                <h1>Agendamento</h1>
+                               <%
+                                   if(!comum)
+                                   %><form action="agenda.jsp" method="post">
+                                       Filtrar dados pelo CPF:<br/>
+                                       <input type="text" name="txtCPF"/><input type="submit" name="b1" value="Pesquisar"/>
+                                    </form><%
+                               %>
+                                <table border="1">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Data de modificação</th>
+                                            <th>Hora de modificação</th>
+                                            <th>Código de usuário</th>
+                                            <th>Data marcada</th>
+                                            <th>Hora marcada</th>
+                                            <th>Data da aplicação</th>
+                                            <th>Hora da aplicação</th>
+                                            <th>Número da dose</th>
+                                            <th>Comprovante</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+<%
+                                        for(int i = 0; i < lista.size(); i++)
+                                        {
+                                            obj = lista.get(i);
+%>
                                             <tr>
-                                                <th>Código</th>
-                                                <th>Data de modificação</th>
-                                                <th>Hora de modificação</th>
-                                                <th>Código de usuário</th>
-                                                <th>Data marcada</th>
-                                                <th>Hora marcada</th>
-                                                <th>Data da aplicação</th>
-                                                <th>Hora da aplicação</th>
-                                                <th>Número da dose</th>
-                                                <th>Comprovante</th>
+                                                <td><a href="agenda.jsp?bCarregar=<%=obj.getCodigo()%>">Carregar</a></td>
+                                                <td><%=dF.format(obj.getDataAgendamento())%></td>
+                                                <td><%=hF.format(obj.getDataAgendamento())%></td>
+                                                <td><%=obj.getCodigoUsuario().getCodigo()%></td>
+                                                <td><%=dF.format(obj.getDataVacinacao())%></td>
+                                                <td><%=hF.format(obj.getDataVacinacao())%></td>
+                                                <%
+                                                    boolean vacinou = false;
+                                                    Vacinacao vac = new Vacinacao();
+                                                    if(!obj.getVacinacaoList().isEmpty())
+                                                    {
+                                                        vac = obj.getVacinacaoList().get(0);
+                                                        vacinou = true;
+                                                        %><td><%=dF.format(vac.getDataAplicacao())%></td>
+                                                        <td><%=hF.format(vac.getDataAplicacao())%></td><%
+                                                    }
+                                                    else
+                                                    {
+                                                        %><td>--/--/----</td>
+                                                        <td>--:--</td><%
+                                                    }
+                                                %>
+                                                <td><%=obj.getDoseNumero()%></td>
+                                                <td>
+                                                <%
+                                                    if(vacinou)
+                                                    { 
+                                                        int codVac = vac.getCodigo();
+                                                        %><a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>">Acessar</a> <%
+                                                    }
+                                                    else
+                                                    {
+                                                        int param = 2; //1 para agendamento futuro e 2 para atrasado
+                                                        hoje = new Timestamp(System.currentTimeMillis());
+                                                        if(hoje.before(obj.getDataVacinacao()))
+                                                            param = 1;
+                                                        %>                                                        
+                                                        <button onclick="mensagem(<%=param%>, '<%=dF.format(obj.getDataVacinacao()) + ", às " + hF.format(obj.getDataVacinacao())%>')">Saiba mais</button>
+                                                        <%
+                                                    }
+                                                %>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
 <%
-                                            for(int i = 0; i < lista.size(); i++)
-                                            {
-                                                obj = lista.get(i);
+                                        }
 %>
-                                                <tr>
-                                                    <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
-                                                    <td><%=dF.format(obj.getDataAgendamento())%></td>
-                                                    <td><%=hF.format(obj.getDataAgendamento())%></td>
-                                                    <td><%=obj.getCodigoUsuario().getCodigo()%></td>
-                                                    <td><%=dF.format(obj.getDataVacinacao())%></td>
-                                                    <td><%=hF.format(obj.getDataVacinacao())%></td>
-                                                    <%
-                                                        boolean vacinou = false;
-                                                        Vacinacao vac = new Vacinacao();
-                                                        if(!obj.getVacinacaoList().isEmpty())
-                                                        {
-                                                            vac = obj.getVacinacaoList().get(0);
-                                                            vacinou = true;
-                                                            %><td><%=dF.format(vac.getDataAplicacao())%></td>
-                                                            <td><%=hF.format(vac.getDataAplicacao())%></td><%
-                                                        }
-                                                        else
-                                                        {
-                                                            %><td>--/--/----</td>
-                                                            <td>--:--</td><%
-                                                        }
-                                                    %>
-                                                    <td><%=obj.getDoseNumero()%></td>
-                                                    <td>
-                                                    <%
-                                                        if(vacinou)
-                                                        { 
-                                                            int codVac = vac.getCodigo();
-                                                            %><a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>">Acessar</a> <%
-                                                        }
-                                                        else
-                                                        {
-                                                            int param = 2; //1 para agendamento futuro e 2 para atrasado
-                                                            hoje = new Timestamp(System.currentTimeMillis());
-                                                            if(hoje.before(obj.getDataVacinacao()))
-                                                                param = 1;
-                                                            %>                                                              
-                                                            <input type="text" id="p1" value="<%=param%>"> <input type="text" id="p2" value="<%=dF.format(obj.getDataVacinacao()) + ", às " + hF.format(obj.getDataVacinacao())%>"><i id="saibaMais">rejkejw</i>
-                                                            <script>
-                                                                saibaMais.onclick = function()
-                                                                {
-                                                                    mensagem($("#p1").val().toString(), $("#p2").val().toString());
-                                                                }
-                                                            </script><%
-                                                        }
-                                                    %>
-                                                    </td>
-                                                </tr>
+                                        </tbody>
+                                    </table>
+                               
+                                Selecione o campo código de um agendamento para carregar seus dados no formulário.<br/>
+                                Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
 <%
-                                            }
+                            }
+                            break;
+                        
+                        case "Pesquisar":
+                            List<Agenda> lR; //lista resultante da pesquisa
+                            Usuario uR = new Usuario(); //usuário resultante da pesquisa
+                            uR = (Usuario)daoJ.searchCPF(bb, request.getParameter("txtCPF"), uR.getClass());
+                            lR = uR.getAgendaList();
+                            if(lR == null || lR.isEmpty())
+                            {
+                                throw new Exception("Lista nula ou vazia.");
+                            }
+                            else
+                            {
 %>
-                                            </tbody>
-                                        </table>
-                                    </form>
-                                    Selecione o campo código de um agendamento para carregar seus dados no formulário.<br/>
-                                    Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+                                <h1>Agendamento</h1>
+                               <%
+                                   if(!comum)
+                                   %><form action="agenda.jsp" method="post">
+                                       Filtrar dados pelo CPF:<br/>
+                                       <input type="text" name="txtCPF"/><input type="submit" name="b1" value="Pesquisar"/>
+                                    </form><%
+                               %>
+                                <table border="1">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Data de modificação</th>
+                                            <th>Hora de modificação</th>
+                                            <th>Código de usuário</th>
+                                            <th>Data marcada</th>
+                                            <th>Hora marcada</th>
+                                            <th>Data da aplicação</th>
+                                            <th>Hora da aplicação</th>
+                                            <th>Número da dose</th>
+                                            <th>Comprovante</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 <%
-                                }
+                                        for(int i = 0; i < lR.size(); i++)
+                                        {
+                                            obj = lR.get(i);
+%>
+                                            <tr>
+                                                <td><a href="agenda.jsp?bCarregar=<%=obj.getCodigo()%>"><%=obj.getCodigo()%></a></td>
+                                                <td><%=dF.format(obj.getDataAgendamento())%></td>
+                                                <td><%=hF.format(obj.getDataAgendamento())%></td>
+                                                <td><%=obj.getCodigoUsuario().getCodigo()%></td>
+                                                <td><%=dF.format(obj.getDataVacinacao())%></td>
+                                                <td><%=hF.format(obj.getDataVacinacao())%></td>
+                                                <%
+                                                    boolean vacinou = false;
+                                                    Vacinacao vac = new Vacinacao();
+                                                    if(!obj.getVacinacaoList().isEmpty())
+                                                    {
+                                                        vac = obj.getVacinacaoList().get(0);
+                                                        vacinou = true;
+                                                        %><td><%=dF.format(vac.getDataAplicacao())%></td>
+                                                        <td><%=hF.format(vac.getDataAplicacao())%></td><%
+                                                    }
+                                                    else
+                                                    {
+                                                        %><td>--/--/----</td>
+                                                        <td>--:--</td><%
+                                                    }
+                                                %>
+                                                <td><%=obj.getDoseNumero()%></td>
+                                                <td>
+                                                <%
+                                                    if(vacinou)
+                                                    { 
+                                                        int codVac = vac.getCodigo();
+                                                        %><a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>">Acessar</a> <%
+                                                    }
+                                                    else
+                                                    {
+                                                        int param = 2; //1 para agendamento futuro e 2 para atrasado
+                                                        hoje = new Timestamp(System.currentTimeMillis());
+                                                        if(hoje.before(obj.getDataVacinacao()))
+                                                            param = 1;
+                                                        %>                                                        
+                                                        <button onclick="mensagem(<%=param%>, '<%=dF.format(obj.getDataVacinacao()) + ", às " + hF.format(obj.getDataVacinacao())%>')">Saiba mais</button>
+                                                        <%
+                                                    }
+                                                %>
+                                                </td>
+                                            </tr>
+<%
+                                        }
+%>
+                                        </tbody>
+                                    </table>
+                               
+                                Selecione o campo código de um agendamento para carregar seus dados no formulário.<br/>
+                                Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
+<%
+                            }
                             break;
 
-                            default:
-                                throw new Exception("Erro inesperado ao ler evento do botão.");
-                        }
-                        Banco.conexao.close();
+                        default:
+                            throw new Exception("Erro inesperado ao ler evento do botão.");
                     }
-                } 
-                else {
-                    throw new Exception("Nenhum usuário está logado. <a href='loginUsuario.jsp'>Logar agora</a>");
+                    Banco.conexao.close();
                 }
             }
+            
             catch(Exception ex) {
                 Banco.conexao.close();
 %>

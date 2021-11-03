@@ -171,7 +171,6 @@ create table usuario_apl(
                                     aux = "s";
 %>
                                 <h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1>
-                                <form action="usuarioApl.jsp" method="post">
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -193,7 +192,7 @@ create table usuario_apl(
                                                 t = "Enfermeiro";
 %>
                                             <tr>
-                                                <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
+                                                <td><a href="usuarioApl.jsp?bCarregar=<%=obj.getCodigo()%>"><%=obj.getCodigo()%></a></td>
                                                 <td><%=obj.getNome()%></td>
                                                 <td><%=obj.getCpf()%></td>
                                                 <td><%=t%></td>
@@ -203,7 +202,6 @@ create table usuario_apl(
 %>
                                         </tbody>
                                     </table>
-                                </form>
                                 Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
                                 Clique <a href="usuarioApl.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%

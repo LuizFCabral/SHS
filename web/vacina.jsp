@@ -24,6 +24,7 @@
         try {
             if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class)
                     throw new Exception("Log-in não feito ou credenciais insuficientes");
+            
             //SEM FUNÇÕES DO CRUD A EXECUTAR
             //Testando se houve redirecionamento desta página para ela mesma
             if(request.getParameter("b1") == null) {
@@ -124,7 +125,6 @@
                                 aux = "s";
 %>
                             <h1>Lista com <%=lista.size()%> vacina<%=aux%> encontrada<%=aux%></h1>
-                            <form action="vacina.jsp" method="post">
                                 <table border="1">
                                     <thead>
                                         <tr>
@@ -140,7 +140,7 @@
                                             obj = lista.get(i);
 %>
                                             <tr>
-                                                <td><input type="submit" name="bCarregar" value="<%=obj.getCodigo()%>"/></td>
+                                                <td><a href="vacina.jsp?bCarregar=<%=obj.getCodigo()%>"><%=obj.getCodigo()%></a></td>
                                                 <td><%=obj.getDescricao()%></td>
                                                 <td><%=obj.getQtdeDose()%></td>
                                             </tr>
@@ -149,7 +149,6 @@
 %>
                                     </tbody>
                                 </table>
-                            </form>
                             Selecione o campo código de uma vacina para carregar seus dados no formulário.<br/>
                             Clique <a href="vacina.jsp">aqui</a> para voltar ao formulário CRUD vacina
 <%
