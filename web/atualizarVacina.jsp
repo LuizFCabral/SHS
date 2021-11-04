@@ -76,7 +76,7 @@
                                         Agenda vigente = lista.get(i);
                                         isVigente = true;
                                         %>
-                                        <table>
+                                        <table border="1">
                                             <thead>
                                                 <tr>
                                                     <th>Código</th>

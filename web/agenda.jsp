@@ -102,10 +102,12 @@
                     else
                     {
                         obj = dao.findAgenda(Integer.parseInt(request.getParameter("bCarregar")));
+                        
                         //Form com os dados carregados
 %>
                         <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
                             Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>" readonly/> <br/>
+                            Código do Usuário: <input type="text" name="txtCodU"  value="<%=obj.getCodigoUsuario().getCodigo()%>" readonly/> <br/>
                             Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao" value="<%=dF.format(obj.getDataVacinacao())%>"/> <br/>
                             Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" value="<%=hF.format(obj.getDataVacinacao())%>"/> <br/>
                             Número de dose: <input type="text" name="txtDoseNum" id="idDoseNum" value="<%=obj.getDoseNumero()%>"/><br/><br/>
@@ -132,6 +134,12 @@
                                 obj = new Agenda();
                                 hoje = new Timestamp(System.currentTimeMillis());
                                 obj.setDataAgendamento(hoje);
+                                if(session.getAttribute("classe") == UsuarioApl.class)
+                                {
+                                    daoU = new UsuarioJpaController(Banco.conexao);
+                                    Usuario uu = daoU.findUsuario(Integer.parseInt(request.getParameter("txtCodU")));
+                                    obj.setCodigoUsuario(uu);
+                                }
                                 obj.setCodigoUsuario(login);
                                 dataHora = "" + request.getParameter("txtDataVacinacao") + " " + request.getParameter("txtHoraVacinacao");
                                 obj.setDataVacinacao(tF.parse(dataHora));
