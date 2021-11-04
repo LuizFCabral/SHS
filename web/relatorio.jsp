@@ -4,6 +4,7 @@
     Author     : vinif
 --%>
 
+<%@page import="controller.DAOJPA"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="model.*"%>
@@ -22,6 +23,9 @@
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date periodoInicio;
         Date periodoFim;
+        Banco bb;
+        DAOJPA dao;
+        int num_vacinados;
         
         try {
             //RESTRIÇÃO DE ACESSO
@@ -43,6 +47,25 @@
             else {
                 periodoInicio = df.parse(request.getParameter("txtPeriodoInicio"));
                 periodoFim = df.parse(request.getParameter("txtPeriodoFim"));
+                bb = new Banco();
+                dao = new DAOJPA();
+                num_vacinados = dao.pessoasVacinadas(bb, periodoInicio, periodoFim);
+
+                //2.1: TABELA
+%>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Vacinados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><%=num_vacinados%></td>
+                        </tr>
+                    </tbody>
+                </table>
+<%
             }
         } 
         catch (Exception ex) {

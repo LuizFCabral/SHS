@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Vacina.findAll", query = "SELECT v FROM Vacina v"),
     @NamedQuery(name = "Vacina.findByCodigo", query = "SELECT v FROM Vacina v WHERE v.codigo = :codigo"),
+    @NamedQuery(name = "Vacina.countByCodigo", query = "SELECT SUM(v.codigo) FROM Vacina v"),
     @NamedQuery(name = "Vacina.findByDescricao", query = "SELECT v FROM Vacina v WHERE v.descricao = :descricao"),
     @NamedQuery(name = "Vacina.findByQtdeDose", query = "SELECT v FROM Vacina v WHERE v.qtdeDose = :qtdeDose")})
 public class Vacina implements Serializable {
