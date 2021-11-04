@@ -51,9 +51,10 @@
                 periodoInicio = dF.parse(request.getParameter("txtPeriodoInicio"));
                 periodoFim = dF.parse(request.getParameter("txtPeriodoFim"));
                 LoteJpaController daoL = new LoteJpaController(Banco.conexao);
-                dao = new DAOJPA();
+                UsuarioJpaController daoU = new UsuarioJpaController(Banco.conexao);
+                //dao = new DAOJPA();
                 num_vacinados = 0;
-                List<Vacinacao> listaV;
+                /*List<Vacinacao> listaV;
                 ArrayList<Usuario> listaU = new ArrayList<>();
                 listaV = dao.vacinasPeriodo(bb, periodoInicio, periodoFim);
                 for(int i = 0; i < listaV.size(); i++)
@@ -72,7 +73,36 @@
                         listaU.add(atual.getCodigoUsuario());
                     }
                 }
-                num_vacinados = listaU.size();
+                num_vacinados = listaU.size();*/
+                List<Usuario> listaU = daoU.findUsuarioEntities();
+                int a = 0, b = 0;
+                for(int i = 0; i < listaU.size(); i++)
+                {
+                    a++;
+                    boolean achou = false;
+                    Usuario aux = listaU.get(i);
+                    if(!aux.getAgendaList().isEmpty())
+                    {
+                        List<Agenda>listaA = aux.getAgendaList();
+                        for(int j = 0; i < listaA.size(); i++)
+                        {
+                            if(!achou)
+                            {
+                                Agenda ag = listaA.get(i);
+                                if(!ag.getVacinacaoList().isEmpty())
+                                {
+                                    Vacinacao vac = ag.getVacinacaoList().get(0);
+                                    b ++;
+                                    if((periodoInicio.before(vac.getDataAplicacao()) || periodoInicio.equals(vac.getDataAplicacao()))&&(periodoFim.after(vac.getDataAplicacao()) || periodoFim.equals(vac.getDataAplicacao())))
+                                    {
+                                        num_vacinados ++;
+                                        achou = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 List<Lote> listaL = daoL.findLoteEntities();
                 int qtdeDoses = 0;
                 for(int i = 0; i < listaL.size(); i++)
@@ -85,11 +115,17 @@
                     <thead>
                         <tr>
                             <th>Qtde de Doses</th>
+                            <th>Num. de pessoas vacinadas</th>
+                            <th>a</th>
+                            <th>b</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><%=qtdeDoses%></td>
+                            <td><%=num_vacinados%></td>
+                            <td><%=a%></td>
+                            <td><%=b%></td>
                         </tr>
                     </tbody>
                 </table>
