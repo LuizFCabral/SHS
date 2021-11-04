@@ -167,7 +167,10 @@
                         Vacinacao vac = new Vacinacao();
                         vac.setCodigoLote(l);
                         vac.setCodigoUsuario(u);
+                        boolean novo = false;
                         List<Agenda> lista = u.getAgendaList();
+                        if(lista == null || lista.isEmpty())
+                            novo = true;
                         Agenda a = new Agenda();
                         int i;
                         for(i = 0; i<lista.size(); i++)
@@ -175,10 +178,11 @@
                             a = lista.get(i);
                             if(a.getVacinacaoList().isEmpty())
                             {
+                                novo = false;
                                 break;
                             }
                         }
-                        if(i == lista.size() - 1)
+                        if(novo)
                         {
                             a = new Agenda();
                             a.setCodigoUsuario(u);
@@ -190,8 +194,7 @@
                         }
                         vac.setCodigoAgenda(a);
                         vac.setDataAplicacao(hoje);
-                        UsuarioAplJpaController daoApl = new UsuarioAplJpaController(Banco.conexao);
-                        vac.setCodigoUsuarioApl(daoApl.findUsuarioApl(apl.getCodigo()));
+                        vac.setCodigoUsuarioApl(apl);
                         VacinacaoJpaController daoVac = new VacinacaoJpaController(Banco.conexao);
                         daoVac.create(vac);
                         %>pronto!<%

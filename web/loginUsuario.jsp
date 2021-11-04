@@ -125,9 +125,10 @@
                             }
                             else
                             {
-                                Banco.conexao.close();
+                                
                                 session.setAttribute("classe", u.getClass());
                                 session.setAttribute("login", u);
+                                Banco.conexao.close();
 %>
                                 <h1>Log-in feito com sucesso!</h1>
 <%

@@ -4,6 +4,7 @@
     Author     : Pedro
 --%>
 
+<%@page import="controller.LoteJpaController"%>
 <%@page import="model.*"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="controller.VacinaJpaController"%>
@@ -30,7 +31,7 @@
             VacinaJpaController daoV;
             DAOJPA daoJ;
             Banco bb = new Banco();
-            
+            Lote l;
             try 
             {
                 if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class || 
@@ -51,7 +52,7 @@
                         <form action="controleMovimento.jsp" method="post" onsubmit="return verificar(1)">
                             Código: <input type="text" name="txtCod"/> <br/>
                             Código da vacina: <input type="text" name="txtCodVac"/> <br/>
-                            Data do movimento: <input type="text" name="txtDataMov" readonly/> <br/>
+                            Data do movimento: <input type="text" name="txtDataMov"/> <br/>
                             Hora do movimento: <input type="text" name="txtHoraMov"/> <br/>
                             Tipo do movimento: <input type="text" name="txtTipo"/> <br/>
                             Quantidade: <input type="text" name="txtQuant"/><br/>
@@ -72,7 +73,6 @@
                             Código da vacina: <input type="text" name="txtCodVac" value="<%=obj.getCodigoVacina().getCodigo()%>"/> <br/>
                             Data do movimento: <input type="text" name="txtDataMov" value="<%=dF.format(obj.getDataMovimento())%>"/> <br/>
                             Hora do movimento: <input type="text" name="txtHoraMov" value="<%=hF.format(obj.getDataMovimento())%>"/> <br/>
-                            Tipo do movimento: <input type="text" name="txtTipo" value="<%=obj.getTipoMovimento()%>"/> <br/>
                             Quantidade: <input type="text" name="txtQuant" value="<%=obj.getQtdeDose()%>"/><br/>
                             Lote: <input type="text" name="txtLote" value="<%=obj.getCodigoLote().getDescricao()%>"/><br/><br/>
                             <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
@@ -93,30 +93,28 @@
                             obj = new MovimentoVacina();
                             obj.setCodigoVacina(daoV.findVacina(Integer.parseInt(request.getParameter("txtCodVac"))));
                             obj.setDataMovimento(tF.parse(request.getParameter("txtDataMov") + " " + request.getParameter("txtHoraMov")));
-                            obj.setTipoMovimento(request.getParameter("txtTipo"));
-                            obj.setQtdeDose(Integer.parseInt(request.getParameter("txtQuant")));
+                            int dose, uni;
+                            uni = Integer.parseInt(request.getParameter("txtQuant"));
+                            dose = uni * obj.getCodigoVacina().getQtdeDose();
+                            obj.setTipoMovimento("E");
+                            obj.setQtdeDose(dose);
                             daoJ = new DAOJPA();
+                            l = daoJ.loteByDescricao(bb, request.getParameter("txtLote"));
+                            if(l == null)
+                            {
+                                l = new Lote();
+                                l.setDescricao(request.getParameter("txtLote"));
+                                l.setCodigoVacina(obj.getCodigoVacina());
+                                l.setDoseDisponivel(dose);
+                                l.setQtdeUnidade(uni);
+                                LoteJpaController daoL = new LoteJpaController(Banco.conexao);
+                                daoL.create(l);
+                            }
                             obj.setCodigoLote(daoJ.loteByDescricao(bb, request.getParameter("txtLote")));
                             dao.create(obj);
 %> 
-                            <h1>Movimento de <%=obj.completarTipo()%> cadastrado com sucesso. </h1>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
+                            <h1>Movimento de <%=obj.completarTipo()%> cadastrado com sucesso.</h1>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
 <%
-                            break;
-                            
-                        case "Alterar":
-                            cod = Integer.parseInt(request.getParameter("txtCod"));
-                            obj = dao.findMovimentoVacina(cod);
-                            if(obj == null)
-                                throw new Exception("Esse movimento não existe.");
-                            obj.setCodigoVacina(daoV.findVacina(Integer.parseInt(request.getParameter("txtCodVac"))));
-                            obj.setDataMovimento(tF.parse(request.getParameter("txtDataMov") + " " + request.getParameter("txtHoraMov")));
-                            obj.setTipoMovimento(request.getParameter("txtTipo"));
-                            obj.setQtdeDose(Integer.parseInt(request.getParameter("txtQuant")));
-                            daoJ = new DAOJPA();
-                            obj.setCodigoLote(daoJ.loteByDescricao(bb, request.getParameter("txtLote")));
-                            dao.edit(obj);
-%>
-<h1>Movimento de <%=obj.completarTipo()%> alterado com sucesso. </h1>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento<%
                             break;
                             
                         case "Remover":
@@ -124,6 +122,12 @@
                             obj = dao.findMovimentoVacina(cod);
                             if(obj == null)
                                 throw new Exception("Esse movimento não existe.");
+                            if(!obj.getTipoMovimento().equals("S"))
+                                throw new Exception("Apenas movimentos de entrada podem ser removidos");
+                            LoteJpaController daoL = new LoteJpaController(Banco.conexao);
+                            l = obj.getCodigoLote();
+                            l.setDoseDisponivel(l.getDoseDisponivel() - obj.getQtdeDose());
+                            daoL.edit(l);
                             dao.destroy(cod);
 %>
                            <h1>Movimento de <%=obj.completarTipo()%> removido com sucesso.</h1>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
@@ -168,7 +172,7 @@
                                                 <td><%=hF.format(obj.getDataMovimento())%></td>
                                                 <td><%=obj.completarTipo()%></td>
                                                 <td><%=obj.getQtdeDose()%></td>
-                                                <td><%=obj.getCodigoLote()%></td>
+                                                <td><%=obj.getCodigoLote().getDescricao()%></td>
                                             </tr>
 <%
                                         }

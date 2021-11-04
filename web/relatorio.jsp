@@ -4,10 +4,12 @@
     Author     : vinif
 --%>
 
-<%@page import="controller.DAOJPA"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="model.*"%>
+<%@page import="controller.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,7 +22,7 @@
         response.setCharacterEncoding("UTF-8");
         
         //VARIÁVEIS
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
         Date periodoInicio;
         Date periodoFim;
         Banco bb;
@@ -39,29 +41,58 @@
                 <form action="relatorio.jsp" method="POST">
                     Início: <input type="text" name="txtPeriodoInicio"> <br/>
                     Fim: <input type="text" name="txtPeriodoFim"> <br/>
-                    <input type="submit" value="Gerar relatório" name="b1" />
+                    Movimentos da vacina: <input type="text" name="txtVacina"> <br/>
+                    <input type="submit" value="Gerar relatório" name="b1"/>
                 </form>
 <%
             } 
             //2. GERAÇÃO DE RELATÓRIO SOLICITADA: PREENCHENDO AS TABELAS
             else {
-                periodoInicio = df.parse(request.getParameter("txtPeriodoInicio"));
-                periodoFim = df.parse(request.getParameter("txtPeriodoFim"));
+                periodoInicio = dF.parse(request.getParameter("txtPeriodoInicio"));
+                periodoFim = dF.parse(request.getParameter("txtPeriodoFim"));
+                LoteJpaController daoL = new LoteJpaController(Banco.conexao);
                 bb = new Banco();
                 dao = new DAOJPA();
-                num_vacinados = dao.pessoasVacinadas(bb, periodoInicio, periodoFim);
-
+                num_vacinados = 0;
+                List<Vacinacao> listaV;
+                ArrayList<Usuario> listaU = new ArrayList<>();
+                listaV = dao.vacinasPeriodo(bb, periodoInicio, periodoFim);
+                for(int i = 0; i < listaV.size(); i++)
+                {
+                    Vacinacao atual = listaV.get(i);
+                    if(listaU != null)
+                        for(int j = 0; i < listaU.size(); i++)
+                        {
+                            if(!atual.getCodigoUsuario().equals(listaU.get(i)))
+                            {
+                                listaU.add(atual.getCodigoUsuario());
+                            }
+                        }
+                    else
+                    {
+                        listaU.add(atual.getCodigoUsuario());
+                    }
+                }
+                num_vacinados = listaU.size();
+                List<Lote> listaL = daoL.findLoteEntities();
+                int qtdeDoses = 0;
+                for(int i = 0; i < listaL.size(); i++)
+                {
+                    qtdeDoses += listaL.get(i).getDoseDisponivel();
+                }
                 //2.1: TABELA
 %>
                 <table border="1">
                     <thead>
                         <tr>
-                            <th>Vacinados</th>
+                            <th>Num. de Vacinados</th>
+                            <th>Qtde de Doses</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><%=num_vacinados%></td>
+                            <td><%=qtdeDoses%></td>
                         </tr>
                     </tbody>
                 </table>

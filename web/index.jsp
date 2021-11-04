@@ -23,6 +23,6 @@
         <a href="agenda.jsp">Agendar</a><br/>
         <a href="controleMovimento.jsp">controleMovimento</a><br/>
         <a href="atualizarVacina.jsp">atualizarVacina</a><br/>
-        <a href="atualizarVacina.jsp">Relatório</a><br/>
+        <a href="relatorio.jsp">Relatório</a><br/>
     </body>
 </html>
