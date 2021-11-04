@@ -25,7 +25,7 @@
         SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
         Date periodoInicio;
         Date periodoFim;
-        Banco bb;
+        Banco bb = new Banco();
         DAOJPA dao;
         int num_vacinados;
         
@@ -51,7 +51,6 @@
                 periodoInicio = dF.parse(request.getParameter("txtPeriodoInicio"));
                 periodoFim = dF.parse(request.getParameter("txtPeriodoFim"));
                 LoteJpaController daoL = new LoteJpaController(Banco.conexao);
-                bb = new Banco();
                 dao = new DAOJPA();
                 num_vacinados = 0;
                 List<Vacinacao> listaV;
@@ -85,19 +84,18 @@
                 <table border="1">
                     <thead>
                         <tr>
-                            <th>Num. de Vacinados</th>
                             <th>Qtde de Doses</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><%=num_vacinados%></td>
                             <td><%=qtdeDoses%></td>
                         </tr>
                     </tbody>
                 </table>
 <%
             }
+        Banco.conexao.close();
         } 
         catch (Exception ex) {
             Banco.conexao.close();

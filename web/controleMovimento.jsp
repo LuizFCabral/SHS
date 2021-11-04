@@ -58,7 +58,6 @@
                             Quantidade: <input type="text" name="txtQuant"/><br/>
                             Lote: <input type="text" name="txtLote"/><br/><br/>
                             <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
                         </form>
@@ -76,7 +75,6 @@
                             Quantidade: <input type="text" name="txtQuant" value="<%=obj.getQtdeDose()%>"/><br/>
                             Lote: <input type="text" name="txtLote" value="<%=obj.getCodigoLote().getDescricao()%>"/><br/><br/>
                             <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
                             <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
                         </form>
