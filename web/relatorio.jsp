@@ -22,11 +22,12 @@
         response.setCharacterEncoding("UTF-8");
         
         //VARIÁVEIS
-        SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy"); //Formatador de datas
+        SimpleDateFormat hF = new SimpleDateFormat("HH:mm"); //Formatador de horas
         Date periodoInicio;
         Date periodoFim;
         Banco bb = new Banco();
-        DAOJPA dao;
+        DAOJPA daoJ;
         int num_vacinados;
         
         try {
@@ -50,6 +51,8 @@
             else {
                 periodoInicio = dF.parse(request.getParameter("txtPeriodoInicio"));
                 periodoFim = dF.parse(request.getParameter("txtPeriodoFim"));
+                daoJ = new DAOJPA();
+                Vacina choice = daoJ.vacinaByDescr(bb, request.getParameter("txtVacina"));
                 LoteJpaController daoL = new LoteJpaController(Banco.conexao);
                 UsuarioJpaController daoU = new UsuarioJpaController(Banco.conexao);
                 //dao = new DAOJPA();
@@ -84,19 +87,22 @@
                     if(!aux.getAgendaList().isEmpty())
                     {
                         List<Agenda>listaA = aux.getAgendaList();
-                        for(int j = 0; i < listaA.size(); i++)
+                        for(int j = 0; j < listaA.size(); j++)
                         {
                             if(!achou)
                             {
-                                Agenda ag = listaA.get(i);
+                                Agenda ag = listaA.get(j);
                                 if(!ag.getVacinacaoList().isEmpty())
                                 {
                                     Vacinacao vac = ag.getVacinacaoList().get(0);
                                     b ++;
                                     if((periodoInicio.before(vac.getDataAplicacao()) || periodoInicio.equals(vac.getDataAplicacao()))&&(periodoFim.after(vac.getDataAplicacao()) || periodoFim.equals(vac.getDataAplicacao())))
                                     {
-                                        num_vacinados ++;
-                                        achou = true;
+                                        if(vac.getCodigoLote().getCodigoVacina().equals(choice))
+                                        {
+                                            num_vacinados ++;
+                                            achou = true;
+                                        }
                                     }
                                 }
                             }
@@ -107,10 +113,15 @@
                 int qtdeDoses = 0;
                 for(int i = 0; i < listaL.size(); i++)
                 {
-                    qtdeDoses += listaL.get(i).getDoseDisponivel();
+                    if(listaL.get(i).getCodigoVacina().equals(choice))
+                    {
+                        qtdeDoses += listaL.get(i).getDoseDisponivel();
+                    }
                 }
                 //2.1: TABELA
 %>
+                <h3>Relatório gerencial de <%=dF.format(periodoInicio)%> a <%=dF.format(periodoFim)%></h3>
+                <h4> Doses disponíveis e pessoas vacinadas com <%=choice.getDescricao()%></h4>
                 <table border="1">
                     <thead>
                         <tr>
@@ -127,6 +138,43 @@
                             <td><%=a%></td>
                             <td><%=b%></td>
                         </tr>
+                    </tbody>
+                </table>
+                <%
+                    List<MovimentoVacina> listaM = daoJ.movimentosRelatorio(bb, periodoInicio, periodoFim, choice);
+                    if(listaM == null || listaM.isEmpty())
+                        throw new Exception("Lista nula ou vazia");
+                %>
+                <h4> Movimentos em lotes de <%=choice.getDescricao()%>. Quantidade: <%=listaM.size()%></h4>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Data do movimento</th>
+                            <th>Hora do movimento</th>
+                            <th>Tipo</th>
+                            <th>Quantidade</th>
+                            <th>Lote</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            for( int i = 0; i < listaM.size(); i++)
+                            {     
+                                
+                                MovimentoVacina m = listaM.get(i);
+                        %>   
+                        <tr>
+                            <td><%=m.getCodigo()%></td>
+                            <td><%=dF.format(m.getDataMovimento())%></td>
+                            <td><%=hF.format(m.getDataMovimento())%></td>
+                            <td><%=m.getTipoMovimento()%></td>
+                            <td><%=m.getQtdeDose()%></td>
+                            <td><%=m.getCodigoLote().getDescricao()%></td>
+                        </tr>
+                        <%
+                            }
+                        %>
                     </tbody>
                 </table>
 <%
