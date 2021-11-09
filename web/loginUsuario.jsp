@@ -15,6 +15,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Log-in</title>
+        <link rel="stylesheet" href="estilo/style.css">
         <script type="text/javascript">
             var show = false;
             function revelar()
