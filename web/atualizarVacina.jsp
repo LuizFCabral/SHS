@@ -113,48 +113,46 @@
                                         Agenda vigente = lista.get(i);
                                         isVigente = true;
                                         %>
-                                        <div class="tabela" style="overflow-x: auto;">
-                                            <table border="1">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Código</th>
-                                                        <th>Data de modificação</th>
-                                                        <th>Hora de modificação</th>
-                                                        <th>Código de usuário</th>
-                                                        <th>Data marcada</th>
-                                                        <th>Hora marcada</th>
-                                                        <th>Número da dose</th>
-                                                        <th>Situação</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><%=vigente.getCodigo()%></td>
-                                                        <td><%=dF.format(vigente.getDataAgendamento())%></td>
-                                                        <td><%=hF.format(vigente.getDataAgendamento())%></td>
-                                                        <td><%=vigente.getCodigoUsuario().getCodigo()%></td>
-                                                        <td><%=dF.format(vigente.getDataVacinacao())%></td>
-                                                        <td><%=hF.format(vigente.getDataVacinacao())%></td>
-                                                        <td><%=vigente.getDoseNumero()%></td>
-                                                        <%
-                                                            if(hoje.getDate() == vigente.getDataVacinacao().getDate())
+                                        <table border="1">
+                                            <thead>
+                                                <tr>
+                                                    <th>Código</th>
+                                                    <th>Data de modificação</th>
+                                                    <th>Hora de modificação</th>
+                                                    <th>Código de usuário</th>
+                                                    <th>Data marcada</th>
+                                                    <th>Hora marcada</th>
+                                                    <th>Número da dose</th>
+                                                    <th>Situação</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><%=vigente.getCodigo()%></td>
+                                                    <td><%=dF.format(vigente.getDataAgendamento())%></td>
+                                                    <td><%=hF.format(vigente.getDataAgendamento())%></td>
+                                                    <td><%=vigente.getCodigoUsuario().getCodigo()%></td>
+                                                    <td><%=dF.format(vigente.getDataVacinacao())%></td>
+                                                    <td><%=hF.format(vigente.getDataVacinacao())%></td>
+                                                    <td><%=vigente.getDoseNumero()%></td>
+                                                    <%
+                                                        if(hoje.getDate() == vigente.getDataVacinacao().getDate())
+                                                        {
+                                                            %><td>dia certo</td><%
+                                                        }
+                                                        else
+                                                        {
+                                                            if(hoje.before(vigente.getDataVacinacao()))
                                                             {
-                                                                %><td>dia certo</td><%
+                                                                %><td>adiantado</td><%
                                                             }
                                                             else
                                                             {
-                                                                if(hoje.before(vigente.getDataVacinacao()))
-                                                                {
-                                                                    %><td>adiantado</td><%
-                                                                }
-                                                                else
-                                                                {
-                                                                    %><td>atrasado</td><%
-                                                                }
+                                                                %><td>atrasado</td><%
                                                             }
-                                                        %>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
+                                                        }
+                                                    %>
+                                                </tr>
+                                            </thead>
+                                        </table>
                             <%
                                         break;
                                     }

@@ -1,6 +1,5 @@
 body{
     position:relative;
-    overflow: hidden;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
@@ -121,8 +120,7 @@ body{
 
 /*conteudo do site*/
 .home_content{
-    max-width: 700px;
-    width: 100%;
+    min-width: 700px;
     background: #fff;
     padding: 30px 30px;
     margin-left: 15%;
@@ -247,26 +245,16 @@ Essa parte é para tornar o conteudo do site responsivo.
     border-radius: 10px;
     text-align: center;
 }
-.tabela table{
+table{
     border-collapse: collapse;
     border-color: black;
     border-radius: 5px;
 }
-.tabela th{
+th{
     padding: 10px;
     background-color: #259a9a;
     color: #fff;
 }
-.tabela td{
+td{
     padding: 10px;
-}
-.tabela input{
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-    background-color: #fff;
-}
-.tabela input:hover{
-    background: #ccc;
 }

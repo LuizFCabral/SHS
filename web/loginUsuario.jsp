@@ -66,7 +66,9 @@
 %>                      
                         <h1><%=nome%>, você já está logado, deseja deslogar?</h1>
                         <form action="loginUsuario.jsp" method="post">
-                            <input type="submit" name="bDeslog" value="Deslogar"/>
+                            <div class="button">
+                                <input type="submit" name="bDeslog" value="Deslogar"/>
+                            </div>
                         </form>
 <%  
                     }
@@ -92,10 +94,9 @@
                                 </div>
                             </div>
                             <div class="button">
-                                <input type="submit" value="logar" name="b1"> <br/>
+                                <input type="submit" value="logar" name="b1">
                             </div>
                         </form>
-                        <br/><br/>
                         <div id="dCadastro">
                             <h3>Usuário novo? <b id='idControle' onclick="revelar()">Expandir cadastro⏵</b></h3>
                             <form hidden="true" action="cadastrar.jsp" method="post" id="fCadastro" onsubmit="return verificar(1)">
@@ -148,10 +149,9 @@
                                 </div>
                             </div>
                             <div class="button">
-                                <input type="submit" value="logar" name="b1"> <br/>
+                                <input type="submit" value="logar" name="b1">
                             </div>
                         </form>
-                        <br/><br/>
                         <div id="dCadastro">
                             <h3>Usuário novo? <b id='idControle' onclick="revelar()">Expandir cadastro⏵</b></h3>
                             <form hidden="true" action="cadastrar.jsp" method="post" id="fCadastro" onsubmit="return verificar(1)">
