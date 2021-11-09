@@ -17,10 +17,22 @@
         <title>Confirmar aplicação de vacina</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript">
+            var prox = true;
             
+            function prosseguir()
+            {
+                return prox;
+            }
+            function confirmar()
+            {
+                var r = confirm("Este usuário não possui um agendamento. Continuar irá permitir que seja vacinado agora.");
+                prox = r;
+            }
         </script>
     </head>
     <body>
+        <div class="home_content">
+        <div class="title">Aplicação de vacina</div>
         <%
             request.setCharacterEncoding("UTF-8");
             Usuario u = new Usuario();
@@ -41,8 +53,15 @@
                 {
         %>
         <form action="atualizarVacina.jsp">
-            CPF: <input type="text" name="txtCPF"/>
-            <input type="submit" name="b1" value="Procurar"/>
+            <div class="user-data">
+                <div class="input-box">
+                    <span class="data">CPF da pessoa a ser vacinada</span>
+                    <input type="text" name="txtCPF" placeholder="Insira o CPF"/>
+                </div>
+            </div>
+            <div class="button">
+                <input type="submit" name="b1" value="Procurar"/>
+            </div>
         </form>
         <%
                 }
@@ -52,13 +71,30 @@
                     {
                         u = (Usuario) daoJ.searchCPF(bb, request.getParameter("txtCPF"), u.getClass());
         %>
-                    <form action="atualizarVacina.jsp">
+                    <form action="atualizarVacina.jsp" onsubmit="return prosseguir()">
                         <h1>Dados da pessoa</h1>
-                        CPF: <input type="text" name="txtCPF" value="<%=u.getCpf()%>" readonly/> <br/>
-                        Código: <input type="text" name="txtCodigo" value="<%=u.getCodigo()%>" readonly/> <br/>
-                        Nome: <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/> <br/>
-                        Data de nascimento: <input type="text" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>" readonly/> <br/>
-                        Cidade:<input type="text" name="txtCidade" value="<%=u.getCidade()%>" readonly/> <br/>
+                        <div class="user-data">
+                            <div class="input-box">
+                                <span class="data">CPF</span>
+                                <input type="text" name="txtCPF" value="<%=u.getCpf()%>" readonly/> <br/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Código</span>
+                                <input type="text" name="txtCodigo" value="<%=u.getCodigo()%>" readonly/> <br/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Nome</span>
+                                <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/> <br/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Data de nascimento</span>
+                                <input type="text" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>" readonly/> <br/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Cidade</span>
+                                <input type="text" name="txtCidade" value="<%=u.getCidade()%>" readonly/> <br/>
+                            </div>
+                        </div>
                         <h1>Agendamento vigente</h1>
                         <%
                             boolean isVigente = false;
@@ -76,46 +112,48 @@
                                         Agenda vigente = lista.get(i);
                                         isVigente = true;
                                         %>
-                                        <table border="1">
-                                            <thead>
-                                                <tr>
-                                                    <th>Código</th>
-                                                    <th>Data de modificação</th>
-                                                    <th>Hora de modificação</th>
-                                                    <th>Código de usuário</th>
-                                                    <th>Data marcada</th>
-                                                    <th>Hora marcada</th>
-                                                    <th>Número da dose</th>
-                                                    <th>Situação</th>
-                                                </tr>
-                                                <tr>
-                                                    <td><%=vigente.getCodigo()%></td>
-                                                    <td><%=dF.format(vigente.getDataAgendamento())%></td>
-                                                    <td><%=hF.format(vigente.getDataAgendamento())%></td>
-                                                    <td><%=vigente.getCodigoUsuario().getCodigo()%></td>
-                                                    <td><%=dF.format(vigente.getDataVacinacao())%></td>
-                                                    <td><%=hF.format(vigente.getDataVacinacao())%></td>
-                                                    <td><%=vigente.getDoseNumero()%></td>
-                                                    <%
-                                                        if(hoje.getDate() == vigente.getDataVacinacao().getDate())
-                                                        {
-                                                            %><td>dia certo</td><%
-                                                        }
-                                                        else
-                                                        {
-                                                            if(hoje.before(vigente.getDataVacinacao()))
+                                        <div class="tabela" style="overflow-x: auto;">
+                                            <table border="1">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Código</th>
+                                                        <th>Data de modificação</th>
+                                                        <th>Hora de modificação</th>
+                                                        <th>Código de usuário</th>
+                                                        <th>Data marcada</th>
+                                                        <th>Hora marcada</th>
+                                                        <th>Número da dose</th>
+                                                        <th>Situação</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><%=vigente.getCodigo()%></td>
+                                                        <td><%=dF.format(vigente.getDataAgendamento())%></td>
+                                                        <td><%=hF.format(vigente.getDataAgendamento())%></td>
+                                                        <td><%=vigente.getCodigoUsuario().getCodigo()%></td>
+                                                        <td><%=dF.format(vigente.getDataVacinacao())%></td>
+                                                        <td><%=hF.format(vigente.getDataVacinacao())%></td>
+                                                        <td><%=vigente.getDoseNumero()%></td>
+                                                        <%
+                                                            if(hoje.getDate() == vigente.getDataVacinacao().getDate())
                                                             {
-                                                                %><td>adiantado</td><%
+                                                                %><td>dia certo</td><%
                                                             }
                                                             else
                                                             {
-                                                                %><td>atrasado</td><%
+                                                                if(hoje.before(vigente.getDataVacinacao()))
+                                                                {
+                                                                    %><td>adiantado</td><%
+                                                                }
+                                                                else
+                                                                {
+                                                                    %><td>atrasado</td><%
+                                                                }
                                                             }
-                                                        }
-                                                    %>
-                                                </tr>
-                                            </thead>
-                                        </table>
+                                                        %>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
                             <%
                                         break;
                                     }
@@ -127,17 +165,32 @@
                             }
                         %>
                         <h1>Dados da vacina</h1>
-                        Descrição: <input type="text" name="txtDescr"/><br/>
-                        Lote utilizado: <input type="text" name="txtLote"/><br/>
-                        <br/><br/>
+                        <div class="user-data">
+                            <div class="input-box">
+                                <span class="data">Vacina utilizada</span>
+                                <input type="text" name="txtDescr" placeholder="Insira o nome da vacina"/><br/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Lote utilizado</span>
+                                <input type="text" name="txtLote" placeholder="Insira o lote utilizado"/><br/>
+                            </div>
                         <%
+                            String t = "";
                             if(!isVigente)
                                 {
-                                    %><h4>Criar agendamento agora e confirmar:</h4>
-                                    Num. da dose: <input type="text" name="txtNumDose"/><br/><br/><%
+                                    t = "onclick='confirmar()'";
+                                    %>
+                                    <div class="input-box">
+                                        <span class="data"> Número da dose</span>
+                                        <input type="text" name="txtNumDose" placeholder="Insira o n. da dose"/>
+                                    </div>    
+                                        <%
                                 }
                         %>
-                        <input type="submit" name="b1" value="confirmar"/>
+                        </div>
+                        <div class="button">
+                            <input type="submit" name="b1" <%=t%> value="confirmar"/>
+                        </div>
                     </form>
         
         <%
@@ -210,5 +263,6 @@
 <%
             }
         %>
+        </div>
     </body>
 </html>
