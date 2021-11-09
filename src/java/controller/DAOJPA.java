@@ -83,11 +83,11 @@ public class DAOJPA {
         }
     }
     
-    public List<MovimentoVacina> movimentosRelatorio(Banco bb, Date periodoInicio, Date periodoFim, Vacina v) throws Exception
+    public List<MovimentoVacina> movimentosRelatorio(Banco bb, Vacina v) throws Exception
     {
         try {
-            return bb.sessao.createQuery("SELECT m from MovimentoVacina where m.codigoVacina.descricao = :v AND where m.dataMovimento <= :pF AND where m.dataMovimento >= :pI")
-                    .setParameter("pF", periodoFim).setParameter("pI", periodoInicio).setParameter("v", v.getDescricao()).getResultList();
+            return bb.sessao.createQuery("SELECT m from MovimentoVacina m where m.codigoVacina = :v")
+                    .setParameter("v", v).getResultList();
         } 
         catch (Exception ex) {
             throw new Exception("Erro no vacinasPeriodo: " + ex.getMessage());

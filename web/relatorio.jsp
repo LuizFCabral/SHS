@@ -32,7 +32,8 @@
         
         try {
             //RESTRIÇÃO DE ACESSO
-            if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class)
+            if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class || 
+                        !((UsuarioApl)session.getAttribute("login")).getTipoPessoa().equals("G"))
                 throw new Exception("Log-in não feito ou credenciais insuficientes");
             
             //RELATÓRIOS
@@ -42,7 +43,7 @@
                 <form action="relatorio.jsp" method="POST">
                     Início: <input type="text" name="txtPeriodoInicio"> <br/>
                     Fim: <input type="text" name="txtPeriodoFim"> <br/>
-                    Movimentos da vacina: <input type="text" name="txtVacina"> <br/>
+                    Vacina: <input type="text" name="txtVacina"> <br/>
                     <input type="submit" value="Gerar relatório" name="b1"/>
                 </form>
 <%
@@ -120,8 +121,8 @@
                 }
                 //2.1: TABELA
 %>
-                <h3>Relatório gerencial de <%=dF.format(periodoInicio)%> a <%=dF.format(periodoFim)%></h3>
-                <h4> Doses disponíveis e pessoas vacinadas com <%=choice.getDescricao()%></h4>
+                <h2>Relatório gerencial de <%=dF.format(periodoInicio)%> a <%=dF.format(periodoFim)%></h2>
+                <h3> Doses disponíveis e pessoas vacinadas com <%=choice.getDescricao()%></h3>
                 <table border="1">
                     <thead>
                         <tr>
@@ -140,12 +141,31 @@
                         </tr>
                     </tbody>
                 </table>
+                       <h3>Movimentos em lotes de <%=choice.getDescricao()%></h3>
                 <%
-                    List<MovimentoVacina> listaM = daoJ.movimentosRelatorio(bb, periodoInicio, periodoFim, choice);
+                    List<MovimentoVacina> listaM = daoJ.movimentosRelatorio(bb, choice);
                     if(listaM == null || listaM.isEmpty())
                         throw new Exception("Lista nula ou vazia");
-                %>
-                <h4> Movimentos em lotes de <%=choice.getDescricao()%>. Quantidade: <%=listaM.size()%></h4>
+                    String t = "";
+                    int q = 0;
+                    for( int i = 0; i < listaM.size(); i++)
+                    {     
+                        MovimentoVacina m = listaM.get(i);
+                        if((periodoInicio.before(m.getDataMovimento()) || periodoInicio.equals(m.getDataMovimento()))&&(periodoFim.after(m.getDataMovimento()) || periodoFim.equals(m.getDataMovimento())))
+                        {
+                            q ++;
+                            t += "<tr><td>" + m.getCodigo() + "</td>" +
+                                    "<td>" + dF.format(m.getDataMovimento()) + "</td>" +
+                                    "<td>" + hF.format(m.getDataMovimento()) + "</td>" +
+                                    "<td>" + m.completarTipo() + "</td>" +
+                                    "<td>" + m.getQtdeDose() + "</td>" +
+                                    "<td>" + m.getCodigoLote().getDescricao() + "</td></tr>";
+                        }
+                    }
+                    if(q == 0)
+                            throw new Exception("Lista nula ou vazia");
+                        %>
+                        <h4>Quantidade de movimentos: <%=q%></h4>
                 <table border="1">
                     <thead>
                         <tr>
@@ -158,23 +178,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <%
-                            for( int i = 0; i < listaM.size(); i++)
-                            {     
-                                
-                                MovimentoVacina m = listaM.get(i);
-                        %>   
-                        <tr>
-                            <td><%=m.getCodigo()%></td>
-                            <td><%=dF.format(m.getDataMovimento())%></td>
-                            <td><%=hF.format(m.getDataMovimento())%></td>
-                            <td><%=m.getTipoMovimento()%></td>
-                            <td><%=m.getQtdeDose()%></td>
-                            <td><%=m.getCodigoLote().getDescricao()%></td>
-                        </tr>
-                        <%
-                            }
-                        %>
+                        <%=t%>
                     </tbody>
                 </table>
 <%
