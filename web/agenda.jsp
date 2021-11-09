@@ -43,6 +43,8 @@
         </script>
     </head>
     <body>
+        <div class="home_content"> <!-- Esse é o conteiner mais geral, é aquele que engloba todo o formulario-->
+            <div class="title">Agenda</div> 
         <a href="index.jsp">Tela inicial</a>
 <%
             request.setCharacterEncoding("UTF-8");
@@ -87,14 +89,32 @@
                         //Form para o CRUD...
 %>                      
                         <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod" id="idCod" readonly/><br/>
-                            Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao"/> <br/>
-                            Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao"/> <br/>
-                            Número de dose: <input type="text" name="txtDoseNum" id="idDoseNum"/><br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            <div class="user-data"> <!-- O conteiner 'user-data' engloba todos os dados mais gerais do usarioa-->
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCod" id="idCod" readonly/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Data de vacinação</span>
+                                    <input type="text" name="txtDataVacinacao" id="idDataVacinacao" placeholder="Digite a data de vacinação"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Hora de vacinação</span>
+                                    <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" placeholder="Digite a hora da vacinação"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Número da dose</span>
+                                    <input type="text" name="txtDoseNum" id="idDoseNum" placeholder="Digite o número da dose"/>
+                                </div>
+                            </div>
+                            <div class="button"> <!-- Esse conteiner é o dos botões, engloba todos os botões que dispararão os eventos do form.-->
+                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                            </div>
+                            <div class="btn_consult">
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            </div>
                         </form>
 <%
                     }
@@ -105,6 +125,35 @@
                         
                         //Form com os dados carregados
 %>
+                        <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
+                            <div class="user-data"> <!-- O conteiner 'user-data' engloba todos os dados mais gerais do usarioa-->
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>" readonly/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Data de vacinação</span>
+                                    <input type="text" name="txtDataVacinacao" id="idDataVacinacao" placeholder="Digite a data de vacinação"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Hora de vacinação</span>
+                                    <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" placeholder="Digite a hora da vacinação"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Número da dose</span>
+                                    <input type="text" name="txtDoseNum" id="idDoseNum" placeholder="Digite o número da dose"/>
+                                </div>
+                            </div>
+                            <div class="button"> <!-- Esse conteiner é o dos botões, engloba todos os botões que dispararão os eventos do form.-->
+                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                            </div>
+                            <div class="btn_consult">
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            </div>
+                        </form>
+                        
                         <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
                             Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>" readonly/> <br/>
                             Código do Usuário: <input type="text" name="txtCodU"  value="<%=obj.getCodigoUsuario().getCodigo()%>" readonly/> <br/>
@@ -428,5 +477,6 @@
 <%
             }
 %>
+        </div>
     </body>
 </html>
