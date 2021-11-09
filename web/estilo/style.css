@@ -1,0 +1,272 @@
+body{
+    position:relative;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #259a9a;
+}
+
+/*Barra lateral*/
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 70px;
+    background: #414141;
+    padding: 6px 10px;
+    transition: all 0.5s ease;
+    z-index: 1;
+}
+.sidebar.active{
+    width: 230px;
+    background: #008080;
+}
+.sidebar .logo_content .logo_nome{
+    opacity: 0;
+    color: #fff;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 400;
+    pointer-events: none;
+}
+.sidebar.active .logo_content .logo_nome{
+    pointer-events: auto;
+    opacity: 1;
+}
+.sidebar #btn{
+    position: absolute;
+    color: #fff;
+    right: 5%;
+    top: 5px;
+    font-size: 20px;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    line-height: 50px;
+    transform: translateX(-50%);
+}
+.sidebar ul{
+    margin-top: 20px;
+}
+.sidebar ul li{
+    position: absolute;
+    left: 10px;
+    height: 50px;
+    width: 90%;
+    list-style: none;
+    line-height: 50px;
+}
+.sidebar ul li .toltip{
+    position: absolute;
+    top: 0;
+    transform: translateY(-50%);
+    border-radius: 6px;
+    height: 35px;
+    width: 140px;
+    background: #fff;
+    line-height: 32px;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+}
+.sidebar ul li:hover .toltip{
+    transition: all 0.5s ease;
+    opacity: 1;
+    top: 50%;
+    left: 90px;
+}
+.sidebar.active ul li:hover .toltip{
+    opacity: 0;
+}
+.sidebar ul li a{
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.5s ease;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+.sidebar ul li a:hover{
+    color: #414141;
+    background: #fff;
+}
+.sidebar.active ul li a:hover{
+    color: #008080;
+}
+.sidebar ul li i{
+    height: 50px;
+    min-width: 50px;
+    border-radius: 12px;
+    line-height: 50px;
+    text-align: center;
+}
+.sidebar .nomes_links{
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.01s ease;
+}
+.sidebar.active .nomes_links{
+    opacity: 1;
+    pointer-events: auto;
+    transition: all 0.01s ease;
+}
+
+/*conteudo do site*/
+.home_content{
+    max-width: 700px;
+    width: 100%;
+    background: #fff;
+    padding: 30px 30px;
+    margin-left: 15%;
+    margin-top: 6%;
+    border-radius: 15px;
+}
+.home_content .title{
+    font-size: 25px;
+    font-weight: 500;
+    position: relative;
+}
+.home_content form .user-data{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+}
+form .user-data .input-box{
+    margin-bottom: 15px;
+    width: calc(100% / 2 - 20px);
+}
+.user-data .input-box .data{
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.user-data .input-box input{
+    height: 30px;
+    width: 100%;
+    outline-color: #008080;
+    border-radius: 10px;
+    border: 1px solid;
+    padding-left: 10px;
+    font-size: 15px;
+}
+form .user-type{
+    margin-bottom: 20px;
+}
+form .user-type .title-type{
+    font-size: 20px;
+    font-weight: 500;
+}
+form .user-type .category{
+    display: flex;
+    width: 80%;
+    margin: 14px 0;
+}
+form .user-type .category input{
+    margin-right: 25px;
+}
+form .button{
+    text-align: center;
+    height: 40px;
+    margin: 35px 0;
+}
+form .button input{
+    height: 80%;
+    width: 25%;
+    margin: 10px;
+    color: #fff;
+    border: none;
+    border-radius: 10px; 
+    background: #2fa7a7;
+    transition: all 0.5s ease;
+}
+form .btn_consult{
+    text-align: center;
+    height: 40px;
+}
+form .btn_consult input{
+    height: 80%;
+    width: 25%;
+    color: #fff;
+    border: none;
+    border-radius: 10px; 
+    background: #2fa7a7;
+    transition: all 0.5s ease;
+}
+form .button input:hover{
+    background: #008080;
+    box-shadow: 2px 2px 5px #ccc;
+}
+form .btn_consult input:hover{
+    background: #008080;
+    box-shadow: 2px 2px 5px #ccc;
+}
+
+
+/*
+Essa parte é para tornar o conteudo do site responsivo.
+
+.home_content{
+    position: absolute;
+    height: 100%;
+    width: calc(100% - 240px);
+    left: 75px;
+    transition: all 0.5s ease;
+}
+.home_content .text{
+    font-size: 25px;
+    font-weight: 500;
+    color: #008080;
+    margin: 12px;
+}
+.sidebar.active ~ .home_content{
+    width: calc(100% - 240px);
+    left: 235px;
+}
+*/
+
+/*Estilização da tabela*/
+.tabela{
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    height: auto;
+    background: #fff;
+    padding: 30px;
+    padding-left: 10%;
+    margin-left: 15%;
+    margin-top: 6%;
+    border-radius: 10px;
+    text-align: center;
+}
+.tabela table{
+    border-collapse: collapse;
+    border-color: black;
+    border-radius: 5px;
+}
+.tabela th{
+    padding: 10px;
+    background-color: #259a9a;
+    color: #fff;
+}
+.tabela td{
+    padding: 10px;
+}
+.tabela input{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background-color: #fff;
+}
+.tabela input:hover{
+    background: #ccc;
+}
