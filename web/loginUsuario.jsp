@@ -14,9 +14,31 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Log-in</title>
+        <script type="text/javascript">
+            var show = false;
+            function revelar()
+            {
+                document.getElementById("fCadastro").hidden = show;
+                if(show)
+                {
+                    document.getElementById("idControle").innerHTML = "Expandir cadastro⏵";
+                }
+                else
+                {
+                    document.getElementById("idControle").innerHTML = "Expandir cadastro⏷";
+                }
+                show = !show;
+            }
+            function iniciarCadastro(p)
+            {
+                document.getElementById("dCadastro").hidden = !p;
+            }
+        </script>
     </head>
     <body>
+        <div class="home_content">
+        <div class="title">Log-in de usuário</div>
 <%
             request.setCharacterEncoding("UTF-8");
             Object obj;
@@ -53,11 +75,52 @@
                         session.setAttribute("login", null);
 %>
                         <form action="loginUsuario.jsp" method="post">
-                            CPF: <input type="text" name="txtCPF"> <br/>
-                            Usuário: <input type="radio" name="rdbUser" value="0" checked="checked" /> 
-                            Enfermeiro/gestor: <input type="radio" name="rdbUser" value="1"/> <br/>
-                            <input type="submit" value="logar" name="b1"> <br/>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">CPF</span>
+                                    <input type="text" name="txtCPF" placeholder="Insira o seu CPF">
+                                </div>
+                            </div>
+                            <div class="user-type">
+                                <span class="title-type">Tipo de usuário</span><br/>
+                                <div class="category">
+                                    <span>Usuário comum</span>
+                                    <input type="radio" name="rdbUser" value="0" checked="checked" onclick="iniciarCadastro(true)"/> 
+                                    <span>Enfermeiro/gestor</span>
+                                    <input type="radio" name="rdbUser" value="1" onclick="iniciarCadastro(false)"/>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <input type="submit" value="logar" name="b1"> <br/>
+                            </div>
                         </form>
+                        <br/><br/>
+                        <div id="dCadastro">
+                            <h3>Usuário novo? <b id='idControle' onclick="revelar()">Expandir cadastro⏵</b></h3>
+                            <form hidden="true" action="cadastrar.jsp" method="post" id="fCadastro" onsubmit="return verificar(1)">
+                                <div class="user-data">
+                                    <div class="input-box">
+                                        <span class="data">Nome</span>
+                                        <input type="text" name="txtNome" id="idNome" placeholder="Insira o seu nome"/>
+                                    </div>
+                                    <div class="input-box">
+                                        <span class="data">CPF</span>
+                                        <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()" placeholder="Insira o seu CPF"/>
+                                    </div>
+                                    <div class="input-box">
+                                        <span class="data">Data de nascimento</span>
+                                        <input type="text" name="txtDataNasc" id="idDataNasc" placeholder="Insira a sua data de nascimento"/>
+                                    </div>
+                                    <div class="input-box">
+                                        <span class="data">Cidade</span>
+                                        <input type="text" name="txtCidade" id="idCidade" placeholder="Insira a cidade"/>
+                                    </div>
+                                </div>
+                                <div class="button">
+                                    <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>
+                                </div>
+                            </form>
+                        </div>
 <%
                     }
                 }
@@ -68,21 +131,52 @@
                     {
 %>
                         <form action="loginUsuario.jsp" method="post">
-                            CPF: <input type="text" name="txtCPF"> <br/>
-                            Usuário: <input type="radio" name="rdbUser" value="0" checked="checked" /> 
-                            Enfermeiro/gestor: <input type="radio" name="rdbUser" value="1"/> <br/>
-                            <input type="submit" value="logar" name="b1"> <br/>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">CPF</span>
+                                    <input type="text" name="txtCPF" placeholder="Insira o seu CPF">
+                                </div>
+                            </div>
+                            <div class="user-type">
+                                <span class="title-type">Tipo de usuário</span><br/>
+                                <div class="category">
+                                    <span>Usuário comum</span>
+                                    <input type="radio" name="rdbUser" value="0" checked="checked" onclick="iniciarCadastro(true)"/> 
+                                    <span>Enfermeiro/gestor</span>
+                                    <input type="radio" name="rdbUser" value="1" onclick="iniciarCadastro(false)"/>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <input type="submit" value="logar" name="b1"> <br/>
+                            </div>
                         </form>
                         <br/><br/>
-                        <h3>Usuário novo? Cadastre-se abaixo!</h3>
-                        <form action="cadastrar.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod" id="idCod" readonly/> <br/>
-                            Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
-                            CPF: <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()"/> <br/>
-                            Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc"/> <br/>
-                            Cidade: <input type="text" name="txtCidade" id="idCidade"/><br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>
-                        </form>
+                        <div id="dCadastro">
+                            <h3>Usuário novo? <b id='idControle' onclick="revelar()">Expandir cadastro⏵</b></h3>
+                            <form hidden="true" action="cadastrar.jsp" method="post" id="fCadastro" onsubmit="return verificar(1)">
+                                <div class="user-data">
+                                    <div class="input-box">
+                                        <span class="data">Nome</span>
+                                        <input type="text" name="txtNome" id="idNome" placeholder="Insira o seu nome"/>
+                                    </div>
+                                    <div class="input-box">
+                                        <span class="data">CPF</span>
+                                        <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()" placeholder="Insira o seu CPF"/>
+                                    </div>
+                                    <div class="input-box">
+                                        <span class="data">Data de nascimento</span>
+                                        <input type="text" name="txtDataNasc" id="idDataNasc" placeholder="Insira a sua data de nascimento"/>
+                                    </div>
+                                    <div class="input-box">
+                                        <span class="data">Cidade</span>
+                                        <input type="text" name="txtCidade" id="idCidade" placeholder="Insira a cidade"/>
+                                    </div>
+                                </div>
+                                <div class="button">
+                                    <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>
+                                </div>
+                            </form>
+                        </div>
 <%
                     }
                     else
@@ -140,5 +234,6 @@
 <%
             }
 %>
+        </div>
     </body>
 </html>

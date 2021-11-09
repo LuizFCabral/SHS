@@ -76,23 +76,23 @@
                         <div class="user-data">
                             <div class="input-box">
                                 <span class="data">CPF</span>
-                                <input type="text" name="txtCPF" value="<%=u.getCpf()%>" readonly/> <br/>
+                                <input type="text" name="txtCPF" value="<%=u.getCpf()%>" readonly/>
                             </div>
                             <div class="input-box">
                                 <span class="data">Código</span>
-                                <input type="text" name="txtCodigo" value="<%=u.getCodigo()%>" readonly/> <br/>
+                                <input type="text" name="txtCodigo" value="<%=u.getCodigo()%>" readonly/>
                             </div>
                             <div class="input-box">
                                 <span class="data">Nome</span>
-                                <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/> <br/>
+                                <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/>
                             </div>
                             <div class="input-box">
                                 <span class="data">Data de nascimento</span>
-                                <input type="text" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>" readonly/> <br/>
+                                <input type="text" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>" readonly/>
                             </div>
                             <div class="input-box">
                                 <span class="data">Cidade</span>
-                                <input type="text" name="txtCidade" value="<%=u.getCidade()%>" readonly/> <br/>
+                                <input type="text" name="txtCidade" value="<%=u.getCidade()%>" readonly/>
                             </div>
                         </div>
                         <h1>Agendamento vigente</h1>
@@ -168,11 +168,11 @@
                         <div class="user-data">
                             <div class="input-box">
                                 <span class="data">Vacina utilizada</span>
-                                <input type="text" name="txtDescr" placeholder="Insira o nome da vacina"/><br/>
+                                <input type="text" name="txtDescr" placeholder="Insira o nome da vacina"/>
                             </div>
                             <div class="input-box">
                                 <span class="data">Lote utilizado</span>
-                                <input type="text" name="txtLote" placeholder="Insira o lote utilizado"/><br/>
+                                <input type="text" name="txtLote" placeholder="Insira o lote utilizado"/>
                             </div>
                         <%
                             String t = "";
