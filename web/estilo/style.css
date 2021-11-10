@@ -117,6 +117,31 @@ body{
     pointer-events: auto;
     transition: all 0.01s ease;
 }
+.sidebar .profile_content{
+    position: absolute;
+    color: #fff;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+}
+.sidebar .profile_content .profile{
+    position: relative;
+    padding: 10px 6px;
+    height: 60px;
+}
+.profile_content .profile .profile_detail{
+    display: flex;
+    align-items: center;
+}
+.profile .profile_detail .type{
+    font-size: 12px;
+}
+.profile .profile_detail i{
+    margin-right: 15px;
+}
+.sidebar.active .profile_content{
+    opacity: 1;
+}
 
 /*conteudo do site*/
 .home_content{

@@ -19,6 +19,7 @@
     <body>
         <%
             request.setCharacterEncoding("UTF-8");
+            String nome, tipo, icone;
             try
             {
                 if(session.getAttribute("login") == null)
@@ -33,6 +34,11 @@
             <%
                 if(session.getAttribute("classe") == Usuario.class)
                 {
+                    nome = ((Usuario)session.getAttribute("login")).getNome().trim();
+                    tipo = "Usuário";
+                    icone = "<i class='bx bx-user'></i>";
+                    String[] aux = nome.split(" ");
+                    nome = aux[0];
                 %>
                     <div id="Usuario">
                         <li>
@@ -58,6 +64,11 @@
                 }
                 else
                 {
+                    nome = ((UsuarioApl)session.getAttribute("login")).getNome().trim();
+                    tipo = "Enfermeiro";
+                    icone = "<i class='bx bx-plus-medical' ></i>";
+                    String[] aux = nome.split(" ");
+                    nome = aux[0];
                 %>
                     <div id="GestEnf">
                         <li>
@@ -113,6 +124,8 @@
                     UsuarioApl obj = (UsuarioApl) session.getAttribute("login");
                     if(obj.getTipoPessoa().equals("G"))
                     {
+                        tipo = "Gestor";
+                        icone = "<i class='bx bxs-data' ></i>";
                     %>
                         <div id="Movimento">
                             <li>
@@ -149,12 +162,20 @@
                     <br><br><br>
                 </div>
             </ul>
+            <div class="profile_content">
+                <div class="profile">
+                    <div class="profile_detail">
+                        <%=icone%>
+                        <div class="name_type">
+                            <div class="name"><%=nome%></div>
+                            <div class="type"><%=tipo%></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div> 
-        <div>
-            <iframe name="interface" src="welcome.html" width="1500" height="500" style="border: 0"></iframe>
-        </div>
-        <%
-            %><script>
+            <iframe name="interface" src="welcome.html" width="1500" height="620" style="border: 0"></iframe>
+            <script>
                 let btn = document.querySelector("#btn");
                 let sidebar = document.querySelector(".sidebar");
 
