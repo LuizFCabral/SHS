@@ -1,7 +1,7 @@
 <%-- 
-    Document   : atualizarVacina
-    Created on : 09/10/2021, 17:14:15
-    Author     : Pedro
+ATUALIZAR VACINA================================================================
+Com esta classe, o processo de vacinação de um usuário é registrado no sistema e
+o estoque de vacinas, atualizado.
 --%>
 
 <%@page import="controller.*"%>
@@ -34,8 +34,10 @@
     <body>
         <div class="home_content">
         <div class="title">Aplicação de vacina</div>
-        <%
+<%
             request.setCharacterEncoding("UTF-8");
+            
+            //1. VARIÁVEIS
             Usuario u = new Usuario();
             Banco bb = new Banco();
             DAOJPA daoJ = new DAOJPA();
@@ -45,59 +47,64 @@
             MovimentoVacinaJpaController dao = new MovimentoVacinaJpaController(Banco.conexao);
             Timestamp hoje = new Timestamp(System.currentTimeMillis());
             UsuarioApl apl;
+            
             try
             {
+                //2. RESTRIÇÃO DE ACESSO A QUEM NÃO É ENFERMEIRO NEM GESTOR
                 if(session.getAttribute("login") == null || session.getAttribute("classe") != UsuarioApl.class)
                     throw new Exception("Log-in não feito ou credenciais insuficientes");
                 apl = (UsuarioApl)session.getAttribute("login");
+                
+                //3. VACINAÇÃO
+                //Pegando o CPF do usuário a ser vacinado
                 if(request.getParameter("b1") == null)
                 {
-        %>
-        <form action="atualizarVacina.jsp">
-            <div class="user-data">
-                <div class="input-box">
-                    <span class="data">CPF da pessoa a ser vacinada</span>
-                    <input type="text" name="txtCPF" placeholder="Insira o CPF"/>
-                </div>
-            </div>
-            <div class="button">
-                <input type="submit" name="b1" value="Procurar"/>
-            </div>
-        </form>
-        <%
+%>
+                    <form action="atualizarVacina.jsp">
+                        <div class="user-data">
+                            <div class="input-box">
+                                <span class="data">CPF da pessoa a ser vacinada</span>
+                                <input type="text" name="txtCPF" placeholder="Insira o CPF"/>
+                            </div>
+                        </div>
+                        <div class="button">
+                            <input type="submit" name="b1" value="Procurar"/>
+                        </div>
+                    </form>
+<%
                 }
                 else
                 {
                     if(request.getParameter("b1").equalsIgnoreCase("Procurar"))
                     {
                         u = (Usuario) daoJ.searchCPF(bb, request.getParameter("txtCPF"), u.getClass());
-        %>
-                    <form action="atualizarVacina.jsp" onsubmit="return prosseguir()">
-                        <h1>Dados da pessoa</h1>
-                        <div class="user-data">
-                            <div class="input-box">
-                                <span class="data">CPF</span>
-                                <input type="text" name="txtCPF" value="<%=u.getCpf()%>" readonly/>
+%>
+                        <form action="atualizarVacina.jsp" onsubmit="return prosseguir()">
+                            <h1>Dados da pessoa</h1>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">CPF</span>
+                                    <input type="text" name="txtCPF" value="<%=u.getCpf()%>" readonly/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCodigo" value="<%=u.getCodigo()%>" readonly/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Nome</span>
+                                    <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Data de nascimento</span>
+                                    <input type="text" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>" readonly/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Cidade</span>
+                                    <input type="text" name="txtCidade" value="<%=u.getCidade()%>" readonly/>
+                                </div>
                             </div>
-                            <div class="input-box">
-                                <span class="data">Código</span>
-                                <input type="text" name="txtCodigo" value="<%=u.getCodigo()%>" readonly/>
-                            </div>
-                            <div class="input-box">
-                                <span class="data">Nome</span>
-                                <input type="text" name="txtNome" value="<%=u.getNome()%>" readonly/>
-                            </div>
-                            <div class="input-box">
-                                <span class="data">Data de nascimento</span>
-                                <input type="text" name="txtDataNasc" value="<%=dF.format(u.getDataNascimento())%>" readonly/>
-                            </div>
-                            <div class="input-box">
-                                <span class="data">Cidade</span>
-                                <input type="text" name="txtCidade" value="<%=u.getCidade()%>" readonly/>
-                            </div>
-                        </div>
-                        <h1>Agendamento vigente</h1>
-                        <%
+                            <h1>Agendamento vigente</h1>
+<%
                             boolean isVigente = false;
                             if(u.getAgendaList().isEmpty())
                             {

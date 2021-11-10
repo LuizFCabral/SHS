@@ -1,7 +1,10 @@
 <%-- 
-    Document   : loginUsuario
-    Created on : 01/10/2021, 23:29:02
-    Author     : Pedro
+LOGIN DE USUÁRIO================================================================
+Esta é a página pela qual uma pessoa poderá cadastrar-se no site. A depender do
+tipo de usuário, que é especificado no cadastro, ele terá maior ou menor acesso 
+às funcionalidades do site. Um usuário comum, que representa um cidadão que dese-
+ja agendar sua vacinação, não pode modificar o cadastro de nenhum outro usuário, 
+gestor ou enfermeiro, por exemplo.
 --%>
 
 <%@page import="model.UsuarioApl"%>
@@ -18,6 +21,9 @@
         <link rel="stylesheet" href="estilo/style.css">
         <script type="text/javascript">
             var show = false;
+            
+            //Esta função revela todo o formulário para cadastro de um novo 
+            //usuário, enfermeiro ou gestor, que, por padrão, permanece oculto.
             function revelar()
             {
                 document.getElementById("fCadastro").hidden = show;
@@ -41,6 +47,7 @@
         <div class="home_content">
         <div class="title">Log-in de usuário</div>
 <%
+            //VARIÁVEIS
             request.setCharacterEncoding("UTF-8");
             Object obj;
             Banco bb = new Banco();
@@ -48,20 +55,20 @@
             try
             {
                 obj = session.getAttribute("login");
-                //Se já houver alguém logado...
+                //1. Alguém já está logado
                 if(obj != null)
                 {
-                    //Se a pessoa não quiser deslogar
+                    //1.1 Usuário logado não deseja deslogar
                     if(request.getParameter("bDeslog") == null)
                     {
                         String nome = "";
                         if(session.getAttribute("classe").equals(Usuario.class))
                         {
-                            nome = ((Usuario) obj).getNome();
+                            nome = ((Usuario)obj).getNome();
                         }
                         if(session.getAttribute("classe").equals(UsuarioApl.class))
                         {
-                            nome = ((UsuarioApl) obj).getNome();
+                            nome = ((UsuarioApl)obj).getNome();
                         }
 %>                      
                         <h1><%=nome%>, você já está logado, deseja deslogar?</h1>
@@ -72,7 +79,7 @@
                         </form>
 <%  
                     }
-                    //Se a pessoa quiser deslogar
+                    //1.2 Usuário logado deseja deslogar
                     else
                     {
                         session.setAttribute("login", null);
@@ -126,9 +133,10 @@
 <%
                     }
                 }
-                //Se ainda não houver alguém logado...  
+                //2. Ninguém está logado
                 else
                 {
+                    //2.1 Formulário para fazer o login
                     if(request.getParameter("b1") == null)
                     {
 %>
@@ -180,10 +188,13 @@
                         </div>
 <%
                     }
+                    //2.2 Processar o login (executá-lo de fato)
                     else
                     {
                         DAOJPA daoJ = new DAOJPA();
                         String cpf = request.getParameter("txtCPF");
+                        
+                        //2.2.1 Login de usuário comum (cidadão que quer vacinar-se)
                         if(request.getParameter("rdbUser").equals("0"))
                         {
                             Usuario u = new Usuario();
@@ -197,13 +208,14 @@
                                 Banco.conexao.close();
                                 session.setAttribute("classe", u.getClass());
                                 session.setAttribute("login", u);
-                                %>
+%>
                                 <h1>Log-in feito com sucesso!</h1>
                                 Ir à <a href="agenda.jsp">sua página de agendamentos</a><br/>
                                 Ir à <a href="index.jsp">tela inicial</a>
-                        <%
+<%
                             }
                         }
+                        //2.2.2 Login de enfermeiro ou gestor
                         if(request.getParameter("rdbUser").equals("1"))
                         {
                             UsuarioApl u = new UsuarioApl();
@@ -227,6 +239,7 @@
                     }
                 }
             }
+            //Captura e tratamento de possíveis exceções
             catch(Exception ex)
             {
                 Banco.conexao.close();
