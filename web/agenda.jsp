@@ -111,8 +111,6 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                 <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
                                 <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
                                 <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            </div>
-                            <div class="btn_consult">
                                 <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
                             </div>
                         </form>
@@ -130,39 +128,30 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                     <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>" readonly/>
                                 </div>
                                 <div class="input-box">
+                                    <span class="data">Código do Usuário</span>
+                                    <input type="text" name="txtCodU"  value="<%=obj.getCodigoUsuario().getCodigo()%>" readonly/>
+                                </div>
+                                <div class="input-box">
                                     <span class="data">Data de vacinação</span>
-                                    <input type="text" name="txtDataVacinacao" id="idDataVacinacao" placeholder="Digite a data de vacinação"/>
+                                    <input type="text" name="txtDataVacinacao" id="idDataVacinacao" value="<%=dF.format(obj.getDataVacinacao())%>"/>
                                 </div>
                                 <div class="input-box">
                                     <span class="data">Hora de vacinação</span>
-                                    <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" placeholder="Digite a hora da vacinação"/>
+                                    <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" value="<%=hF.format(obj.getDataVacinacao())%>"/>
                                 </div>
                                 <div class="input-box">
                                     <span class="data">Número da dose</span>
-                                    <input type="text" name="txtDoseNum" id="idDoseNum" placeholder="Digite o número da dose"/>
+                                    <input type="text" name="txtDoseNum" id="idDoseNum" value="<%=obj.getDoseNumero()%>"/>
                                 </div>
                             </div>
                             <div class="button"> <!-- Esse conteiner é o dos botões, engloba todos os botões que dispararão os eventos do form.-->
                                 <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
                                 <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
                                 <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            </div>
-                            <div class="btn_consult">
                                 <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
                             </div>
                         </form>
                         
-                        <form action="agenda.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>" readonly/> <br/>
-                            Código do Usuário: <input type="text" name="txtCodU"  value="<%=obj.getCodigoUsuario().getCodigo()%>" readonly/> <br/>
-                            Data de vacinação: <input type="text" name="txtDataVacinacao" id="idDataVacinacao" value="<%=dF.format(obj.getDataVacinacao())%>"/> <br/>
-                            Hora de vacinação: <input type="text" name="txtHoraVacinacao" id="idHoraVacinacao" value="<%=hF.format(obj.getDataVacinacao())%>"/> <br/>
-                            Número de dose: <input type="text" name="txtDoseNum" id="idDoseNum" value="<%=obj.getDoseNumero()%>"/><br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
-                        </form>
 <%
                     }
                 }
@@ -293,6 +282,7 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                 }
                                 //3.4.1 CONSTRUÇÃO DA TABELA
 %>
+                        <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                                 <table border="1">
                                     <thead>
                                         <tr>
@@ -372,6 +362,7 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
 %>
                                         </tbody>
                                     </table>
+                                </div>
                                
                                 Selecione o campo código de um agendamento para carregar seus dados no formulário.<br/>
                                 Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
@@ -402,6 +393,8 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                     </form><%
                                         }
                                %>
+                               
+                            <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                                 <table border="1">
                                     <thead>
                                         <tr>
@@ -476,7 +469,7 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
 %>
                                         </tbody>
                                     </table>
-                               
+                                </div>
                                 Selecione o campo código de um agendamento para carregar seus dados no formulário.<br/>
                                 Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
 <%

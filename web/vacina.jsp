@@ -32,13 +32,26 @@
                 if(request.getParameter("bCarregar") == null) {
 %>
                     <form action="vacina.jsp" method="post" onsubmit="return verificar(2)">
-                        Código: <input type="text" name="txtCod" id="idCod"/> <br/>
-                        Descrição: <input type="text" name="txtDescricao" id="idNome"/> <br/>
-                        Doses por unidade: <input type="text" name="txtQtdeDose" id="QtdeDose"/> <br/>
-                        <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                        <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                        <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                        <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                        <div class="user-data">
+                            <div class="input-box">
+                                <span class="data">Código</span>
+                                <input type="text" name="txtCod" id="idCod" placeholder="Digite o código do movimento: "/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Descrição</span>
+                                <input type="text" name="txtDescricao" id="idNome" placeholder="Digite a descrição: "/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Doses por unidade</span>
+                                <input type="text" name="txtQtdeDose" id="QtdeDose" placeholder="Digite o número de doses por unidade: "/>
+                            </div>
+                        </div>
+                        <div class="button"> <!-- Esse conteiner é o dos botões, engloba todos os botões que dispararão os eventos do form.-->
+                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                        </div>
                     </form>
 <%
                 }
@@ -49,13 +62,26 @@
                     Banco.conexao.close();
 %>
                     <form action="vacina.jsp" method="post" onsubmit="return verificar(2)">
-                        Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
-                        Descrição: <input type="text" name="txtDescricao" id="idNome" value="<%=obj.getDescricao()%>"/> <br/>
-                        Doses por unidade: <input type="text" name="txtQtdeDose" id="idQtdeDose" value="<%=obj.getQtdeDose()%>"/> <br/><br/>
-                        <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                        <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                        <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                        <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                        <div class="user-data">
+                            <div class="input-box">
+                                <span class="data">Código</span>
+                                <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Descrição</span>
+                                <input type="text" name="txtDescricao" id="idNome" value="<%=obj.getDescricao()%>"/>
+                            </div>
+                            <div class="input-box">
+                                <span class="data">Doses por unidade</span>
+                                <input type="text" name="txtQtdeDose" id="QtdeDose" value="<%=obj.getQtdeDose()%>"/>
+                            </div>
+                            <div class="button"> <!-- Esse conteiner é o dos botões, engloba todos os botões que dispararão os eventos do form.-->
+                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            </div>
+                        </div>
                     </form>
 <%
                 }
@@ -125,6 +151,7 @@
                                 aux = "s";
 %>
                             <h1>Lista com <%=lista.size()%> vacina<%=aux%> encontrada<%=aux%></h1>
+                            <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                                 <table border="1">
                                     <thead>
                                         <tr>
@@ -149,6 +176,7 @@
 %>
                                     </tbody>
                                 </table>
+                            </div>
                             Selecione o campo código de uma vacina para carregar seus dados no formulário.<br/>
                             Clique <a href="vacina.jsp">aqui</a> para voltar ao formulário CRUD vacina
 <%

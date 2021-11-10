@@ -41,10 +41,23 @@
             if(request.getParameter("b1") == null) {
 %>
                 <form action="relatorio.jsp" method="POST">
-                    Início: <input type="text" name="txtPeriodoInicio"> <br/>
-                    Fim: <input type="text" name="txtPeriodoFim"> <br/>
-                    Vacina: <input type="text" name="txtVacina"> <br/>
-                    <input type="submit" value="Gerar relatório" name="b1"/>
+                    <div class="user-data">
+                        <div class="input-box">
+                            <span class="data">Início</span>
+                            <input type="text" name="txtPeriodoInicio" placeholder="Insira o início do período: "/>
+                        </div>
+                        <div class="input-box">
+                            <span class="data">Fim</span>
+                            <input type="text" name="txtPeriodoFim" placeholder="Insira a descrição da vacina: "/>
+                        </div>
+                        <div class="input-box">
+                            <span class="data">Vacina</span>
+                            <input type="text" name="txtVacina" placeholder="Insira a descrição da vacina: "/>
+                        </div>
+                        <div class="button"> <!-- Esse conteiner é o dos botões, engloba todos os botões que dispararão os eventos do form.-->
+                            <input type="submit" value="Gerar relatório" name="b1"/>
+                        </div>
+                    </div>
                 </form>
 <%
             } 
@@ -123,24 +136,26 @@
 %>
                 <h2>Relatório gerencial de <%=dF.format(periodoInicio)%> a <%=dF.format(periodoFim)%></h2>
                 <h3> Doses disponíveis e pessoas vacinadas com <%=choice.getDescricao()%></h3>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Qtde de Doses</th>
-                            <th>Num. de pessoas vacinadas</th>
-                            <th>a</th>
-                            <th>b</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><%=qtdeDoses%></td>
-                            <td><%=num_vacinados%></td>
-                            <td><%=a%></td>
-                            <td><%=b%></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Qtde de Doses</th>
+                                <th>Num. de pessoas vacinadas</th>
+                                <th>a</th>
+                                <th>b</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><%=qtdeDoses%></td>
+                                <td><%=num_vacinados%></td>
+                                <td><%=a%></td>
+                                <td><%=b%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                        <h3>Movimentos em lotes de <%=choice.getDescricao()%></h3>
                 <%
                     List<MovimentoVacina> listaM = daoJ.movimentosRelatorio(bb, choice);
@@ -166,21 +181,23 @@
                             throw new Exception("Lista nula ou vazia");
                         %>
                         <h4>Quantidade de movimentos: <%=q%></h4>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Data do movimento</th>
-                            <th>Hora do movimento</th>
-                            <th>Tipo</th>
-                            <th>Quantidade</th>
-                            <th>Lote</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%=t%>
-                    </tbody>
-                </table>
+                <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Data do movimento</th>
+                                <th>Hora do movimento</th>
+                                <th>Tipo</th>
+                                <th>Quantidade</th>
+                                <th>Lote</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%=t%>
+                        </tbody>
+                    </table>
+                </div>
 <%
             }
         Banco.conexao.close();

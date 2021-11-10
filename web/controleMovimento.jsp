@@ -50,16 +50,41 @@
                     {
 %>                      
                         <form action="controleMovimento.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod"/> <br/>
-                            Código da vacina: <input type="text" name="txtCodVac"/> <br/>
-                            Data do movimento: <input type="text" name="txtDataMov"/> <br/>
-                            Hora do movimento: <input type="text" name="txtHoraMov"/> <br/>
-                            Tipo do movimento: <input type="text" name="txtTipo"/> <br/>
-                            Quantidade: <input type="text" name="txtQuant"/><br/>
-                            Lote: <input type="text" name="txtLote"/><br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCod" placeholder="Digite o código do movimento: "/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Código da vacina</span>
+                                    <input type="text" name="txtCodVac" placeholder="Digite o código da vacina: "/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Data do movimento</span>
+                                    <input type="text" name="txtDataMov" placeholder="Digite a data do movimento: "/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Hora do movimento</span>
+                                    <input type="text" name="txtHoraMov" placeholder="Digite a hora do movimento: "/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Tipo do movimento</span>
+                                    <input type="text" name="txtTipo" placeholder="Digite o tipo do movimento: "/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Quantidade</span>
+                                    <input type="text" name="txtQuant" placeholder="Digite a quantidade: "/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Lote</span>
+                                    <input type="text" name="txtLote" placeholder="Digite o lote: "/>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            </div>
                         </form>
 <%
                     }
@@ -68,15 +93,37 @@
                         obj = dao.findMovimentoVacina(Integer.parseInt(request.getParameter("bCarregar")));
 %>
                         <form action="controleMovimento.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod" value="<%=obj.getCodigo()%>"/> <br/>
-                            Código da vacina: <input type="text" name="txtCodVac" value="<%=obj.getCodigoVacina().getCodigo()%>"/> <br/>
-                            Data do movimento: <input type="text" name="txtDataMov" value="<%=dF.format(obj.getDataMovimento())%>"/> <br/>
-                            Hora do movimento: <input type="text" name="txtHoraMov" value="<%=hF.format(obj.getDataMovimento())%>"/> <br/>
-                            Quantidade: <input type="text" name="txtQuant" value="<%=obj.getQtdeDose()%>"/><br/>
-                            Lote: <input type="text" name="txtLote" value="<%=obj.getCodigoLote().getDescricao()%>"/><br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCod" value="<%=obj.getCodigo()%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Código da vacina</span>
+                                    <input type="text" name="txtCodVac" value="<%=obj.getCodigoVacina().getCodigo()%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Data do movimento</span>
+                                    <input type="text" name="txtDataMov" value="<%=dF.format(obj.getDataMovimento())%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Hora do movimento</span>
+                                    <input type="text" name="txtHoraMov" value="<%=hF.format(obj.getDataMovimento())%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Quantidade</span>
+                                    <input type="text" name="txtQuant" value="<%=obj.getQtdeDose()%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Lote</span>
+                                    <input type="text" name="txtLote" value="<%=obj.getCodigoLote().getDescricao()%>"/>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            </div>
                         </form>
 <%
                     }
@@ -145,6 +192,7 @@
                                     aux = "s";
 %>
                                 <h1>Lista com <%=lista.size()%> movimento<%=aux%> encontrado<%=aux%></h1>
+                                <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -177,6 +225,7 @@
 %>
                                         </tbody>
                                     </table>
+                                </div>
                                 Selecione o campo código de um movimento para carregar seus dados no formulário.<br/>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
 <%
                             }
