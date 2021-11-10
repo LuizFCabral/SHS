@@ -33,7 +33,7 @@ o estoque de vacinas, atualizado.
     </head>
     <body>
         <div class="home_content">
-        <div class="title">Aplicação de vacina</div>
+            <div class="title">Aplicação de vacina</div>
 <%
             request.setCharacterEncoding("UTF-8");
             

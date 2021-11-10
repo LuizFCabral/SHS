@@ -14,14 +14,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>SHS</title>
             <link rel="stylesheet" href="estilo/style.css">
-            <script>
-            let btn = document.querySelector("#btn");
-            let sidebar = document.querySelector(".sidebar");
-
-            btn.onclick = function () {
-                sidebar.classList.toggle("active");
-            };
-        </script>
+            <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     </head>
     <body>
         <%
@@ -72,7 +65,7 @@
                                 <i class='bx bx-user-circle'></i>
                                 <span class="nomes_links">Gestores/Enfermeiros</span>
                             </a>
-                            <span class="toltip">Gestores/Enfermeiros</span>
+                            <span class="toltip" style="width: 165px;">Gestores/Enfermeiros</span>
                         </li>
                         <br><br><br>
                     </div>
@@ -83,6 +76,16 @@
                                 <span class="nomes_links">Vacinas</span>
                             </a>
                             <span class="toltip">Vacinas</span>
+                        </li>
+                        <br><br><br>
+                    </div>
+                    <div id="Usuario">
+                        <li>
+                            <a href="usuario.jsp" target="interface">
+                                <i class='bx bx-user'></i>
+                                <span class="nomes_links">Usuários comuns</span>
+                            </a>
+                            <span class="toltip">Usuários</span>
                         </li>
                         <br><br><br>
                     </div>
@@ -99,10 +102,10 @@
                     <div id="Aplicar">
                         <li>
                             <a href="atualizarVacina.jsp" target="interface">
-                                <i class='bx bx-calendar'></i>
+                                <i class='bx bxs-virus-block' ></i>
                                 <span class="nomes_links">Aplicação de vacina</span>
                             </a>
-                            <span class="toltip">Aplicação de vacina</span>
+                            <span class="toltip">Aplicação</span>
                         </li>
                         <br><br><br>
                     </div>
@@ -114,7 +117,7 @@
                         <div id="Movimento">
                             <li>
                                 <a href="controleMovimento.jsp" target="interface">
-                                    <i class='bx bx-calendar'></i>
+                                    <i class='bx bxs-box'></i>
                                     <span class="nomes_links">Movimentos</span>
                                 </a>
                                 <span class="toltip">Movimentos</span>
@@ -124,7 +127,7 @@
                         <div id="Relatorio">
                             <li>
                                 <a href="relatorio.jsp" target="interface">
-                                    <i class='bx bx-calendar'></i>
+                                    <i class='bx bxs-spreadsheet' ></i>
                                     <span class="nomes_links">Relatório</span>
                                 </a>
                                 <span class="toltip">Relatório</span>
@@ -138,7 +141,7 @@
                 <div id="Exit">
                     <li>
                         <a href="index.jsp?bDeslog=Deslogar">
-                            <i class='bx bx-calendar'></i>
+                            <i class='bx bx-log-out'></i>
                             <span class="nomes_links">Sair</span>
                         </a>
                         <span class="toltip">Sair</span>
@@ -148,9 +151,17 @@
             </ul>
         </div> 
         <div>
-            <iframe name="interface" src="welcome.html" width="1500" height="3500"></iframe>
+            <iframe name="interface" src="welcome.html" width="1500" height="600" style="border: 0"></iframe>
         </div>
         <%
+            %><script>
+                let btn = document.querySelector("#btn");
+                let sidebar = document.querySelector(".sidebar");
+
+                btn.onclick = function () {
+                    sidebar.classList.toggle("active");
+                };
+            </script><%
             }
             catch(Exception ex)
             {
