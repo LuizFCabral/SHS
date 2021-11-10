@@ -72,11 +72,12 @@ cadastro de nenhum outro usuário, gestor ou enfermeiro, por exemplo.
                         }
 %>                      
                         <h1><%=nome%>, você já está logado, deseja deslogar?</h1>
-                        <form action="loginUsuario.jsp" method="post">
+                        <form action="index.jsp" method="post">
                             <div class="button">
                                 <input type="submit" name="bDeslog" value="Deslogar"/>
                             </div>
                         </form>
+                        <h1>Clique <a href="hub.jsp">aqui</a> para voltar ao sistema</h1>
 <%  
                     }
                     //1.2 Usuário logado deseja deslogar
@@ -84,7 +85,7 @@ cadastro de nenhum outro usuário, gestor ou enfermeiro, por exemplo.
                     {
                         session.setAttribute("login", null);
 %>
-                        <form action="loginUsuario.jsp" method="post">
+                        <form action="index.jsp" method="post">
                             <div class="user-data">
                                 <div class="input-box">
                                     <span class="data">CPF</span>
@@ -140,7 +141,7 @@ cadastro de nenhum outro usuário, gestor ou enfermeiro, por exemplo.
                     if(request.getParameter("b1") == null)
                     {
 %>
-                        <form action="loginUsuario.jsp" method="post">
+                        <form action="index.jsp" method="post">
                             <div class="user-data">
                                 <div class="input-box">
                                     <span class="data">CPF</span>
@@ -205,9 +206,9 @@ cadastro de nenhum outro usuário, gestor ou enfermeiro, por exemplo.
                             }
                             else
                             {
-                                Banco.conexao.close();
                                 session.setAttribute("classe", u.getClass());
                                 session.setAttribute("login", u);
+                                Banco.conexao.close();
 %>
                                 <h1>Log-in feito com sucesso! Clique <a href="hub.jsp">aqui</a> para continuar</h1>
 <%
@@ -223,8 +224,7 @@ cadastro de nenhum outro usuário, gestor ou enfermeiro, por exemplo.
                                 throw new Exception("CPF não cadastrado!");
                             }
                             else
-                            {
-                                
+                            { 
                                 session.setAttribute("classe", u.getClass());
                                 session.setAttribute("login", u);
                                 Banco.conexao.close();
