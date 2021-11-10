@@ -151,7 +151,7 @@
             </ul>
         </div> 
         <div>
-            <iframe name="interface" src="welcome.html" width="1500" height="600" style="border: 0"></iframe>
+            <iframe name="interface" src="welcome.html" width="1500" height="500" style="border: 0"></iframe>
         </div>
         <%
             %><script>
