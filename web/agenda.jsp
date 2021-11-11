@@ -389,9 +389,13 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                    if(!comum)
                                     {
                                    %><form action="agenda.jsp" method="post">
-                                       Filtrar dados pelo CPF:<br/>
-                                       <input type="text" name="txtCPF"/><input type="submit" name="b1" value="Pesquisar"/>
-                                    </form><%
+                                    <div class="user-data">
+                                        <div class="input-box">
+                                            <span class="data">Filtrar dados pelo CPF</span>
+                                            <input type="text" name="txtCPF"/><input class="btnPesquisa" type="submit" name="b1" value="Pesquisar"/>
+                                        </div>
+                                    </div>
+                                </form><%
                                         }
                                %>
                                 <table border="1">

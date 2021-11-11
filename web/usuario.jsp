@@ -211,7 +211,7 @@
                             else
                             {
 %> 
-                            <h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário</h1> 
+                            <h1>Clique <a href="usuario.jsp">aqui</a> para voltar à página do usuário</h1> 
 <%
                             }
                             break;
