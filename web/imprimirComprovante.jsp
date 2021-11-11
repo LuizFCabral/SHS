@@ -23,8 +23,10 @@
                 tela_impressao.window.close();
             } 
        </script>
+       <link rel="stylesheet" href="estilo/style.css">
     </head>
     <body>
+        <div class="home_content">
         <%
             request.setCharacterEncoding("UTF-8");
             int cod = Integer.parseInt(request.getParameter("vacinacao"));
@@ -61,11 +63,15 @@
                             <p>Vacina aplicada: <%=l.getCodigoVacina().getDescricao()%></p>
                             <p>Data e hora de aplicação: <%=dF.format(vac.getDataAplicacao()) + " às " + hF.format(vac.getDataAplicacao())%></p>
                             <p>Lote da vacina: <%=l.getDescricao()%></p>
-                            <p>Responsável pela aplciação: <%=vac.getCodigoUsuarioApl().getNome()%></p>
+                            <p>Responsável pela aplicação: <%=vac.getCodigoUsuarioApl().getNome()%></p>
                         </fieldset>
                     </div>
                 </div><br>
-                <input type="button"  value="Imprimir" onclick="imprimir()" />
+                <form>
+                    <div class="button">
+                        <input type="button"  value="Imprimir" onclick="imprimir()" class=""/>
+                    </div>
+                </form>
         <%
                 Banco.conexao.close();
             }
@@ -75,5 +81,6 @@
                 %><h1>Erro: <%=ex.getMessage()%></h1><%
             }
         %>
+    </div>
     </body>
 </html>

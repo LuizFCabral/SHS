@@ -41,7 +41,6 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
     <body>
         <div class="home_content">
             <div class="title">Agenda</div> 
-        <a href="index.jsp">Tela inicial</a>
 <%
             request.setCharacterEncoding("UTF-8");
             
@@ -275,8 +274,12 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                 {
 %>
                                     <form action="agenda.jsp" method="post">
-                                        Filtrar dados pelo CPF:<br/>
-                                        <input type="text" name="txtCPF"/><input type="submit" name="b1" value="Pesquisar"/>
+                                        <div class="user-data">
+                                            <div class="input-box">
+                                                <span class="data">Filtrar dados pelo CPF</span>
+                                                <input type="text" name="txtCPF"/><input class="btnPesquisa" type="submit" name="b1" value="Pesquisar"/>
+                                            </div>
+                                        </div>
                                     </form>
 <%
                                 }
@@ -339,7 +342,7 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                                     if(vacinou) { 
                                                         int codVac = vac.getCodigo();
 %>
-                                                        <a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>">Acessar</a> 
+                                                        <a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>" target="hub.jsp">Acessar</a> 
 <%
                                                     }
                                                     //Se ainda não vacinou, receberá uma mensagem a depender de se já deveria ou não ter tomado a vacina. 
@@ -444,7 +447,7 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                                     if(vacinou)
                                                     { 
                                                         int codVac = vac.getCodigo();
-                                                        %><a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>">Acessar</a> <%
+                                                        %><a href="imprimirComprovante.jsp?vacinacao=<%=codVac%>" target="hub.jsp">Acessar</a> <%
                                                     }
                                                     //Se ainda não vacinou, receberá uma mensagem a depender de se já deveria ou não ter tomado a vacina. 
                                                     else

@@ -274,6 +274,7 @@ table{
     border-collapse: collapse;
     border-color: black;
     border-radius: 5px;
+    text-align: center;
 }
 th{
     padding: 10px;
@@ -282,4 +283,30 @@ th{
 }
 td{
     padding: 10px;
+}
+td button{
+    border: 0;
+    font-size: 15px;
+    color: #259a9a;
+    background-color: #fff;
+}
+td a{
+    font-size: 15px;
+}
+a{
+    color: #259a9a;
+    text-decoration: none;
+}
+.home_content b{
+    color: #259a9a;
+}
+.user-data .input-box .btnPesquisa{
+    border: 0;
+    margin-top: 10px;
+    color: #fff;
+    background-color: #259a9a;
+}
+.user-data .input-box .btnPesquisa:hover{
+    background: #008080;
+    box-shadow: 2px 2px 5px #ccc;
 }

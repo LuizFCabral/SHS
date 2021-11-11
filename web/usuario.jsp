@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="input-box">
                                     <span class="data">Nome</span>
-                                    <input type="text" name="txtCNome" id="idNome" placeholder="Digite o nome"/>
+                                    <input type="text" name="txtNome" id="idNome" placeholder="Digite o nome"/>
                                 </div>
                                 <div class="input-box">
                                     <span class="data">CPF</span>
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="input-box">
                                     <span class="data">Nome</span>
-                                    <input type="text" name="txtCNome" id="idNome" placeholder="Digite o nome" value="<%=obj.getNome()%>"/>
+                                    <input type="text" name="txtNome" id="idNome" placeholder="Digite o nome" value="<%=obj.getNome()%>"/>
                                 </div>
                                 <div class="input-box">
                                     <span class="data">CPF</span>

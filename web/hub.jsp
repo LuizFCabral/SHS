@@ -31,6 +31,16 @@
                 <i class='bx bx-menu' id="btn"></i>
             </div>
             <ul class="nav_list">
+            <div id="Home">
+                <li>
+                    <a href="hub.jsp">
+                        <i class='bx bxs-home'></i>
+                        <span class="nomes_links">Tela inicial</span>
+                    </a>
+                    <span class="toltip">Início</span>
+                </li>
+                <br><br><br>
+            </div>
             <%
                 if(session.getAttribute("classe") == Usuario.class)
                 {

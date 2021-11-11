@@ -19,7 +19,7 @@
         <title>Relatório</title>
     </head>
     <body>
-        <div class="user-data">
+        <div class="home_content">
             <div class="title">Gerenciamento de estoque - relatório</div>
 <%
         response.setCharacterEncoding("UTF-8");
@@ -57,9 +57,9 @@
                             <span class="data">Vacina</span>
                             <input type="text" name="txtVacina" placeholder="Insira a descrição da vacina: "/>
                         </div>
-                        <div class="button"> <!-- Esse conteiner é o dos botões, engloba todos os botões que dispararão os eventos do form.-->
-                            <input type="submit" value="Gerar relatório" name="b1"/>
-                        </div>
+                    </div>
+                    <div class="button"> <!-- Esse conteiner é o dos botões, engloba todos os botões que dispararão os eventos do form.-->
+                        <input type="submit" value="Gerar relatório" name="b1"/>
                     </div>
                 </form>
 <%
