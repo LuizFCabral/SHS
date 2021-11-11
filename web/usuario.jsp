@@ -233,7 +233,6 @@
                                 <h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1><%
                                     }
 %>
-                                    <div class="tabela">
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -278,7 +277,6 @@
 %>
                                         </tbody>
                                     </table>
-                                    </div>
                                 Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
                                 Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%

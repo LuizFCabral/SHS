@@ -194,7 +194,6 @@
                                     aux = "s";
 %>
                                 <h1>Lista com <%=lista.size()%> movimento<%=aux%> encontrado<%=aux%></h1>
-                                <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -227,7 +226,6 @@
 %>
                                         </tbody>
                                     </table>
-                                </div>
                                 Selecione o campo código de um movimento para carregar seus dados no formulário.<br/>Clique <a href="controleMovimento.jsp">aqui</a> para voltar ao controle de movimento
 <%
                             }

@@ -213,7 +213,6 @@ create table usuario_apl(
                                     aux = "s";
 %>
                                 <h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1>
-                                <div class="tabela">
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -245,7 +244,6 @@ create table usuario_apl(
 %>
                                         </tbody>
                                     </table>
-                                </div>
                                 Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
                                 Clique <a href="usuarioApl.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%

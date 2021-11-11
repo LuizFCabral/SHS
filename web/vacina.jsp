@@ -154,7 +154,6 @@
                                 aux = "s";
 %>
                             <h1>Lista com <%=lista.size()%> vacina<%=aux%> encontrada<%=aux%></h1>
-                            <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                                 <table border="1">
                                     <thead>
                                         <tr>
@@ -179,7 +178,6 @@
 %>
                                     </tbody>
                                 </table>
-                            </div>
                             Selecione o campo código de uma vacina para carregar seus dados no formulário.<br/>
                             Clique <a href="vacina.jsp">aqui</a> para voltar ao formulário CRUD vacina
 <%

@@ -139,7 +139,6 @@
 %>
                 <h2>Relatório gerencial de <%=dF.format(periodoInicio)%> a <%=dF.format(periodoFim)%></h2>
                 <h3> Doses disponíveis e pessoas vacinadas com <%=choice.getDescricao()%></h3>
-                <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                     <table border="1">
                         <thead>
                             <tr>
@@ -158,7 +157,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
                        <h3>Movimentos em lotes de <%=choice.getDescricao()%></h3>
                 <%
                     List<MovimentoVacina> listaM = daoJ.movimentosRelatorio(bb, choice);
@@ -184,7 +182,6 @@
                             throw new Exception("Lista nula ou vazia");
                         %>
                         <h4>Quantidade de movimentos: <%=q%></h4>
-                <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                     <table border="1">
                         <thead>
                             <tr>
@@ -200,7 +197,6 @@
                             <%=t%>
                         </tbody>
                     </table>
-                </div>
 <%
             }
         Banco.conexao.close();
