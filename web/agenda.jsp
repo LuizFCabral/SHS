@@ -391,8 +391,6 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
                                     </form><%
                                         }
                                %>
-                               
-                            <div class="tabela" style="overflow-x: auto;"> <!-- Para a tabela apenas um conteiner que ingloba ela mesma sera necessario-->
                                 <table border="1">
                                     <thead>
                                         <tr>
@@ -467,7 +465,6 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
 %>
                                         </tbody>
                                     </table>
-                                </div>
                                 Selecione o campo código de um agendamento para carregar seus dados no formulário.<br/>
                                 Clique <a href="agenda.jsp">aqui</a> para voltar ao formulário de agendamento
 <%
