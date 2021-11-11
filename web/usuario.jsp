@@ -23,9 +23,11 @@
         <title>Gerenciamento de usuários</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src="javascript/js_geral.js"></script>
+        <link rel="stylesheet" href="estilo/style.css">
     </head>
     <body>
-        <a href="index.jsp">Tela inicial</a>
+        <div class="home_content">
+            <div class="title">Usuário</div>
 <%
             request.setCharacterEncoding("UTF-8");
             Usuario obj;
@@ -59,19 +61,38 @@
                         //FORM CRUD USUARIO A PREENCHER
 %>                      
                         <form action="usuario.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod" id="idCod" readonly/> <br/>
-                            Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
-                            CPF: <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()"/> <br/>
-                            Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc"/> <br/>
-                            Cidade: <input type="text" name="txtCidade" id="idCidade"/><br/><br/>
-                            <%if(!comum)
-                            {
-                                %><input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;<%
-                            }
-%>
-                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCod" id="idCod" readonly/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Nome</span>
+                                    <input type="text" name="txtCNome" id="idNome" placeholder="Digite o nome"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">CPF</span>
+                                    <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()" placeholder="Digite o CPF"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Data de nascimento</span>
+                                    <input type="text" name="txtDataNasc" id="idDataNasc" placeholder="(dd/mm/aaaa)"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Cidade</span>
+                                    <input type="text" name="txtCidade" id="idCidade" placeholder="Digite a cidade"/>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <%if(!comum)
+                                {
+                                    %><input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;<%
+                                }
+    %>
+                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            </div>
                         </form>
 <%
                     }
@@ -82,18 +103,38 @@
                         //FORM CARREGADO DE DADOS DE USUARIO DA TABELA
 %>
                         <form action="usuario.jsp" method="post" onsubmit="return verificar(1)">
-                            Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>" readonly/> <br/>
-                            Nome: <input type="text" name="txtNome" id="idNome" value="<%=obj.getNome()%>"/>  <br/>
-                            CPF: <input type="text" name="txtCPF" id="idCPF" value="<%=obj.getCpf()%>"/> <br/>
-                            Data de nascimento: <input type="text" name="txtDataNasc" id="idDataNasc" value="<%=dF.format(obj.getDataNascimento())%>"/> <br/>
-                            Cidade: <input type="text" name="txtCidade" id="idCidade" value="<%=obj.getCidade()%>"/><br/><br/>
-                            <%if(!comum)
-                            {
-                                %><input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;<%
-                            }%>
-                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCod" id="idCod" readonly value="<%=obj.getCodigo()%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Nome</span>
+                                    <input type="text" name="txtCNome" id="idNome" placeholder="Digite o nome" value="<%=obj.getNome()%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">CPF</span>
+                                    <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()" placeholder="Digite o CPF" value="<%=obj.getCpf()%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Data de nascimento</span>
+                                    <input type="text" name="txtDataNasc" id="idDataNasc" placeholder="(dd/mm/aaaa)" value="<%=dF.format(obj.getDataNascimento())%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Cidade</span>
+                                    <input type="text" name="txtCidade" id="idCidade" placeholder="Digite a cidade" value="<%=obj.getCidade()%>"/>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <%if(!comum)
+                                {
+                                    %><input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;<%
+                                }
+    %>
+                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
+                            </div>
                         </form>
 <%
                     }
@@ -145,7 +186,7 @@
                             obj.setDataNascimento(dF.parse(request.getParameter("txtDataNasc")));
                             obj.setCidade(request.getParameter("txtCidade"));
                             dao.edit(obj);
-%>
+%>                          
                             <h1>Usuário de código <%=obj.getCodigo()%> alterado com sucesso!</h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%
                             break;
@@ -192,7 +233,7 @@
                                 <h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1><%
                                     }
 %>
-                                    
+                                    <div class="tabela">
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -237,6 +278,7 @@
 %>
                                         </tbody>
                                     </table>
+                                    </div>
                                 Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
                                 Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%
@@ -257,5 +299,6 @@
 <%
             }
 %>
+        </div>
     </body>
 </html>

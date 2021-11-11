@@ -19,10 +19,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="estilo/style.css">
         <title>Consulta de movimentos</title>
     </head>
     <body>
-        <a href="index.jsp">Tela inicial</a>
+        <div class="home_content">
+            <div class="title">Gerenciamento de estoque - Movimentos</div>
 <%
             request.setCharacterEncoding("UTF-8");
             MovimentoVacina obj;
@@ -121,7 +123,7 @@
                             </div>
                             <div class="button">
                                 <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbs  p;&nbsp;
                                 <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/>
                             </div>
                         </form>
@@ -245,5 +247,6 @@
 <%
             }
 %>
+        </div>
     </body>
 </html>

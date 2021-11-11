@@ -15,9 +15,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="estilo/style.css">
         <title>Relatório</title>
     </head>
     <body>
+        <div class="user-data">
+            <div class="title">Gerenciamento de estoque - relatório</div>
 <%
         response.setCharacterEncoding("UTF-8");
         
@@ -209,5 +212,6 @@
 <%
         }
 %>
+        </div>
     </body>
 </html>

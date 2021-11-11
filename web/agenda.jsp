@@ -15,7 +15,7 @@ Por meio desta página, o usuário poderá realizar o agendamento de sua vacina�
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Gerenciamento de usuários</title>
-        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link href='estilo/style.css' rel='stylesheet'>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript">
             //Mostra mensagem para o usuário durante sua consulta aos agendamentos

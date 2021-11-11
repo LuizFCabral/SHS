@@ -17,6 +17,8 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <div class="home_content">
+            <div class="title">Cadastro</div>
         <%
             request.setCharacterEncoding("UTF-8");
             SimpleDateFormat dF = new SimpleDateFormat("dd/MM/yyyy");
@@ -35,9 +37,10 @@
             UsuarioJpaController dao = new UsuarioJpaController(Banco.conexao);
             dao.create(obj);
 %> 
-            <h1>Usuário de nome <%=obj.getNome()%> cadastrado com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="usuario.jsp">aqui</a> para voltar ao formulário CRUD usuário
+            <h1>Usuário de nome <%=obj.getNome()%> cadastrado com sucesso. Código: <%=obj.getCodigo()%></h1>Clique <a href="index.jsp">aqui</a> para voltar à página de Log-in
 <%
     Banco.conexao.close();
         %>
+        </div>
     </body>
 </html>

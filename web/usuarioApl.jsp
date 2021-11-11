@@ -21,9 +21,11 @@ create table usuario_apl(
         <title>Gerenciamento de gestores e enfermeiros</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src="javascript/js_geral.js"></script>
+        <link rel="stylesheet" href="estilo/style.css">
     </head>
     <body>
-        <a href="index.jsp">Tela inicial</a>
+        <div class="home_content">
+            <div class="title">Gestor e enfermeiro</div>
         <%
             request.setCharacterEncoding("UTF-8");
             UsuarioApl obj;
@@ -47,16 +49,36 @@ create table usuario_apl(
                         //primeira vez a rodar
                         //FORM CRUD USUARIO A PREENCHER
 %>                      
-                        <form action="usuarioApl.jsp" method="post" onsubmit="return verificar(1)"/>&nbsp;&nbsp;
-                            Código: <input type="text" name="txtCod" id="idCod"/> <br/>
-                            Nome: <input type="text" name="txtNome" id="idNome"/> <br/>
-                            CPF: <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()"/> <br/>
-                            Tipo de funcionário: Gestor: <input type="radio" name="tipo_user" value="G" checked="true"/>
-                            Enfermeiro: <input type="radio" name="tipo_user" value="E"/> <br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/> 
+                        <form action="usuarioApl.jsp" method="post" onsubmit="return verificar(1)"/>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCod" id="idCod" placeholder="Digite o código"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Nome</span>
+                                    <input type="text" name="txtCod" id="idNome" placeholder="Digite o nome"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">CPF</span>
+                                    <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()" placeholder="Digite o CPF"/> 
+                                </div>
+                            </div>
+                            <div class="user-type">
+                                <span class="title-type">Tipo do funcionário</span>
+                                <div class="category">
+                                    <span>Gestor</span>
+                                    <input type="radio" name="tipo_user" value="G" checked="true"/>
+                                    <span>Enfermeiro</span>
+                                    <input type="radio" name="tipo_user" value="E"/>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/> 
+                            </div>
                         </form>
 <%
                     }
@@ -66,10 +88,21 @@ create table usuario_apl(
                         obj = dao.findUsuarioApl(Integer.parseInt(request.getParameter("bCarregar")));
                         //FORM CARREGADO DE DADOS DE USUARIO DA TABELA
 %>
-                        <form action="usuarioApl.jsp" method="post" onsubmit="return verificar(1)"/>&nbsp;&nbsp;
-                            Código: <input type="text" name="txtCod" id="idCod" value="<%=obj.getCodigo()%>"/> <br/>
-                            Nome: <input type="text" name="txtNome" id="idNome" value="<%=obj.getNome()%>"/> <br/>
-                            CPF: <input type="text" name="txtCPF" id="idCPF" value="<%=obj.getCpf()%>"/> <br/>
+                        <form action="usuarioApl.jsp" method="post" onsubmit="return verificar(1)"/>
+                            <div class="user-data">
+                                <div class="input-box">
+                                    <span class="data">Código</span>
+                                    <input type="text" name="txtCod" id="idCod" placeholder="Digite o código" value="<%=obj.getCodigo()%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">Nome</span>
+                                    <input type="text" name="txtCod" id="idNome" placeholder="Digite o nome" value="<%=obj.getNome()%>"/>
+                                </div>
+                                <div class="input-box">
+                                    <span class="data">CPF</span>
+                                    <input type="text" name="txtCPF" id="idCPF" onblur="validaCPF()" placeholder="Digite o CPF" value="<%=obj.getCpf()%>"/> 
+                                </div>
+                            </div>
                             <%
                                 String[] valores = {"", ""};
                                 String check = "checked = 'true'";
@@ -78,12 +111,21 @@ create table usuario_apl(
                                 else
                                     valores[1] = check;
                             %>
-                            Tipo de funcionário: Gestor: <input type="radio" name="tipo_user" value="G" <%=valores[0]%>/>
-                            Enfermeiro: <input type="radio" name="tipo_user" value="E" <%=valores[1]%>/> <br/><br/>
-                            <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
-                            <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/> 
+                            <div class="user-type">
+                                <span class="title-type">Tipo do funcionário</span>
+                                <div class="category">
+                                    <span>Gestor</span>
+                                    <input type="radio" name="tipo_user" value="G" <%=valores[0]%>/>
+                                    <span>Enfermeiro</span>
+                                    <input type="radio" name="tipo_user" value="E" <%=valores[1]%>/>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <input type="submit" name="b1" value="Cadastrar" onclick="definir(0)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Alterar" onclick="definir(1)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Remover" onclick="definir(2)"/>&nbsp;&nbsp;
+                                <input type="submit" name="b1" value="Consultar" onclick="definir(3)"/> 
+                            </div>
                         </form>
 <%
                     }
@@ -171,6 +213,7 @@ create table usuario_apl(
                                     aux = "s";
 %>
                                 <h1>Lista com <%=lista.size()%> usuário<%=aux%> encontrado<%=aux%></h1>
+                                <div class="tabela">
                                     <table border="1">
                                         <thead>
                                             <tr>
@@ -202,6 +245,7 @@ create table usuario_apl(
 %>
                                         </tbody>
                                     </table>
+                                </div>
                                 Selecione o campo código de um usuário para carregar seus dados no formulário.<br/>
                                 Clique <a href="usuarioApl.jsp">aqui</a> para voltar ao formulário CRUD usuário
 <%
@@ -222,5 +266,6 @@ create table usuario_apl(
 <%
             }
 %>
+        </div>
     </body>
 </html>

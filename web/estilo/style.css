@@ -259,8 +259,7 @@ Essa parte é para tornar o conteudo do site responsivo.
 /*Estilização da tabela*/
 .tabela{
     position: relative;
-    width: 100%;
-    max-width: 700px;
+    min-width: 700px;
     height: auto;
     background: #fff;
     padding: 30px;

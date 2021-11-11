@@ -9,9 +9,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manutenção de vacinas</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="estilo/style.css">
         <script type="text/javascript" src="javascript/js_geral.js"></script>
     </head>
     <body>
+        <div class="home_content">
+            <div class="title">Vacina</div>
         <a href="index.jsp">Tela inicial</a>
 <%
         request.setCharacterEncoding("UTF-8");
@@ -196,5 +199,6 @@
 <%
         }
 %>
+        </div>
     </body>
 </html>
