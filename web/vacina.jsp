@@ -15,7 +15,6 @@
     <body>
         <div class="home_content">
             <div class="title">Vacina</div>
-        <a href="index.jsp">Tela inicial</a>
 <%
         request.setCharacterEncoding("UTF-8");
         String b;

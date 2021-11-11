@@ -205,7 +205,7 @@
                                 session.removeAttribute("login");
                                 session.removeAttribute("classe");
 %> 
-                            <h1>Clique <a href="index.jsp">aqui</a> para voltar à tela inicial</h1> 
+                            <h1>Você se removeu. Clique <a href="index.jsp" target="_PARENT">aqui</a> para voltar à tela log-in/cadastro</h1> 
 <%
                             }
                             else
