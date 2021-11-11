@@ -256,7 +256,7 @@ Essa parte é para tornar o conteudo do site responsivo.
 }
 */
 
-/*Estilização da tabela*/
+/*Estilização da tabela
 .tabela{
     position: relative;
     min-width: 700px;
@@ -269,6 +269,7 @@ Essa parte é para tornar o conteudo do site responsivo.
     border-radius: 10px;
     text-align: center;
 }
+*/
 table{
     border-collapse: collapse;
     border-color: black;
