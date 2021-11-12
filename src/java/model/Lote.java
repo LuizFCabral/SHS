@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+CLASSE LOTE ====================================================================
+Esta classe, que não existe na documentação original, abstrai os lotes que contêm
+as doses de certa vacina. Essa classe foi criada para facilitar a contagem das 
+doses em estoque e para facilitar, na verdade, todo o controle do estoque. Seu SQL
+é:
+
+CREATE TABLE lote(
+	codigo SERIAL PRIMARY KEY,
+        descricao VARCHAR(10),
+	qtde_unidade INT, //Estabele a quantidade de unidades da vacina que 
+                          //possuía quando ainda completo
+	codigo_vacina INT REFERENCES vacina (codigo),
+	dose_disponivel INT //Estabele a quantidade de doses ainda disponíveis.
+                            //É por este atributo e pelo qtde_unidade que calculamos
+                            //as quantidades de doses em estoque.
+);
  */
 package model;
 

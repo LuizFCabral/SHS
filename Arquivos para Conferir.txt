@@ -1,0 +1,11 @@
+Arquivos para Conferir
+
+Pasta "web"
+- Pasta "estilo": style.css;
+- Pasta "javascript": js_geral.js;
+- Todos os arquivos .jsp e .html.
+
+Pasta "src/java":
+- Todas os arquivos .java nas pastas "controller" e "model".
+
+Todo o restante dos arquivos não precisam ser conferidos, pois não interessam para o entendimento do projeto.

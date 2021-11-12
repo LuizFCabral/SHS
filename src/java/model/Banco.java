@@ -1,3 +1,8 @@
+/*
+CLASSE BANCO ===================================================================
+Esta é a classe que permite a conexão com o banco Postgres. Ela possui alguns
+muito importantes, como aquele denominado de "conexao".
+*/
 package model;
 
 import javax.persistence.*;

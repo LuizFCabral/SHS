@@ -1,5 +1,5 @@
 <%-- 
-LOGIN DE USUÁRIO================================================================
+INDEX OU LOGIN DE USUÁRIO================================================================
 Esta é a primeira página do site. Nela, uma pessoa poderá cadastrar-se no site ou 
 fazer seu log-in. A depender do tipo de usuário, que é especificado no cadastro, 
 ele terá maior ou menor acesso às funcionalidades do site. Um usuário comum, que

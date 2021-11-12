@@ -1,8 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+CLASSE AGENDA ==================================================================
+Esta é a classe que abstrai os agendamentos que o usuário faz no sistema para 
+poder vacinar-se. Seu SQL é:
+
+create table agenda(
+    codigo serial primary key,
+    data_agendamento timestamp,
+    codigo_usuario int REFERENCES usuario (codigo),
+    data_vacinacao timestamp,
+    dose_numero int
+);
+
+OBS.: TODAS as classes dentro da pasta model são mapeadas diretamente do banco de
+dados pela tecnologia chamada de JPA. Basicamente, a ligação entre o software e 
+o banco é mais dinâmica, pois eu tenho todo o banco mapeado nele e, ainda, de modo
+sincronizado.
+*/
 package model;
 
 import java.io.Serializable;

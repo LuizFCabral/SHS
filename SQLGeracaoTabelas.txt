@@ -1,3 +1,9 @@
+/*Aqui está compilado todo o SQL utilizado no projeto.
+Apesar de havermos tentado seguir o máximo possível a
+documentação, houve ocasiões em que, para facilitar o 
+código, o funcionamento do programa e para não perdermos
+muito tempo, fizemos algumas mudanças e acréscimos.*/
+
 create table usuario(
     codigo serial primary key,
     cpf varchar(14) unique,

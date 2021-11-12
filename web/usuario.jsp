@@ -1,11 +1,10 @@
- <%--
-    create table usuario(
-        codigo serial primary key,
-        cpf varchar(14),
-        nome varchar (40),
-        data_nascimento date,
-        cidade varchar(30)
-    );
+<%--
+USUÁRIO ===============================================================================
+Esta é a página que permite as operações básicas de CRUD (ou seja, inclusão, alteração, 
+remoção e consulta) para registros no banco da entidade usuario (cidadãos que querem 
+agendar sua vacinação). A diferença entre esta página e a página cadastrar.jsp é que 
+esta serve para a manutenção do registro de um certo cidadão no banco enquanto a página cadastrar.jsp 
+serve para que o usuário comum possa simples e exclusivamente fazer seu cadastro no sistema.
 --%>
 
 <%@page import="controller.DAOJPA"%>

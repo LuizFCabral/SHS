@@ -1,3 +1,6 @@
+/*Este é um JavaScript genérico para o sistema. Em certos casos, um JavaScript 
+específico para uma determinada página pode ter sido usado.*/
+
 var index;
 
 //Seta todos os campos para não necessários (só serve de suporte)
@@ -58,11 +61,11 @@ function verificar(j)
     if (index === 1 || index === 2)
     {
         cod = document.getElementById("idCod").value.toString();
-        if (cod.length === 0 || cod.includes('.') || cod.includes('-') || isNaN(cod) || parseInt(cod) == 0)
+        if (cod.length === 0 || cod.includes('.') || cod.includes('-') || isNaN(cod) || parseInt(cod) === 0)
         {
-            if (j == 1)
+            if (j === 1)
                 j = "um usuário";
-            if (j == 2)
+            if (j === 2)
                 j = "uma vacina";
             alert("Para alterar ou remover " + j + ", informe o seu código. O código é um número inteiro positivo.");
             return false;

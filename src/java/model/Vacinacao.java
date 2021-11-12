@@ -1,7 +1,19 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+VACINAÇÃO ======================================================================
+Esta classe representa o processo de vacinação e sua implicação ao estoque. De
+fato, quando uma pessoa se vacina, o estoque reduz. Essa dose que foi gasta na 
+vacinação tem seu lote de proveniência informado. Vacinacação não existe na 
+documentação original. Foi criada para facilitar e tornar mais coerente o código.
+Seu SQL é:
+
+CREATE TABLE vacinacao(
+	codigo SERIAL PRIMARY KEY,
+	codigo_usuario INT REFERENCES usuario (codigo),
+	codigo_agenda INT REFERENCES agenda (codigo), //Este atributo vincula a vacinação ao agendamento que o usuário realizou.
+	codigo_lote INT REFERENCES lote (codigo),
+        codigo_usuario_apl INT REFERENCES usuario_apl (codigo),
+        data_aplicacao timestamp
+);
  */
 package model;
 

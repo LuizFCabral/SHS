@@ -1,7 +1,22 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+USUÁRIO APL ====================================================================
+Esta classe abstrai para o sistema seus gestores e os enfermeiros. Um objeto 
+dessa classe só pode ser um dos dois, sendo isso especificado pelo atributo tipo_
+pessoa. Esta é a classe com mais permissões, isto é, com mais acesso às funciona-
+lidades do projeto. Há, em pontos específicos do sistema, restrição de acesso a 
+enfermeiros também, de modo que só gestores possam acessar. Essa é a classe dos 
+usuários que gerenciam o projeto e os dados que por ele são guardados ou 
+manipulados, daí o seu acesso a mais funções. Por exemplo, a pessoa responsável 
+pelo registro de alguma vacinação, pelo controle do estoque de vacinas ou pela 
+manutenção do cadastro de outros enfermeiros e gestores pertence a essa classe.
+Seu SQL é:
+
+create table usuario_apl(
+    codigo serial primary key,
+    cpf varchar(14) unique,
+    nome varchar(40),
+    tipo_pessoa varchar(1)
+);
  */
 package model;
 

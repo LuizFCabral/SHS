@@ -1,10 +1,8 @@
 <%--
-create table usuario_apl(
-	codigo serial primary key,
-	cpf varchar(14),
-	nome varchar(40),
-	tipo_pessoa varchar(1)
-);
+USUÁRIO APL ===============================================================================
+Esta é a página que permite as operações básicas de CRUD (ou seja, inclusão, alteração, remoção 
+e consulta) para registros no banco da entidade usuario_apl (gestores e enfermeiros). Só podem 
+acessar esta página os gestores e os enfermeiros.
 --%>
 <%@page import="model.UsuarioApl"%>
 <%@page import="controller.UsuarioAplJpaController"%>

@@ -1,8 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+USUÁRIO ========================================================================
+Esta é a classe responsável por mapear a entidade usuario no banco. Ela abstrai
+para dentro do sistema o cidadão comum que busca agendar sua vacinação. As 
+funçãos que o usuário pode utilizar do sistema são as de cadastrar-se nele, modificar
+excluir e consultar esse cadastro e, com ele, realizar agendamentos, alterá-los,
+removê-los e consultá-los. O usuário pode também imprimir seu comprovante de 
+vacinação. O SQL da classe é:
+
+create table usuario(
+    codigo serial primary key,
+    cpf varchar(14) unique,
+    nome varchar (40),
+    data_nascimento date,
+    cidade varchar(30)
+);
+*/
 package model;
 
 import java.io.Serializable;

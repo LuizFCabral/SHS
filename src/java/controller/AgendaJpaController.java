@@ -1,7 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+AGENDA JPA CONTROLLER ==========================================================
+TODAS as classe em controller que terminam em JPA CONTROLLER são as que guardam 
+as funções básicas de CRUD (inclusão, alteração, remoção e alguns tipos de consultas)
+para certa classe. Neste caso, para a classe Agenda. Esses JPA CONTROLLERS são gerados
+pelo mapeamento JPA. Vale pontuar o seguinte: todas as funções aqui presentes estarão presentes
+também em todas as classes JPA CONTROLLER, sendo que a diferença será a classe alvo (Agenda, 
+Lote, Vacinacao etc.).
+Esta classe serve como agrupamento das operações básicas de CRUD para a classe 
+Agenda. 
  */
 package controller;
 

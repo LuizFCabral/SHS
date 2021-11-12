@@ -1,7 +1,7 @@
 <%-- 
-    Document   : relatorio
-    Created on : 02/11/2021, 22:35:28
-    Author     : vinif
+RELATÓRIO ===============================================================
+Esta página permite a consulta de dados referentes às vacinas e ao número 
+de vacinados, basicamente. Tudo isso, claro, formatado em uma tabela. 
 --%>
 
 <%@page import="java.util.ArrayList"%>

@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+USUARIO APL JPA CONTROLLER =========================================================
+Esta classe serve como agrupamento das operações básicas de CRUD para a classe 
+UsuarioApl. Para melhor explicação sobre o que é uma classe JPA CONTROLLER, cf. 
+AgendaJpaController, onde isso está explicado.
  */
 package controller;
 

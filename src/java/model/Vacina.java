@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+VACINA =========================================================================
+A classe vacina abstrai para dentro do sistema uma vacina, ou seja, por meio desta
+classe, pode-se manter o cadastro das vacinas que o estoque possui, como Pfizer,
+Janssen e Coronavac. O ponto importante aqui é entender que desta classe se tiram
+dados sobre as vacinas em si: não se faz contagem do estoque de vacinas por meio
+da classe Vacina. Essa é a função da classe Lote (em que há uma chave estrangeira
+dizendo a que vacina pertence o lote). O SQL da classe é:
+
+create table vacina(
+    codigo serial primary key,
+    descricao varchar(20),
+    qtde_dose int //Esse atributo nos diz quantas doses contém uma unidade da vacina
+                  //(novamente, não medimos nosso estoque por esta classe).
+);
  */
 package model;
 

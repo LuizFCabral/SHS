@@ -1,7 +1,8 @@
 <%-- 
-    Document   : imprimirComprovante
-    Created on : 01/11/2021, 21:38:43
-    Author     : Pedro
+IMPRIMIR COMPROVANTE ============================================================
+Esta página possui duas funções: mostrar de forma organizada os dados que comprovam
+que determinado indivíduo foi vacinado e, principalmente, permitir que esses dados 
+devidamente formatados possam ser impressos por ele.
 --%>
 
 <%@page import="java.text.SimpleDateFormat"%>

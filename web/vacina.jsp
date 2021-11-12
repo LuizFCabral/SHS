@@ -1,3 +1,10 @@
+<!--
+VACINA =========================================================================================
+Esta é a página pela qual se realizam as operações de CRUD para registros que pertençam à entidade 
+vacina no banco. Traduzindo, é página em que se podem incluir, alterar, remover e consultar os dados
+de registros das VACINAS (não se podem ver as quantidades dela em estoque, pois não é essa a função 
+dessa classe/entidade).
+-->
 <%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
 <%@page import="controller.VacinaJpaController"%>

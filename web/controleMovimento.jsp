@@ -1,7 +1,11 @@
 <%-- 
-    Document   : controleMovimento
-    Created on : 09/10/2021, 17:55:11
-    Author     : Pedro
+CONTROLE DO MOVIMENTO ===============================================
+Esta página serve para o controle e registro das movimentações que 
+ocorrem no estoque de vacinas: entrada e saída de lotes/doses de vacinas. Uma coisa
+importante a notar-se é que movimentos de entrada, tais como foram 
+programados neste projeto, significam exclusivamente entrada de um lote 
+inteiro de uma certa vacina. Assim fizemos para manter a coerência no código.
+Não ocorre nenhuma especificidade quanto à saída.
 --%>
 
 <%@page import="controller.LoteJpaController"%>

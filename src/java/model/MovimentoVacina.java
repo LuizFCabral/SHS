@@ -1,7 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+CLASSE MOVIMENTO VACINA ====================================================================
+Esta classe abstrai os movimentos que ocorrem no estoque com a entrada e saída de 
+vacinas. Uma coisa importante a notar é que: 1. movimentos de entrada significam 
+exclusivamente entrada de lotes inteiros no estoque, ou seja, não se pode adicionar 
+uma dose por vez no sistema e 2. movimentos de saída não têm a ver com o desconto 
+de doses por conta da vacinação de alguém, mas com, por exemplo, perda de doses 
+por vencimento, quebra de vidro em que estão etc. A situação do desconto
+de doses por vacinação tem classe própria. O SQL do movimento vacina é:
+
+create table movimento_vacina(
+    codigo serial primary key,
+    codigo_vacina int REFERENCES vacina (codigo),
+    data_movimento timestamp,
+    tipo_movimento varchar(1),
+    qtde_dose int,
+    codigo_lote int references lote (codigo) 
+);
  */
 package model;
 

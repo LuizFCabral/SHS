@@ -1,3 +1,10 @@
+/*
+CSS DO PROJETO ===============================================================
+Aqui está configurado todo o design do projeto, 
+desde as cores até as formas dos itens na tela.
+Não foi preciso separar o css em pedaços.
+*/
+
 body{
     position:relative;
     font-family: Arial, Helvetica, sans-serif;

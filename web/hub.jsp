@@ -1,8 +1,12 @@
 <%-- 
-    Document   : index
-    Created on : 09/09/2021, 11:41:01
-    Author     : Vinicius
-
+HUB ============================================================================
+Feito o login, esta é a página que se abrirá e em que se permanecerá. Trata-se do local
+onde fica a sidebar (o menuzinho) e um iframe. De acordo com a página/função em 
+que se clicar nessa sidebar, tal página se abrirá dentro do hub por meio do iframe 
+(o hub não fechará para a nova página abrir, mas esta se abrirá dentro do hub, 
+ambas funcionam ao menos tempo, mas uma dentro da outra). Isso ocorre de tal modo que, como 
+o nome da página sugere, o hub é a central do sistema. Como dito, após o login, 
+não se sairá mais dele.
 --%>
 
 <%@page import="model.UsuarioApl"%>

@@ -1,7 +1,8 @@
 <%-- 
-    Document   : cadastrar
-    Created on : 02/11/2021, 18:15:20
-    Author     : Pedro
+CADASTRAR ===========================================================
+Esta página serve para cadastro (somente para  cadastro) de um usuário 
+por ele mesmo, ou seja, quando um cidadão que quer vacinar-se fizer seu 
+cadastro no sistema, é por aqui que ele o fará.
 --%>
 
 <%@page import="java.text.SimpleDateFormat"%>
